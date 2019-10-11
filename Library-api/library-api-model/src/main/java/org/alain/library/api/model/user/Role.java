@@ -20,4 +20,8 @@ public class Role {
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private List<User> users = new ArrayList<>();
+
+    public Role(RoleDesignation role) {
+        this.roleDesignation = role;
+    }
 }
