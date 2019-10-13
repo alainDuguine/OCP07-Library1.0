@@ -1,27 +1,42 @@
 package org.alain.library.api.model.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Role {
 
     @Id
-    @Enumerated(EnumType.STRING)
-    private RoleDesignation roleDesignation;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
-    private List<User> users = new ArrayList<>();
+    private String designation;
 
-    public Role(RoleDesignation role) {
-        this.roleDesignation = role;
+    @ManyToMany( mappedBy = "roles")
+    private Set<User> users = new HashSet<>();
+
+    public Role(String designation) {
+        this.designation = designation;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder listUsers = new StringBuilder();
+        for (User u : this.users) {
+            listUsers.append("\n\tUser id : ").append(u.getId()).append(", User email : ").append(u.getEmail());
+        }
+
+        return "Role{" +
+                "id=" + id +
+                ", designation='" + designation + '\'' +
+                ", users :" + listUsers.toString() +
+                '}';
     }
 }

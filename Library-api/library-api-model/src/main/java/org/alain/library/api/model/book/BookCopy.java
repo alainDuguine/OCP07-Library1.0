@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.alain.library.api.model.loan.Loan;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class BookCopy {
     private Long id;
     private String barcode;
 
+    @NotNull
     @ManyToOne
     private Book book;
 
