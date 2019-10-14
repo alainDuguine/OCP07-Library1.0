@@ -14,9 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
 @SpringBootApplication
-@ComponentScan(basePackages = "org.alain.library.api.*")
-@EntityScan("org.alain.library.api.model.*")
-@EnableJpaRepositories(basePackages = "org.alain.library.api.consumer")
+@ComponentScan(basePackages = {"org.alain.library.api"})
+@EntityScan(basePackages = {"org.alain.library.api"})
+@EnableJpaRepositories(basePackages = {"org.alain.library.api"})
 public class LibraryApiWebApplication implements CommandLineRunner {
 
     @Autowired

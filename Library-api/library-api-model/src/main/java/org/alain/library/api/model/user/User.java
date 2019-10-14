@@ -5,15 +5,15 @@ import org.alain.library.api.model.loan.Loan;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+
+@Table(name = "LibraryUser")
 public class User{
 
     @Id
@@ -57,7 +57,20 @@ public class User{
     }
 
     public void removeRole(Role role){
-        role.getUsers().remove(this);
         this.roles.remove(role);
+        role.getUsers().remove(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(this.getId(), user.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return 56;
     }
 }
