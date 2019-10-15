@@ -11,66 +11,73 @@ import java.util.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-
 @Table(name = "LibraryUser")
 public class User{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotNull
     @Email
+    @Column(nullable = false)
     private String email;
+
     @NotNull
+    @Column(nullable = false)
     private String password;
 
     @NotNull
     @Size( min = 2, max=30)
     @Column (length = 30)
     private String firstName;
+
     @NotNull
     @Size( min = 2, max=30)
     @Column (length = 30)
     private String lastName;
 
+    private int active;
+
+    private String roles = "";
+
+    private String permissions = "";
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Loan> loans = new ArrayList<>();
 
-    @ManyToMany(cascade = {CascadeType.MERGE})
-    @JoinTable( name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
-
-    public User(String email, String password, String firstName, String lastName, Role role) {
+    public User(@NotNull @Email String email, @NotNull String password, @NotNull @Size(min = 2, max = 30) String firstName, @NotNull @Size(min = 2, max = 30) String lastName, String roles, String permissions) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.roles.add(role);
+        this.roles = roles;
+        this.permissions = permissions;
+        this.active = 1;
     }
 
-    public void addRole(Role role){
-        this.roles.add(role);
-        role.getUsers().add(this);
+    public void addLoan(Loan loan){
+        this.loans.add(loan);
+        loan.setUser(this);
     }
 
-    public void removeRole(Role role){
-        this.roles.remove(role);
-        role.getUsers().remove(this);
+    public void removeLoan(Loan loan){
+        this.loans.remove(loan);
+        loan.setUser(null);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(this.getId(), user.getId());
+    public List<String> getRoleList(){
+        if (this.roles.length() > 0){
+            return Arrays.asList(this.roles.split(","));
+        }
+        return new ArrayList<>();
     }
 
-    @Override
-    public int hashCode() {
-        return 56;
+    public List<String> getPermissionList(){
+        if (this.permissions.length() > 0){
+            return Arrays.asList(this.permissions.split(","));
+        }
+        return new ArrayList<>();
     }
+
 }

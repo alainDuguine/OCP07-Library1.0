@@ -1,6 +1,5 @@
 package org.alain.library.api.model.loan;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +10,6 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Status {
 
     @Id
@@ -24,4 +22,7 @@ public class Status {
     @OneToMany(mappedBy = "status", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LoanStatus> loanStatuses = new ArrayList<>();
 
+    public Status(StatusDesignation designation) {
+        this.designation = designation;
+    }
 }

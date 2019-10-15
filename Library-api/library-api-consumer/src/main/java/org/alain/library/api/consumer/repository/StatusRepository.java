@@ -1,4 +1,4 @@
-package org.alain.library.api.consumer;
+package org.alain.library.api.consumer.repository;
 
 import org.alain.library.api.model.loan.Status;
 import org.springframework.data.jpa.repository.JpaRepository;

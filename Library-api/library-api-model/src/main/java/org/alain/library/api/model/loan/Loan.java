@@ -1,9 +1,7 @@
 package org.alain.library.api.model.loan;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.alain.library.api.model.book.BookCopy;
 import org.alain.library.api.model.user.User;
 
@@ -14,10 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 @Table
 public class Loan {
 
@@ -42,6 +41,19 @@ public class Loan {
         LoanStatus loanStatus = new LoanStatus(this, status, LocalDate.now());
         this.loanStatuses.add(loanStatus);
         status.getLoanStatuses().add(loanStatus);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        if (this.getClass() != o.getClass()) return false;
+        return id != null && id.equals(((Loan)o).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return 23;
     }
 
 }

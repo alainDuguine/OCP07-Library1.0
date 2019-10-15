@@ -1,6 +1,5 @@
 package org.alain.library.api.model.loan;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +13,6 @@ import java.time.LocalDate;
 @Entity(name = "LoanStatus")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "loan_status")
 public class LoanStatus {
 
@@ -38,5 +36,17 @@ public class LoanStatus {
         this.loan = loan;
         this.status = status;
         this.date = date;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        if (this.getClass() != o.getClass()) return false;
+        return id != null && id.equals(((LoanStatus)o).getId());
+    }
+    @Override
+    public int hashCode() {
+        return 19;
     }
 }

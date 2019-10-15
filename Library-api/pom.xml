@@ -17,7 +17,7 @@
     <module>library-api-business</module>
     <module>library-api-consumer</module>
     <module>library-api-model</module>
-    <module>library-api-web</module>
+    <module>library-api-webservice</module>
   </modules>
 
   <properties>
@@ -61,6 +61,7 @@
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-data-rest</artifactId>
+        <version>2.1.9.RELEASE</version>
       </dependency>
 
       <dependency>
@@ -68,12 +69,6 @@
         <artifactId>spring-boot-devtools</artifactId>
         <scope>runtime</scope>
         <optional>true</optional>
-      </dependency>
-
-      <dependency>
-        <groupId>mysql</groupId>
-        <artifactId>mysql-connector-java</artifactId>
-        <scope>runtime</scope>
       </dependency>
 
     </dependencies>
