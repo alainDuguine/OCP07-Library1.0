@@ -69,7 +69,7 @@ public class AuthorsApiController implements AuthorsApi {
     public ResponseEntity<AuthorDto> updateAuthor(@ApiParam(value = "Author id to update",required=true) @PathVariable("id") Long id,
                                                   @ApiParam(value = "Author object updated" ,required=true )
                                                   @Valid @RequestBody AuthorDto author) {
-        Optional<Author> authorModel = authorManagement.update(id, convertAuthorDtoToAuthorModel(author));
+        Optional<Author> authorModel = authorManagement.updateAuthor(id, convertAuthorDtoToAuthorModel(author));
         if (authorModel.isPresent()){
             return new ResponseEntity<AuthorDto>(convertAuthorModelToAuthorDto(authorModel.get()), HttpStatus.OK);
         }

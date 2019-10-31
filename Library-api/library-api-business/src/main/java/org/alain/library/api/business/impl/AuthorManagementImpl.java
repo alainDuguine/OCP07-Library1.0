@@ -21,9 +21,6 @@ public class AuthorManagementImpl extends CrudManagerImpl<Author> implements Aut
 
     @Override
     public List<Author> findAuthorsByName(String name){
-//        if(name==null){
-//            name="";
-//        }
         return authorRepository.findAuthorsListByName(name);
     }
 
@@ -37,7 +34,7 @@ public class AuthorManagementImpl extends CrudManagerImpl<Author> implements Aut
     }
 
     @Override
-    public Optional<Author> update(Long id, Author authorForm) {
+    public Optional<Author> updateAuthor(Long id, Author authorForm) {
         Optional<Author> author = authorRepository.findById(id);
         if(author.isPresent()){
             author.get().setFirstName(authorForm.getFirstName());

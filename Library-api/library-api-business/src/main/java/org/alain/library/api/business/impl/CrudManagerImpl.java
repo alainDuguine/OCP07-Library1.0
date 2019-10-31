@@ -26,7 +26,8 @@ public class CrudManagerImpl<T> implements CrudManager<T> {
 
     @Override
     public void delete(Long id){
-        repository.deleteById(id);
+        if(repository.findById(id).isPresent())
+            repository.deleteById(id);
     }
 
     @Override

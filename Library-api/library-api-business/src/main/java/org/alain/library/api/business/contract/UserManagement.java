@@ -6,11 +6,9 @@ import org.alain.library.api.model.user.User;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserManagement{
+public interface UserManagement extends CrudManager<User>{
 
-    Optional<User> findOne(Long id);
-    List<User> findAll();
-    void delete(Long id);
-    Optional<User> findUserByMail(String email);
-    User saveUser(User user);
+    List<User> findUserByMail(String email);
+    Optional<User> saveUser(User user);
+    Optional<User> updateUser(Long id, User userForm, String authorization);
 }

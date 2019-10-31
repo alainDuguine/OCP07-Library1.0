@@ -32,7 +32,7 @@ public interface UsersApi {
     ResponseEntity<UserDto> addUser(@ApiParam(value = "User object that needs to be added to the database", required = true) @Valid @RequestBody UserForm userForm);
 
 
-    @ApiOperation(value = "Delete a user by id", nickname = "deleteUserById", notes = "", tags={ "users", })
+    @ApiOperation(value = "Delete a user", nickname = "deleteUser", notes = "", tags={ "users", })
     @ApiResponses(value = {
         @ApiResponse(code = 204, message = "User successfully deleted"),
         @ApiResponse(code = 400, message = "Invalid ID supplied"),
@@ -41,7 +41,7 @@ public interface UsersApi {
     @RequestMapping(value = "/users/{id}",
         produces = { "application/json" },
         method = RequestMethod.DELETE)
-    ResponseEntity<Void> deleteUserById(@ApiParam(value = "User id to delete", required = true) @PathVariable("id") Long id);
+    ResponseEntity<Void> deleteUser(@ApiParam(value = "User id to delete", required = true) @PathVariable("id") Long id);
 
 
     @ApiOperation(value = "Get user by Id", nickname = "getUser", notes = "", response = UserDto.class, tags={ "users", })

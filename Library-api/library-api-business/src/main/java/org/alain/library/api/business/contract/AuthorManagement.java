@@ -8,5 +8,5 @@ public interface AuthorManagement extends CrudManager<Author>{
 
     List<Author> findAuthorsByName(String name);
     Optional<Author> saveAuthor(Author author);
-    Optional<Author> update(Long id, Author author);
+    Optional<Author> updateAuthor(Long id, Author author);
 }
