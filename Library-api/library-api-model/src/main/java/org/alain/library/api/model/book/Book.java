@@ -1,5 +1,6 @@
 package org.alain.library.api.model.book;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -13,7 +14,6 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 public class Book {
 
     @Id
@@ -23,6 +23,7 @@ public class Book {
     @NotNull
     private String title;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookCopy> copyList = new ArrayList<>();
 
@@ -31,6 +32,10 @@ public class Book {
                joinColumns = @JoinColumn(name = "book_id"),
                inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Set<Author> authors = new HashSet<>();
+
+    public Book(String isbn) {
+        this.isbn = RandomStringUtils.randomAlphanumeric(10);
+    }
 
     public Book(@NotNull String title, Author author) {
         this.title = title;

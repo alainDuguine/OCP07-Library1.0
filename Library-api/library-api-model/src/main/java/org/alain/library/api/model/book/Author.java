@@ -23,7 +23,6 @@ public class Author {
     @Column (length = 30)
     private String firstName;
 
-    @NotNull
     @Size( min = 2, max = 30)
     @Column (length = 30)
     private String lastName;
