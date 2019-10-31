@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-10-31T08:40:05.054+01:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-10-31T15:23:24.407+01:00")
 
 @Api(value = "users", description = "the users API")
 public interface UsersApi {
@@ -61,7 +61,7 @@ public interface UsersApi {
     @RequestMapping(value = "/users",
         produces = { "application/json" },
         method = RequestMethod.GET)
-    ResponseEntity<List<UserDto>> getUsers(@ApiParam(value = "Email of user to return") @Valid @RequestParam(value = "email", required = false) String email);
+    ResponseEntity<List<UserDto>> getUsers(@ApiParam(value = "Email of user to return", defaultValue = "") @Valid @RequestParam(value = "email", required = false, defaultValue = "") String email);
 
 
     @ApiOperation(value = "Update a user", nickname = "updateUser", notes = "", response = UserDto.class, authorizations = {

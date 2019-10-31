@@ -21,16 +21,19 @@ public class AuthorManagementImpl extends CrudManagerImpl<Author> implements Aut
 
     @Override
     public List<Author> findAuthorsByName(String name){
+//        if(name==null){
+//            name="";
+//        }
         return authorRepository.findAuthorsListByName(name);
     }
 
     @Override
     public Optional<Author> saveAuthor(Author author) {
         if (this.findAuthorsByName(author.getFirstName()+ ' ' + author.getLastName()).isEmpty()){
-            return Optional.empty();
+            author.setBooks(new HashSet<>());
+            return Optional.of(authorRepository.save(author));
         }
-        author.setBooks(new HashSet<>());
-        return Optional.of(authorRepository.save(author));
+        return Optional.empty();
     }
 
     @Override

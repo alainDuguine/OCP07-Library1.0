@@ -27,6 +27,7 @@ public class Book {
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookCopy> copyList = new ArrayList<>();
 
+    //Owning side
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "book_author",
                joinColumns = @JoinColumn(name = "book_id"),

@@ -19,7 +19,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-10-31T08:40:05.054+01:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-10-31T15:23:24.407+01:00")
 
 @Controller
 public class UsersApiController implements UsersApi {
@@ -69,7 +69,7 @@ public class UsersApiController implements UsersApi {
         return new ResponseEntity<UserDto>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<List<UserDto>> getUsers(@ApiParam(value = "Email of user to return") @Valid @RequestParam(value = "email", required = false) String email) {
+    public ResponseEntity<List<UserDto>> getUsers(@ApiParam(value = "Email of user to return", defaultValue = "") @Valid @RequestParam(value = "email", required = false, defaultValue="") String email) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {

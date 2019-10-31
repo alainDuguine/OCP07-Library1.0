@@ -48,8 +48,7 @@ public class AuthorsApiController implements AuthorsApi {
         return new ResponseEntity<AuthorDto>(HttpStatus.NOT_FOUND);
     }
 
-    public ResponseEntity<List<AuthorDto>> getAuthors(@ApiParam(value = "Name of author to return") @Valid @RequestParam(value = "name", required = false) String name) {
-        String accept = request.getHeader("Accept");
+    public ResponseEntity<List<AuthorDto>> getAuthors(@ApiParam(value = "Name of author to return", defaultValue = "") @Valid @RequestParam(value = "name", required = false, defaultValue="") String name) {
         List<Author> authorList = authorManagement.findAuthorsByName(name);
         return new ResponseEntity<List<AuthorDto>>(convertListAuthorModelToListAuthorDto(authorList), HttpStatus.OK);
     }
