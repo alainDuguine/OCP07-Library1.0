@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-10-31T15:23:24.407+01:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-11-02T08:01:57.545+01:00")
 
 @Api(value = "books", description = "the books API")
 public interface BooksApi {
 
-    @ApiOperation(value = "Add a new book", nickname = "addBook", notes = "If author doesn't exist in the database he will be added", response = BookDto.class, tags={ "books", })
+    @ApiOperation(value = "Add a new book", nickname = "addBook", notes = "Author should be added in the databse first", response = BookDto.class, tags={ "books", })
     @ApiResponses(value = { 
         @ApiResponse(code = 201, message = "Book added successfully to database", response = BookDto.class),
         @ApiResponse(code = 400, message = "Parameters are incorrect"),
@@ -38,7 +38,7 @@ public interface BooksApi {
         @ApiResponse(code = 201, message = "Book added successfully to database", response = BookCopyDto.class),
         @ApiResponse(code = 400, message = "Parameters are incorrect"),
         @ApiResponse(code = 403, message = "You are not allowed to perform this request") })
-    @RequestMapping(value = "/books/{id}/Copies",
+    @RequestMapping(value = "/books/{id}/copies",
         produces = { "application/json" },
         consumes = { "application/json" },
         method = RequestMethod.POST)
@@ -63,7 +63,7 @@ public interface BooksApi {
         @ApiResponse(code = 400, message = "Invalid ID supplied"),
         @ApiResponse(code = 403, message = "You are not allowed to perform this request"),
         @ApiResponse(code = 404, message = "Book copy not found") })
-    @RequestMapping(value = "/books/{bookId}/Copies/{copyId}",
+    @RequestMapping(value = "/books/{bookId}/copies/{copyId}",
         produces = { "application/json" },
         method = RequestMethod.DELETE)
     ResponseEntity<Void> deleteBookCopy(@ApiParam(value = "Book id to delete a copy from", required = true) @PathVariable("bookId") Long bookId, @ApiParam(value = "BookCopy id to delete", required = true) @PathVariable("copyId") Long copyId);
@@ -94,10 +94,21 @@ public interface BooksApi {
         @ApiResponse(code = 200, message = "Book's copies found", response = BookCopyDto.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "Invalid Id Supplied"),
         @ApiResponse(code = 404, message = "Book not found") })
-    @RequestMapping(value = "/books/{id}/Copies",
+    @RequestMapping(value = "/books/{id}/copies",
         produces = { "application/json" },
         method = RequestMethod.GET)
     ResponseEntity<List<BookCopyDto>> getCopies(@ApiParam(value = "Id of book to find copies from", required = true) @PathVariable("id") Long id);
+
+
+    @ApiOperation(value = "Get bookcopy by Id", nickname = "getCopy", notes = "", response = BookCopyDto.class, tags={ "books", })
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Book found", response = BookCopyDto.class),
+        @ApiResponse(code = 400, message = "Invalid BookID supplied"),
+        @ApiResponse(code = 404, message = "Book not found") })
+    @RequestMapping(value = "/books/{bookId}/copies/{copyId}",
+        produces = { "application/json" },
+        method = RequestMethod.GET)
+    ResponseEntity<BookCopyDto> getCopy(@ApiParam(value = "Book id concerned by the copy", required = true) @PathVariable("bookId") Long bookId, @ApiParam(value = "BookCopy id to get", required = true) @PathVariable("copyId") Long copyId);
 
 
     @ApiOperation(value = "Update a book", nickname = "updateBook", notes = "", response = BookDto.class, tags={ "books", })
@@ -119,7 +130,7 @@ public interface BooksApi {
         @ApiResponse(code = 400, message = "Parameters are incorrect"),
         @ApiResponse(code = 403, message = "You are not allowed to perform this request"),
         @ApiResponse(code = 404, message = "Book copy not found") })
-    @RequestMapping(value = "/books/{bookId}/Copies/{copyId}",
+    @RequestMapping(value = "/books/{bookId}/copies/{copyId}",
         produces = { "application/json" },
         consumes = { "application/json" },
         method = RequestMethod.PUT)

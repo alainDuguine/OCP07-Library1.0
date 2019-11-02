@@ -23,7 +23,7 @@ public class UserManagementImpl extends CrudManagerImpl<User> implements UserMan
 
     @Override
     public List<User> findUserByMail(String email) {
-        return userRepository.findByEmailLike(email);
+        return userRepository.findByEmailLike("%"+email+"%");
     }
 
     @Override

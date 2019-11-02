@@ -14,6 +14,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Book {
 
     @Id
@@ -28,19 +29,15 @@ public class Book {
     private List<BookCopy> copyList = new ArrayList<>();
 
     //Owning side
+    @NotNull
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "book_author",
                joinColumns = @JoinColumn(name = "book_id"),
                inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Set<Author> authors = new HashSet<>();
 
-    public Book(String isbn) {
-        this.isbn = RandomStringUtils.randomAlphanumeric(10);
-    }
-
-    public Book(@NotNull String title, Author author) {
+    public Book(String title) {
         this.title = title;
-        addAuthor(author);
         this.isbn = RandomStringUtils.randomAlphanumeric(10);
     }
 

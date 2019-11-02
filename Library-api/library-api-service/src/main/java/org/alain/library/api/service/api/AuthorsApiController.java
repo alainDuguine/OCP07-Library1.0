@@ -54,7 +54,7 @@ public class AuthorsApiController implements AuthorsApi {
     }
 
     public ResponseEntity<Void> deleteAuthor(@ApiParam(value = "Author id to delete",required=true) @PathVariable("id") Long id) {
-        authorManagement.delete(id);
+        authorManagement.deleteAuthor(id);
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 

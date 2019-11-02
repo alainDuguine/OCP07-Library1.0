@@ -3,7 +3,9 @@ package org.alain.library.api.business.impl;
 
 import org.alain.library.api.business.contract.AuthorManagement;
 import org.alain.library.api.consumer.repository.AuthorRepository;
+import org.alain.library.api.consumer.repository.BookRepository;
 import org.alain.library.api.model.book.Author;
+import org.alain.library.api.model.book.Book;
 import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
@@ -13,15 +15,22 @@ import java.util.Optional;
 public class AuthorManagementImpl extends CrudManagerImpl<Author> implements AuthorManagement {
 
     private final AuthorRepository authorRepository;
+    private final BookRepository bookRepository;
 
-    public AuthorManagementImpl(AuthorRepository authorRepository) {
+    public AuthorManagementImpl(AuthorRepository authorRepository, BookRepository bookRepository) {
         super(authorRepository);
         this.authorRepository = authorRepository;
+        this.bookRepository = bookRepository;
     }
 
     @Override
     public List<Author> findAuthorsByName(String name){
         return authorRepository.findAuthorsListByName(name);
+    }
+
+    @Override
+    public Optional<Author> findAuthorByFullName(String firstName, String lastName) {
+        return authorRepository.findByFirstNameAndLastName(firstName, lastName);
     }
 
     @Override
@@ -42,5 +51,19 @@ public class AuthorManagementImpl extends CrudManagerImpl<Author> implements Aut
             return Optional.of(authorRepository.save(author.get()));
         }
         return Optional.empty();
+    }
+
+    @Override
+    public void deleteAuthor(Long id) {
+        Optional<Author> author = authorRepository.findById(id);
+        if (author.isPresent()) {
+            for (Book book : new HashSet<Book>(author.get().getBooks())) {
+                author.get().removeBook(book);
+                if(book.getAuthors().isEmpty()){
+                    bookRepository.delete(book);
+                }
+            }
+            authorRepository.delete(author.get());
+        }
     }
 }
