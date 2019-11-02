@@ -1,9 +1,8 @@
 package org.alain.library.api.business.impl;
 
-
 import org.alain.library.api.business.contract.AuthorManagement;
+import org.alain.library.api.business.contract.SharedBookAuthorManagement;
 import org.alain.library.api.consumer.repository.AuthorRepository;
-import org.alain.library.api.consumer.repository.BookRepository;
 import org.alain.library.api.model.book.Author;
 import org.alain.library.api.model.book.Book;
 import org.springframework.stereotype.Service;
@@ -15,22 +14,17 @@ import java.util.Optional;
 public class AuthorManagementImpl extends CrudManagerImpl<Author> implements AuthorManagement {
 
     private final AuthorRepository authorRepository;
-    private final BookRepository bookRepository;
+    private final SharedBookAuthorManagement sharedBookAuthorManagement;
 
-    public AuthorManagementImpl(AuthorRepository authorRepository, BookRepository bookRepository) {
+    public AuthorManagementImpl(AuthorRepository authorRepository, SharedBookAuthorManagement sharedBookAuthorManagement) {
         super(authorRepository);
         this.authorRepository = authorRepository;
-        this.bookRepository = bookRepository;
+        this.sharedBookAuthorManagement = sharedBookAuthorManagement;
     }
 
     @Override
     public List<Author> findAuthorsByName(String name){
         return authorRepository.findAuthorsListByName(name);
-    }
-
-    @Override
-    public Optional<Author> findAuthorByFullName(String firstName, String lastName) {
-        return authorRepository.findByFirstNameAndLastName(firstName, lastName);
     }
 
     @Override
@@ -57,10 +51,10 @@ public class AuthorManagementImpl extends CrudManagerImpl<Author> implements Aut
     public void deleteAuthor(Long id) {
         Optional<Author> author = authorRepository.findById(id);
         if (author.isPresent()) {
-            for (Book book : new HashSet<Book>(author.get().getBooks())) {
+            for (Book book : new HashSet<>(author.get().getBooks())) {
                 author.get().removeBook(book);
                 if(book.getAuthors().isEmpty()){
-                    bookRepository.delete(book);
+                    sharedBookAuthorManagement.deleteBookWithEmptyAuthors(book.getId());
                 }
             }
             authorRepository.delete(author.get());

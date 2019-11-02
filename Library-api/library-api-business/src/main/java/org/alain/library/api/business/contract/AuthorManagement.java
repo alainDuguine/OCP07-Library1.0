@@ -5,9 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AuthorManagement extends CrudManager<Author>{
-
     List<Author> findAuthorsByName(String name);
-    Optional<Author> findAuthorByFullName(String firstName, String lastName);
     Optional<Author> saveAuthor(Author author);
     Optional<Author> updateAuthor(Long id, Author author);
     void deleteAuthor(Long id);

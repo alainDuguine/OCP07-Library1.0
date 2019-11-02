@@ -1,15 +1,15 @@
 package org.alain.library.api.business.impl;
 
-import org.alain.library.api.business.contract.AuthorManagement;
+import org.alain.library.api.business.contract.SharedBookAuthorManagement;
 import org.alain.library.api.business.contract.BookManagement;
 import org.alain.library.api.business.exceptions.UnknownAuthorException;
+import org.alain.library.api.business.exceptions.UnknownBookException;
 import org.alain.library.api.consumer.repository.BookCopyRepository;
 import org.alain.library.api.consumer.repository.BookRepository;
 import org.alain.library.api.model.book.Author;
 import org.alain.library.api.model.book.Book;
 import org.alain.library.api.model.book.BookCopy;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -18,13 +18,13 @@ public class BookManagementImpl extends CrudManagerImpl<Book> implements BookMan
 
     private final BookRepository bookRepository;
     private final BookCopyRepository bookCopyRepository;
-    private final AuthorManagement authorManagement;
+    private final SharedBookAuthorManagement sharedBookAuthorManagement;
 
-    public BookManagementImpl(BookRepository bookRepository, BookCopyRepository bookCopyRepository, AuthorManagement authorManagement) {
+    public BookManagementImpl(BookRepository bookRepository, BookCopyRepository bookCopyRepository, SharedBookAuthorManagement sharedBookAuthorManagement) {
         super(bookRepository);
         this.bookRepository = bookRepository;
         this.bookCopyRepository = bookCopyRepository;
-        this.authorManagement = authorManagement;
+        this.sharedBookAuthorManagement = sharedBookAuthorManagement;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class BookManagementImpl extends CrudManagerImpl<Book> implements BookMan
 
     @Override
     public void deleteCopyInBook(Long bookId, Long copyId) {
-        bookCopyRepository.deleteOneByIdInBook(bookId, copyId);
+        bookCopyRepository.deleteByIdAndAndBookId(copyId, bookId);
     }
 
     @Override
@@ -61,23 +61,29 @@ public class BookManagementImpl extends CrudManagerImpl<Book> implements BookMan
         }
     }
 
-    /**
-     * Check if author exists, extract them as Set, and add association between book and author
-     * @param book to check the authors from
-     */
-    private void manageAuthors(Book book) {
-        Set<Author> listAuthor = new HashSet<>();
-        for (Iterator<Author> it = book.getAuthors().iterator(); it.hasNext();) {
-            Author author = it.next();
-            Optional<Author> authorInDb = authorManagement.findAuthorByFullName(author.getFirstName(), author.getLastName());
-            if(authorInDb.isPresent()){
-                it.remove();
-                listAuthor.add(authorInDb.get());
-            }else{
-                throw new UnknownAuthorException();
+    @Override
+    public Optional<Book> updateBook(Long id, Book bookForm) {
+        Optional<Book> book = bookRepository.findById(id);
+        if (book.isPresent()) {
+            try {
+                this.manageAuthors(bookForm);
+                bookForm.setId(book.get().getId());
+            } catch (UnknownAuthorException e) {
+                throw new UnknownAuthorException("The author doesn't exist in the database");
             }
+            if (bookAlreadyExists(bookForm)) {
+                return Optional.empty();
+            } else {
+                book.get().setTitle(bookForm.getTitle());
+                book.get().setIsbn(bookForm.getIsbn());
+                if(!book.get().getAuthors().equals(bookForm.getAuthors())) {
+                    book.get().setAuthors(bookForm.getAuthors());
+                }
+                return Optional.of(bookRepository.save(book.get()));
+            }
+        }else{
+            throw new UnknownBookException("The book doesn't exists");
         }
-        book.setAuthors(listAuthor);
     }
 
     @Override
@@ -90,74 +96,46 @@ public class BookManagementImpl extends CrudManagerImpl<Book> implements BookMan
         return Optional.empty();
     }
 
+    @Override
+    public Optional<BookCopy> updateBookCopy(Long bookId, Long copyId, BookCopy bookCopyForm) {
+        Optional<BookCopy> bookCopy = bookCopyRepository.findOneByIdInBook(bookId, copyId);
+        if (bookCopy.isPresent()){
+            bookCopy.get().setEditor(bookCopyForm.getEditor());
+            return Optional.of(bookCopyRepository.save(bookCopy.get()));
+        }
+        return Optional.empty();
+    }
+
+
+    /**
+     * Check if author exists, extract them as Set, and add association between book and author
+     * @param book to check the authors from
+     */
+    private void manageAuthors(Book book) {
+        Set<Author> listAuthor = new HashSet<>();
+        for (Iterator<Author> it = book.getAuthors().iterator(); it.hasNext();) {
+            Author author = it.next();
+            Optional<Author> authorInDb = sharedBookAuthorManagement.getAuthorByFullName(author.getFirstName(), author.getLastName());
+            if(authorInDb.isPresent()){
+                it.remove();
+                listAuthor.add(authorInDb.get());
+            }else{
+                throw new UnknownAuthorException();
+            }
+        }
+        book.setAuthors(listAuthor);
+    }
+
     private boolean bookAlreadyExists(Book book) {
         List<Book> bookList = bookRepository.findByTitleLike(book.getTitle());
         if (!bookList.isEmpty()) {
             for (Book bookInList : bookList) {
-                if(bookInList.getAuthors().equals(book.getAuthors())){
+                if(bookInList.getAuthors().equals(book.getAuthors()) && !bookInList.getId().equals(book.getId())){
                     return true;
                 }
             }
         }
         return false;
     }
-
-//    private boolean compareListAuthorsByName(Set<Author> authors1, Set<Author> authors2){
-//        Set<String> authorNameList1 = new HashSet<>();
-//        Set<String> authorNameList2 = new HashSet<>();
-//        for (Author author : authors1){
-//            String authorName = author.getFirstName() + ' ' + author.getLastName();
-//            authorNameList1.add(authorName);
-//        }
-//        for (Author author : authors2){
-//            String authorName = author.getFirstName() + ' ' + author.getLastName();
-//            authorNameList2.add(authorName);
-//        }
-//        return authorNameList1.equals(authorNameList2);
-//    }
-
-
-//    @Override
-//    public Book saveNewBook(Book book, Set<Author> authors) {
-//        // Check if author already exists, otherwise we save it
-//        for(Author author: authors){
-//            Optional<Author> authorInDb = authorRepository.findByFirstNameAndLastName(author.getFirstName(), author.getLastName());
-//            if(authorInDb.isPresent()){
-//                author = authorInDb.get();
-//            }
-//            author.addBook(book);
-//        }
-//        return bookRepository.save(book);
-//    }
-//
-//    @Override
-//    public Book updateBook(Long id, Book book, Set<Author> authors) {
-////        OBook book2 = bookRepository.findById(id);
-//        if(!compareListAuthorsByName(book.getAuthors(),authors)){
-//            for(Author author : book.getAuthors()){
-//                author.removeBook(book);
-//            }
-//        }
-//        return this.saveNewBook(book, authors);
-//
-//    }
-
-//    @Override
-//    public Book updateBook(Long id, BookDto bookDto, Set<Author> authors) {
-//        Book book = bookRepository.findById(id).get();
-//        book.setTitle(bookDto.getTitle());
-//        if(bookDto.getIsbn() != null) {
-//            book.setIsbn(bookDto.getIsbn());
-//        }
-//        if(!compareListAuthorsByName(book.getAuthors(), authors)){
-//            Iterator iterator = book.getAuthors().iterator();
-//            while (iterator.hasNext()) {
-//                book.removeAuthor((Author) iterator.next());
-//            }
-//        }
-//        return this.saveNewBook(book, authors);
-//    }
-
-
 
 }

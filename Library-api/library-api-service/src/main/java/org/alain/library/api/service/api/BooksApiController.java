@@ -20,7 +20,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -102,33 +101,29 @@ public class BooksApiController implements BooksApi {
         return new ResponseEntity<BookCopyDto>(HttpStatus.NOT_FOUND);
     }
 
-    public ResponseEntity<BookDto> updateBook(@ApiParam(value = "Book id to update",required=true) @PathVariable("id") Long id,@ApiParam(value = "Book object updated" ,required=true )  @Valid @RequestBody BookDto book) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<BookDto>(objectMapper.readValue("{  \"isbn\" : \"isbn\",  \"id\" : 0,  \"title\" : \"title\",  \"authors\" : [ {    \"firstName\" : \"firstName\",    \"lastName\" : \"lastName\"  }, {    \"firstName\" : \"firstName\",    \"lastName\" : \"lastName\"  } ]}", BookDto.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<BookDto>(HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<BookDto> updateBook(@ApiParam(value = "Book id to update",required=true) @PathVariable("id") Long id,
+                                              @ApiParam(value = "Book object updated" ,required=true )  @Valid @RequestBody BookDto book) {
+        try {
+            Optional<Book> bookModel = bookManagement.updateBook(id, convertBookDtoToBookModel(book));
+            if (bookModel.isPresent()) {
+                return new ResponseEntity<BookDto>(convertBookModelToBookDto(bookModel.get()), HttpStatus.OK);
             }
+            return new ResponseEntity<BookDto>(HttpStatus.CONFLICT);
+        }catch (Exception ex){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
-
-        return new ResponseEntity<BookDto>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<BookCopyDto> updateBookCopy(@ApiParam(value = "Book id to update copy from",required=true) @PathVariable("bookId") Long bookId,@ApiParam(value = "BookCopy id to update",required=true) @PathVariable("copyId") Long copyId,@ApiParam(value = "Book copy object updated" ,required=true )  @Valid @RequestBody BookCopyDto copy) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<BookCopyDto>(objectMapper.readValue("{  \"editor\" : \"editor\",  \"book\" : \"{}\",  \"id\" : 0,  \"barcode\" : \"barcode\"}", BookCopyDto.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<BookCopyDto>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+    public ResponseEntity<BookCopyDto> updateBookCopy(@ApiParam(value = "Book id to update copy from",required=true) @PathVariable("bookId") Long bookId,
+                                                      @ApiParam(value = "BookCopy id to update",required=true) @PathVariable("copyId") Long copyId,
+                                                      @ApiParam(value = "Book copy object updated" ,required=true )  @Valid @RequestBody BookCopyDto copy) {
+        Optional<BookCopy> bookCopyModel = bookManagement.updateBookCopy(bookId, copyId, convertBookCopyDtoToBookCopyModel(copy));
+        if (bookCopyModel.isPresent()) {
+            return new ResponseEntity<BookCopyDto>(convertBookCopyModelToBookCopyDto(bookCopyModel.get()), HttpStatus.OK);
         }
-
-        return new ResponseEntity<BookCopyDto>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<BookCopyDto>(HttpStatus.NOT_FOUND);
     }
+
 
     //=======================================================================
     //================== CONVERTERS =========================================
@@ -146,6 +141,18 @@ public class BooksApiController implements BooksApi {
             bookDto.addAuthorsItem(convertAuthorModelToBooksAuthors(author));
         }
         return bookDto;
+    }
+
+    private Book convertBookDtoToBookModel(BookDto bookDto) {
+        Book bookModel = new Book(bookDto.getTitle());
+        try {
+            for (BooksAuthors booksAuthors : bookDto.getAuthors()) {
+                bookModel.addAuthor(convertBooksAuthorsToAuthorModel(booksAuthors));
+            }
+            return bookModel;
+        }catch (NullPointerException ex){
+            throw new UnknownAuthorException("A book should have at least one author");
+        }
     }
 
     private List<BookDto> convertListBookModelToListBookDto(List<Book> bookList) {
@@ -168,6 +175,7 @@ public class BooksApiController implements BooksApi {
         }
     }
 
+
     //================== Author =========================================
 
     private BooksAuthors convertAuthorModelToBooksAuthors(Author authorModel){
@@ -184,6 +192,7 @@ public class BooksApiController implements BooksApi {
         return author;
     }
 
+
     //================== BookCopy =========================================
 
     private BookCopyDto convertBookCopyModelToBookCopyDto(BookCopy bookCopy) {
@@ -193,6 +202,12 @@ public class BooksApiController implements BooksApi {
         bookCopyDto.setEditor(bookCopy.getEditor());
         bookCopyDto.setBook(convertBookModelToBookDto(bookCopy.getBook()));
         return bookCopyDto;
+    }
+
+    private BookCopy convertBookCopyDtoToBookCopyModel(BookCopyDto bookCopyDto) {
+        BookCopy bookCopyModel = new BookCopy();
+        bookCopyModel.setEditor(bookCopyDto.getEditor());
+        return bookCopyModel;
     }
 
     private List<BookCopyDto> convertListBookCopyModelToListBookCopyDto(List<BookCopy> bookCopyList) {

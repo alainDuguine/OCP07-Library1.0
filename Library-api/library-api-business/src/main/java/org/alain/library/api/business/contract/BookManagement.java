@@ -14,8 +14,6 @@ public interface BookManagement extends CrudManager<Book>{
     void deleteCopyInBook(Long bookId, Long copyId);
     Optional<Book> saveBook(Book convertBookFormToBookModel);
     Optional<BookCopy> saveBookCopy(Long id, BookCopy bookCopy);
-
-//    Book updateBook(Long id, BookDto book, Set<Author> authors);
-
-//    Book updateBook(Long id, Book book, Set<Author> authors);
+    Optional<BookCopy> updateBookCopy(Long bookId, Long copyId, BookCopy bookCopy);
+    Optional<Book> updateBook(Long id, Book book);
 }

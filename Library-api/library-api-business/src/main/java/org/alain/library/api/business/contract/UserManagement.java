@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserManagement extends CrudManager<User>{
-
     List<User> findUserByMail(String email);
     Optional<User> saveUser(User user);
     Optional<User> updateUser(Long id, User userForm, String authorization);
