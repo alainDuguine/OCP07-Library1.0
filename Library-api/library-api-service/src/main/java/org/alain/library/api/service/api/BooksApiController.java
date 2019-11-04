@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiParam;
 import org.alain.library.api.business.contract.BookManagement;
 import org.alain.library.api.business.exceptions.UnknownAuthorException;
+import org.alain.library.api.business.exceptions.UnknownBookException;
 import org.alain.library.api.model.book.Author;
 import org.alain.library.api.model.book.Book;
 import org.alain.library.api.model.book.BookCopy;
@@ -65,8 +66,12 @@ public class BooksApiController implements BooksApi {
     }
 
     public ResponseEntity<List<BookCopyDto>> getCopies(@ApiParam(value = "Id of book to find copies from",required=true) @PathVariable("id") Long id) {
-        List<BookCopy> bookCopyList = bookManagement.findCopiesInBook(id);
-        return new ResponseEntity<List<BookCopyDto>>(convertListBookCopyModelToListBookCopyDto(bookCopyList), HttpStatus.OK);
+        try {
+            List<BookCopy> bookCopyList = bookManagement.findCopiesInBook(id);
+            return new ResponseEntity<List<BookCopyDto>>(convertListBookCopyModelToListBookCopyDto(bookCopyList), HttpStatus.OK);
+        }catch (UnknownBookException ex){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 
     public ResponseEntity<Void> deleteBook(@ApiParam(value = "Book id to delete",required=true) @PathVariable("id") Long id) {

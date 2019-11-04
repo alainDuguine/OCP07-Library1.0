@@ -7,7 +7,7 @@ import org.alain.library.api.model.book.BookCopy;
 import java.util.List;
 import java.util.Optional;
 
-public interface BookManagement extends CrudManager<Book>{
+public interface BookManagement extends CrudManagement<Book> {
     List<Book> findByTitle(String title);
     Optional<BookCopy> findCopyInBook(Long bookId, Long copyId);
     List<BookCopy> findCopiesInBook(Long id);

@@ -6,7 +6,6 @@
 package org.alain.library.api.service.api;
 
 import io.swagger.annotations.*;
-import org.alain.library.api.service.dto.InlineResponse200;
 import org.alain.library.api.service.dto.LoanDto;
 import org.alain.library.api.service.dto.LoanStatusDto;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-10-31T15:23:24.407+01:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-11-03T10:43:27.637+01:00")
 
 @Api(value = "loans", description = "the loans API")
 public interface LoansApi {
@@ -55,15 +54,15 @@ public interface LoansApi {
     ResponseEntity<LoanDto> getLoan(@ApiParam(value = "Id of loan to return", required = true) @PathVariable("id") Long id);
 
 
-    @ApiOperation(value = "Get all loan's history", nickname = "getLoanHistory", notes = "", response = InlineResponse200.class, tags={ "loans", })
+    @ApiOperation(value = "Get all loan's history", nickname = "getLoanHistory", notes = "", response = LoanStatusDto.class, responseContainer = "List", tags={ "loans", })
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Loan found", response = InlineResponse200.class),
+        @ApiResponse(code = 200, message = "Loan found", response = LoanStatusDto.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "Invalid ID supplied"),
         @ApiResponse(code = 404, message = "Loan not found") })
     @RequestMapping(value = "/loans/{id}/history",
         produces = { "application/json" },
         method = RequestMethod.GET)
-    ResponseEntity<InlineResponse200> getLoanHistory(@ApiParam(value = "Id of loan", required = true) @PathVariable("id") Long id);
+    ResponseEntity<List<LoanStatusDto>> getLoanHistory(@ApiParam(value = "Id of loan", required = true) @PathVariable("id") Long id);
 
 
     @ApiOperation(value = "Get a list of all loans", nickname = "getLoans", notes = "", response = LoanDto.class, responseContainer = "List", tags={ "loans", })
@@ -72,6 +71,6 @@ public interface LoansApi {
     @RequestMapping(value = "/loans",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<List<LoanDto>> getLoans(@ApiParam(value = "Status values as filter in research", allowableValues = "loaned, returned, prolonged, late, closed") @Valid @RequestParam(value = "status", required = false) List<String> status);
+    ResponseEntity<List<LoanDto>> getLoans(@ApiParam(value = "Status values as filter in research", allowableValues = "loaned, returned, prolonged, late, closed") @Valid @RequestParam(value = "status", required = false) String status);
 
 }

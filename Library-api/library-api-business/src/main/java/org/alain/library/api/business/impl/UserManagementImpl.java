@@ -12,7 +12,7 @@ import java.util.Optional;
 
 
 @Service
-public class UserManagementImpl extends CrudManagerImpl<User> implements UserManagement {
+public class UserManagementImpl extends CrudManagementImpl<User> implements UserManagement {
 
     private final UserRepository userRepository;
 

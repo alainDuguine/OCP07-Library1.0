@@ -37,10 +37,10 @@ public class Loan {
     @OneToMany(mappedBy = "loan", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LoanStatus> loanStatuses = new ArrayList<>();
 
-    public void addStatus(Status status){
-        LoanStatus loanStatus = new LoanStatus(this, status, LocalDate.now());
+    public void addLoanStatus(LoanStatus loanStatus) {
+        loanStatus.setDate(LocalDate.now());
+        loanStatus.setLoan(this);
         this.loanStatuses.add(loanStatus);
-        status.getLoanStatuses().add(loanStatus);
     }
 
     @Override

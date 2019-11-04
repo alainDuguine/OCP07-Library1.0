@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AuthorManagementImpl extends CrudManagerImpl<Author> implements AuthorManagement {
+public class AuthorManagementImpl extends CrudManagementImpl<Author> implements AuthorManagement {
 
     private final AuthorRepository authorRepository;
     private final SharedBookAuthorManagement sharedBookAuthorManagement;

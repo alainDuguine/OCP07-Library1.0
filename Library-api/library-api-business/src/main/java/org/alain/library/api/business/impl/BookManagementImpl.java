@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class BookManagementImpl extends CrudManagerImpl<Book> implements BookManagement {
+public class BookManagementImpl extends CrudManagementImpl<Book> implements BookManagement {
 
     private final BookRepository bookRepository;
     private final BookCopyRepository bookCopyRepository;
@@ -39,7 +39,11 @@ public class BookManagementImpl extends CrudManagerImpl<Book> implements BookMan
 
     @Override
     public List<BookCopy> findCopiesInBook(Long id) {
-        return bookCopyRepository.findAllByBookId(id);
+        if(bookRepository.findById(id).isPresent()) {
+            return bookCopyRepository.findAllByBookId(id);
+        }else {
+            throw new UnknownBookException("The book doesn't exists");
+        }
     }
 
     @Override

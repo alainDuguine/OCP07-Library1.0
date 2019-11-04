@@ -1,16 +1,16 @@
 package org.alain.library.api.business.impl;
 
-import org.alain.library.api.business.contract.CrudManager;
+import org.alain.library.api.business.contract.CrudManagement;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public class CrudManagerImpl<T> implements CrudManager<T> {
+public class CrudManagementImpl<T> implements CrudManagement<T> {
 
     JpaRepository<T, Long> repository;
 
-    public CrudManagerImpl(JpaRepository<T, Long> repository) {
+    public CrudManagementImpl(JpaRepository<T, Long> repository) {
         this.repository = repository;
     }
 

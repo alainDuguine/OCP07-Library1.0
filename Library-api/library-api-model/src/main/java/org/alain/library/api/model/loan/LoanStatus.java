@@ -49,4 +49,14 @@ public class LoanStatus {
     public int hashCode() {
         return 19;
     }
+
+    @Override
+    public String toString() {
+        return "LoanStatus{" +
+                "id=" + id +
+                ", loan=" + loan.getId() +
+                ", status=" + status.getDesignation() +
+                ", date=" + date +
+                '}';
+    }
 }
