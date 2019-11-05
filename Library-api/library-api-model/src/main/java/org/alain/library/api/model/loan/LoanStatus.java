@@ -1,18 +1,19 @@
 package org.alain.library.api.model.loan;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * Represents the association table between Loan and Status,
  * which has as primary key the object @Embeddable LoanStatusId
  */
 @Entity(name = "LoanStatus")
-@Data
-@NoArgsConstructor
 @Table(name = "loan_status")
 public class LoanStatus {
 
@@ -32,22 +33,59 @@ public class LoanStatus {
     @Column
     private LocalDate date = LocalDate.now();
 
-    public LoanStatus(Loan loan, Status status, LocalDate date) {
+    public LoanStatus() {
+    }
+
+    public LoanStatus(Loan loan, Status status) {
         this.loan = loan;
         this.status = status;
+        this.id = new LoanStatusId(loan.getId(), status.getId());
+    }
+
+    public LoanStatusId getId() {
+        return id;
+    }
+
+    public void setId(LoanStatusId id) {
+        this.id = id;
+    }
+
+    public Loan getLoan() {
+        return loan;
+    }
+
+    public void setLoan(Loan loan) {
+        this.loan = loan;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null) return false;
-        if (this.getClass() != o.getClass()) return false;
-        return id != null && id.equals(((LoanStatus)o).getId());
+        if (o == null || getClass() != o.getClass()) return false;
+        LoanStatus that = (LoanStatus) o;
+        return Objects.equals(loan, that.loan) &&
+                Objects.equals(status, that.status);
     }
+
     @Override
     public int hashCode() {
-        return 19;
+        return Objects.hash(loan, status);
     }
 
     @Override

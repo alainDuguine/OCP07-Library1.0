@@ -86,7 +86,7 @@ public class BookManagementImpl extends CrudManagementImpl<Book> implements Book
                 return Optional.of(bookRepository.save(book.get()));
             }
         }else{
-            throw new UnknownBookException("The book doesn't exists");
+            throw new UnknownBookException("The book number"+id+"doesn't exists");
         }
     }
 

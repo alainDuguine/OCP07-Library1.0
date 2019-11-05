@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-11-03T10:43:27.637+01:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-11-05T10:49:30.288+01:00")
 
 @Api(value = "loans", description = "the loans API")
 public interface LoansApi {
@@ -31,16 +31,16 @@ public interface LoansApi {
     ResponseEntity<LoanDto> addLoan(@ApiParam(value = "Loan object that needs to be added to the database", required = true) @Valid @RequestBody LoanDto loanForm);
 
 
-    @ApiOperation(value = "Extend an existing loan", nickname = "extendLoan", notes = "", response = LoanStatusDto.class, tags={ "loans", })
+    @ApiOperation(value = "Extend an existing loan", nickname = "extendLoan", notes = "", tags={ "loans", })
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Loan extended", response = LoanStatusDto.class),
+        @ApiResponse(code = 200, message = "Loan extended"),
         @ApiResponse(code = 400, message = "Invalid ID supplied"),
         @ApiResponse(code = 403, message = "Loan can't be extended"),
         @ApiResponse(code = 404, message = "Loan not found") })
     @RequestMapping(value = "/loans/{id}/extension",
         produces = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<LoanStatusDto> extendLoan(@ApiParam(value = "Id of loan", required = true) @PathVariable("id") Long id, @ApiParam(value = "User identification", required = true) @RequestHeader(value = "Authorization", required = true) String authorization);
+    ResponseEntity<Void> extendLoan(@ApiParam(value = "Id of loan", required = true) @PathVariable("id") Long id, @ApiParam(value = "User identification", required = true) @RequestHeader(value = "Authorization", required = true) String authorization);
 
 
     @ApiOperation(value = "Get loan by Id", nickname = "getLoan", notes = "", response = LoanDto.class, tags={ "loans", })
@@ -66,11 +66,23 @@ public interface LoansApi {
 
 
     @ApiOperation(value = "Get a list of all loans", nickname = "getLoans", notes = "", response = LoanDto.class, responseContainer = "List", tags={ "loans", })
-    @ApiResponses(value = { 
+    @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Loans found", response = LoanDto.class, responseContainer = "List") })
     @RequestMapping(value = "/loans",
-        produces = { "application/json" }, 
+        produces = { "application/json" },
         method = RequestMethod.GET)
-    ResponseEntity<List<LoanDto>> getLoans(@ApiParam(value = "Status values as filter in research", allowableValues = "loaned, returned, prolonged, late, closed") @Valid @RequestParam(value = "status", required = false) String status);
+    ResponseEntity<List<LoanDto>> getLoans(@ApiParam(value = "Status values as filter in research", allowableValues = "loaned, returned, prolonged, late") @Valid @RequestParam(value = "status", required = false) String status);
+
+
+    @ApiOperation(value = "Update a loan by adding a status to it", nickname = "updateLoan", notes = "", tags={ "loans", })
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Loan updated"),
+        @ApiResponse(code = 400, message = "Invalid ID supplied"),
+        @ApiResponse(code = 404, message = "Loan not found") })
+    @RequestMapping(value = "/loans/{id}",
+        produces = { "application/json" },
+        consumes = { "text/plain" },
+        method = RequestMethod.PUT)
+    ResponseEntity<Void> updateLoan(@ApiParam(value = "Id of loan to update", required = true) @PathVariable("id") Long id, @ApiParam(value = "Status values to add to loan history", required = true) @Valid @RequestBody String status);
 
 }

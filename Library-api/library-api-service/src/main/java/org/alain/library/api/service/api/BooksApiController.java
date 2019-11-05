@@ -205,6 +205,7 @@ public class BooksApiController implements BooksApi {
         bookCopyDto.setId(bookCopy.getId());
         bookCopyDto.setBarcode(bookCopy.getBarcode());
         bookCopyDto.setEditor(bookCopy.getEditor());
+        bookCopyDto.setAvailable(bookCopy.isAvailable());
         bookCopyDto.setBook(convertBookModelToBookDto(bookCopy.getBook()));
         return bookCopyDto;
     }

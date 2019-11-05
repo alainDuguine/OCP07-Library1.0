@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LoanManagement extends CrudManagement<Loan> {
-    Optional<LoanStatus> getCurrentStatus(Loan loan);
     List<Loan> findAllByStatus(String status);
+    List<LoanStatus> getLoanStatusList(Long id);
+    Loan createNewLoan(Long bookCopyId, Long userId);
+    Optional<LoanStatus> updateLoan(Long id, String status);
+    Optional<LoanStatus> extendLoan(Long id, String authorization);
 }

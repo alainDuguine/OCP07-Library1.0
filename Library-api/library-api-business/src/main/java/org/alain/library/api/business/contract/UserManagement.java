@@ -10,4 +10,5 @@ public interface UserManagement extends CrudManagement<User> {
     List<User> findUserByMail(String email);
     Optional<User> saveUser(User user);
     Optional<User> updateUser(Long id, User userForm, String authorization);
+    boolean checkUserCredentialsFromB64Encoded(String userCredentials, String authorization);
 }

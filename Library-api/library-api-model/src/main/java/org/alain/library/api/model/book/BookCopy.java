@@ -17,6 +17,7 @@ public class BookCopy {
     private Long id;
     private String barcode;
     private String editor;
+    private boolean available = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Book book;

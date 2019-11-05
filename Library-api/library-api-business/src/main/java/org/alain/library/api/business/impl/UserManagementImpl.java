@@ -43,8 +43,7 @@ public class UserManagementImpl extends CrudManagementImpl<User> implements User
         if (user.isPresent()){
             // Check authorization
             String userCredentials = user.get().getEmail() + ':' + user.get().getPassword();
-            authorization = authorization.replace("Basic ","");
-            if(userCredentials.equals(decodeAuthorization(authorization))){
+            if(checkUserCredentialsFromB64Encoded(userCredentials, authorization)){
                 user.get().setFirstName(userForm.getFirstName());
                 user.get().setLastName(userForm.getLastName());
                 user.get().setPasswordConfirmation(user.get().getPassword());
@@ -56,7 +55,13 @@ public class UserManagementImpl extends CrudManagementImpl<User> implements User
         return Optional.empty();
     }
 
+    @Override
+    public boolean checkUserCredentialsFromB64Encoded(String userCredentials, String authorization){
+        return userCredentials.equals(decodeAuthorization(authorization));
+    }
+
     private String decodeAuthorization(String encodedAuthorization){
+        encodedAuthorization = encodedAuthorization.replace("Basic ","");
         byte[] decodedAuthorization = Base64.getDecoder().decode(encodedAuthorization);
         return new String(decodedAuthorization);
     }

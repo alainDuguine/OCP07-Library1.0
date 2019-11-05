@@ -3,7 +3,11 @@ package org.alain.library.api.service.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiParam;
 import org.alain.library.api.business.contract.LoanManagement;
+import org.alain.library.api.business.exceptions.UnauthorizedException;
+import org.alain.library.api.business.exceptions.UnknowStatusException;
+import org.alain.library.api.business.exceptions.UnknownLoanException;
 import org.alain.library.api.model.loan.Loan;
+import org.alain.library.api.model.loan.LoanStatus;
 import org.alain.library.api.service.dto.LoanDto;
 import org.alain.library.api.service.dto.LoanStatusDto;
 import org.slf4j.Logger;
@@ -15,13 +19,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-10-31T15:23:24.407+01:00")
 
@@ -56,36 +58,45 @@ public class LoansApiController implements LoansApi {
 
     @Override
     public ResponseEntity<List<LoanStatusDto>> getLoanHistory(@ApiParam(value = "Id of loan",required=true) @PathVariable("id") Long id) {
-        return null;
+        try {
+            List<LoanStatus> loanStatusListModel = loanManagement.getLoanStatusList(id);
+            return new ResponseEntity<List<LoanStatusDto>>(convertListLoanStatusModelToListLoanStatusDto(loanStatusListModel), HttpStatus.OK);
+        }catch (UnknownLoanException ex){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
-
 
     public ResponseEntity<LoanDto> addLoan(@ApiParam(value = "Loan object that needs to be added to the database" ,required=true )  @Valid @RequestBody LoanDto loanForm) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<LoanDto>(objectMapper.readValue("{  \"endDate\" : \"endDate\",  \"bookCopyId\" : 6,  \"currentStatus\" : \"{}\",  \"id\" : 0,  \"userId\" : 1,  \"startDate\" : \"startDate\"}", LoanDto.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<LoanDto>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+        try {
+            Loan loanModel = loanManagement.createNewLoan(loanForm.getBookCopyId(), loanForm.getUserId());
+            return new ResponseEntity<LoanDto>(convertLoanModelToLoanDto(loanModel), HttpStatus.OK);
+        }catch(Exception ex){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
-
-        return new ResponseEntity<LoanDto>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<LoanStatusDto> extendLoan(@ApiParam(value = "Id of loan",required=true) @PathVariable("id") Long id,@ApiParam(value = "User identification" ,required=true) @RequestHeader(value="Authorization", required=true) String authorization) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<LoanStatusDto>(objectMapper.readValue("{  \"date\" : \"date\",  \"id\" : 0,  \"status\" : \"status\"}", LoanStatusDto.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<LoanStatusDto>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public ResponseEntity<Void> updateLoan(@ApiParam(value = "Id of loan to update",required=true) @PathVariable("id") Long id,
+                                           @ApiParam(value = "Status values to add to loan history" ,required=true )  @Valid @RequestBody String status) {
+        try {
+            Optional<LoanStatus> loanStatus = loanManagement.updateLoan(id, status);
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        }catch (UnknowStatusException ex){throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());}
+    }
 
-        return new ResponseEntity<LoanStatusDto>(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity<Void> extendLoan(@ApiParam(value = "Id of loan",required=true) @PathVariable("id") Long id,
+                                           @ApiParam(value = "User identification" ,required=true) @RequestHeader(value="Authorization", required=true) String authorization) {
+        try {
+            Optional<LoanStatus> loanStatus = loanManagement.extendLoan(id, authorization);
+            if(loanStatus.isPresent()) {
+                return new ResponseEntity<Void>(HttpStatus.OK);
+            }else{
+                return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+            }
+        }catch(UnauthorizedException ex){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not allowed to extend this loan");
+        }catch(Exception ex){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "You are not allowed to extend this loan");
+        }
     }
 
     //=======================================================================
@@ -102,7 +113,7 @@ public class LoansApiController implements LoansApi {
         loanDto.endDate(String.valueOf(loanModel.getEndDate()));
         loanDto.setBookCopyId(loanModel.getBookCopy().getId());
         loanDto.setUserId(loanModel.getUser().getId());
-        loanDto.setCurrentStatus(loanManagement.getCurrentStatus(loanModel).get());
+        loanDto.setCurrentStatus(loanModel.getCurrentStatus());
         return loanDto;
     }
 
@@ -114,5 +125,22 @@ public class LoansApiController implements LoansApi {
         return loanDtoList;
     }
 
+    //================== Loan Status =========================================
+
+    private List<LoanStatusDto> convertListLoanStatusModelToListLoanStatusDto(List<LoanStatus> loanStatusListModel) {
+        List<LoanStatusDto> loanStatusDtoList = new ArrayList<>();
+        for(LoanStatus loanStatus : loanStatusListModel){
+            loanStatusDtoList.add(convertLoanStatusModelToLoanStatusDto(loanStatus));
+        }
+        return loanStatusDtoList;
+    }
+
+    private LoanStatusDto convertLoanStatusModelToLoanStatusDto(LoanStatus loanStatusModel){
+        LoanStatusDto loanStatusDto = new LoanStatusDto();
+        loanStatusDto.setId(loanStatusModel.getLoan().getId());
+        loanStatusDto.setDate(loanStatusModel.getDate().toString());
+        loanStatusDto.setStatus(loanStatusModel.getStatus().getDesignation().name());
+        return loanStatusDto;
+    }
 
 }

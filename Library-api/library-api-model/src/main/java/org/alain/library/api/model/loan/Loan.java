@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Objects;
 
 
 @Entity
@@ -24,9 +24,9 @@ public class Loan {
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
-    private LocalDate startDate = LocalDate.now();
+    private LocalDate startDate;
     private LocalDate endDate;
-    private boolean returned = false;
+    private String currentStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private BookCopy bookCopy;
@@ -37,23 +37,24 @@ public class Loan {
     @OneToMany(mappedBy = "loan", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LoanStatus> loanStatuses = new ArrayList<>();
 
-    public void addLoanStatus(LoanStatus loanStatus) {
-        loanStatus.setDate(LocalDate.now());
-        loanStatus.setLoan(this);
+    public LoanStatus addLoanStatus(Status status){
+        LoanStatus loanStatus = new LoanStatus(this, status);
         this.loanStatuses.add(loanStatus);
+        status.getLoanStatuses().add(loanStatus);
+        return loanStatus;
     }
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null) return false;
-        if (this.getClass() != o.getClass()) return false;
-        return id != null && id.equals(((Loan)o).getId());
+        if (o == null || getClass() != o.getClass()) return false;
+        Loan loan = (Loan) o;
+        return Objects.equals(id, loan.id);
     }
 
     @Override
     public int hashCode() {
-        return 23;
+        return Objects.hash(id);
     }
-
 }
