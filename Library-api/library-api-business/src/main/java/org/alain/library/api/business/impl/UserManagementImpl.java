@@ -3,6 +3,8 @@ package org.alain.library.api.business.impl;
 import org.alain.library.api.business.contract.UserManagement;
 import org.alain.library.api.business.exceptions.UnauthorizedException;
 import org.alain.library.api.consumer.repository.UserRepository;
+import org.alain.library.api.model.loan.Loan;
+import org.alain.library.api.model.loan.StatusDesignation;
 import org.alain.library.api.model.user.User;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +60,21 @@ public class UserManagementImpl extends CrudManagementImpl<User> implements User
     @Override
     public boolean checkUserCredentialsFromB64Encoded(String userCredentials, String authorization){
         return userCredentials.equals(decodeAuthorization(authorization));
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()){
+            List<Loan> loanList = user.get().getLoans();
+            for (Loan loan : loanList){
+                if (!loan.getCurrentStatus().equals(StatusDesignation.RETURNED.toString())){
+                    throw new UnauthorizedException("Impossible to delete user n°"+id+", user concerned by loans who are still active");
+                }else{
+                    userRepository.deleteById(id);
+                }
+            }
+        }
     }
 
     private String decodeAuthorization(String encodedAuthorization){

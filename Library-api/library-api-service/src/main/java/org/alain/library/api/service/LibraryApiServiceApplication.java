@@ -1,25 +1,15 @@
 package org.alain.library.api.service;
 
 import org.alain.library.api.consumer.repository.*;
-import org.alain.library.api.model.book.Author;
-import org.alain.library.api.model.book.Book;
-import org.alain.library.api.model.book.BookCopy;
 import org.alain.library.api.model.loan.*;
-import org.alain.library.api.model.user.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.Transactional;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
-import java.time.LocalDate;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"org.alain.library.api"})
@@ -28,9 +18,11 @@ import java.time.LocalDate;
 @EnableSwagger2
 public class LibraryApiServiceApplication implements CommandLineRunner {
 
-    @Autowired
     private StatusRepository statusRepository;
 
+    public LibraryApiServiceApplication(StatusRepository statusRepository) {
+        this.statusRepository = statusRepository;
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(LibraryApiServiceApplication.class, args);

@@ -1,6 +1,7 @@
 package org.alain.library.api.model.book;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.alain.library.api.model.loan.Loan;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -9,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class BookCopy {
 
     @Id

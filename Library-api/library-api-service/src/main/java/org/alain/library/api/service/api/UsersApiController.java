@@ -56,8 +56,12 @@ public class UsersApiController implements UsersApi {
     }
 
     public ResponseEntity<Void> deleteUser(@ApiParam(value = "User id to delete",required=true) @PathVariable("id") Long id) {
-        userManagement.delete(id);
-        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+        try {
+            userManagement.deleteUser(id);
+            return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+        }catch(UnauthorizedException ex){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        }
     }
 
     public ResponseEntity<UserDto> addUser(@ApiParam(value = "User object that needs to be added to the database" ,required=true )  @Valid @RequestBody UserForm userForm) {

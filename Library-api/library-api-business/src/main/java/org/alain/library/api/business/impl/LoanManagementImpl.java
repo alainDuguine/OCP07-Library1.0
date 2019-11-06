@@ -45,6 +45,21 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
     }
 
     @Override
+    public List<Loan> getLoansByUserId(Long userId, String authorization) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            String userCredentials = user.get().getEmail() + ':' + user.get().getPassword();
+            if (userManagement.checkUserCredentialsFromB64Encoded(userCredentials, authorization)) {
+                return loanRepository.findLoansByUserId(userId);
+            }else{
+                throw new UnauthorizedException("You are not allowed to acces these user's loans");
+            }
+        }else{
+            throw new UnknownUserException("User n°" + userId + " doesn't exist");
+        }
+    }
+
+    @Override
     public List<LoanStatus> getLoanStatusList(Long id) {
         if(loanRepository.findById(id).isPresent()) {
             return loanStatusRepository.findAllByLoanId(id);
@@ -123,5 +138,4 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
             throw new UnknownLoanException("Loan n°" + id + " doesn't exist");
         }
     }
-
 }

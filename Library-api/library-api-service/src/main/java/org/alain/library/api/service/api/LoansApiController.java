@@ -6,6 +6,7 @@ import org.alain.library.api.business.contract.LoanManagement;
 import org.alain.library.api.business.exceptions.UnauthorizedException;
 import org.alain.library.api.business.exceptions.UnknowStatusException;
 import org.alain.library.api.business.exceptions.UnknownLoanException;
+import org.alain.library.api.business.exceptions.UnknownUserException;
 import org.alain.library.api.model.loan.Loan;
 import org.alain.library.api.model.loan.LoanStatus;
 import org.alain.library.api.service.dto.LoanDto;
@@ -56,7 +57,19 @@ public class LoansApiController implements LoansApi {
         return new ResponseEntity<List<LoanDto>>(convertListLoanModelToListLoanDto(loanList), HttpStatus.OK);
     }
 
-    @Override
+    public ResponseEntity<List<LoanDto>> getLoanByUserId(@ApiParam(value = "User Id to look for loans",required=true) @PathVariable("userId") Long userId,
+                                                         @ApiParam(value = "User identification" ,required=true) @RequestHeader(value="Authorization", required=true) String authorization) {
+        try {
+            List<Loan> loanModelList = loanManagement.getLoansByUserId(userId, authorization);
+            return new ResponseEntity<List<LoanDto>>(convertListLoanModelToListLoanDto(loanModelList), HttpStatus.OK);
+        }catch(UnauthorizedException ex){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        }catch (UnknownUserException ex){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+        }
+
+    }
+
     public ResponseEntity<List<LoanStatusDto>> getLoanHistory(@ApiParam(value = "Id of loan",required=true) @PathVariable("id") Long id) {
         try {
             List<LoanStatus> loanStatusListModel = loanManagement.getLoanStatusList(id);

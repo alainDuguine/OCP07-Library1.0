@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-11-05T10:49:30.288+01:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-11-06T10:28:55.966+01:00")
 
 @Api(value = "loans", description = "the loans API")
 public interface LoansApi {
@@ -52,6 +52,17 @@ public interface LoansApi {
         produces = { "application/json" },
         method = RequestMethod.GET)
     ResponseEntity<LoanDto> getLoan(@ApiParam(value = "Id of loan to return", required = true) @PathVariable("id") Long id);
+
+
+    @ApiOperation(value = "Get loan for a user", nickname = "getLoanByUserId", notes = "", response = LoanDto.class, responseContainer = "List", tags={ "loans", })
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Loans found", response = LoanDto.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Invalid ID supplied"),
+        @ApiResponse(code = 404, message = "User not found") })
+    @RequestMapping(value = "/loans/user/{userId}",
+        produces = { "application/json" },
+        method = RequestMethod.GET)
+    ResponseEntity<List<LoanDto>> getLoanByUserId(@ApiParam(value = "User Id to look for loans", required = true) @PathVariable("userId") Long userId, @ApiParam(value = "User identification", required = true) @RequestHeader(value = "Authorization", required = true) String authorization);
 
 
     @ApiOperation(value = "Get all loan's history", nickname = "getLoanHistory", notes = "", response = LoanStatusDto.class, responseContainer = "List", tags={ "loans", })
