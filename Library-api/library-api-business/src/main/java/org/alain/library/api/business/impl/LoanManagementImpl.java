@@ -21,27 +21,22 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
 
     private final LoanRepository loanRepository;
     private final LoanStatusRepository loanStatusRepository;
-    private final BookCopyRepository bookCopyRepository;
     private final UserRepository userRepository;
     private final StatusRepository statusRepository;
     private final UserManagement userManagement;
 
-    public LoanManagementImpl(LoanRepository loanRepository, LoanStatusRepository loanStatusRepository, BookCopyRepository bookCopyRepository, UserRepository userRepository, StatusRepository statusRepository, UserManagement userManagement) {
+    public LoanManagementImpl(LoanRepository loanRepository, LoanStatusRepository loanStatusRepository, UserRepository userRepository, StatusRepository statusRepository, UserManagement userManagement) {
         super(loanRepository);
         this.loanRepository = loanRepository;
         this.loanStatusRepository = loanStatusRepository;
-        this.bookCopyRepository = bookCopyRepository;
         this.userRepository = userRepository;
         this.statusRepository = statusRepository;
         this.userManagement = userManagement;
     }
 
     @Override
-    public List<Loan> findAllByStatus(String status) {
-        if (status == null){
-            return loanRepository.findAll();
-        }
-        return loanRepository.findLoansByCurrentStatus(status);
+    public List<Loan> findLoans(String status, Long user) {
+        return loanRepository.findByCurrentStatusAndUserId(status, user);
     }
 
     @Override
@@ -70,22 +65,28 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
 
     @Override
     public Loan createNewLoan(Long bookCopyId, Long userId) {
-        Optional<BookCopy> bookCopy = bookCopyRepository.findById(bookCopyId);
-        Optional<User> user = userRepository.findById(userId);
-        if (!bookCopy.isPresent()) {
-            throw new UnknownBookCopyException("BookCopy n°" + bookCopyId + " doesn't exist");
-        } else if (!bookCopy.get().isAvailable()) {
-            throw new BookCopyNotAvailableException("BookCopy n°" + bookCopyId + " is not available");
-        }
-        if (!user.isPresent()) {
-            throw new UnknownUserException("User n°" + userId + " doesn't exist");
-        }
+//        Optional<BookCopy> bookCopy = bookCopyRepository.findById(bookCopyId);
+//        Optional<User> user = userRepository.findById(userId);
+//        if (!bookCopy.isPresent()) {
+//            throw new UnknownBookCopyException("BookCopy n°" + bookCopyId + " doesn't exist");
+//        } else if (!bookCopy.get().isAvailable()) {
+//            throw new BookCopyNotAvailableException("BookCopy n°" + bookCopyId + " is not available");
+//        }
+//        if (!user.isPresent()) {
+//            throw new UnknownUserException("User n°" + userId + " doesn't exist");
+//        }
         Loan loan = new Loan();
-        loan.setBookCopy(bookCopy.get());
-        loan.setUser(user.get());
+//        loan.setBookCopy(bookCopy.get());
+        loan.setBookCopy(BookCopy.builder().id(bookCopyId).build());
+//        loan.setUser(user.get());
+        loan.setUser(User.builder().id(userId).build());
         loan.setStartDate(LocalDate.now());
         loan.setEndDate(LocalDate.now().plusWeeks(4));
-        this.addLoanStatusToLoan(loan, StatusDesignation.LOANED);
+        try {
+            this.addLoanStatusToLoan(loan, StatusDesignation.LOANED);
+        }catch (Exception e){
+            throw new UnknownParameterException(String.format("Cannot create loan for %d and %d", bookCopyId, userId),e);
+        }
         return loan;
     }
 

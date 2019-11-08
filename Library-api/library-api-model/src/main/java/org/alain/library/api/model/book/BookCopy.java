@@ -1,5 +1,7 @@
 package org.alain.library.api.model.book;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.alain.library.api.model.loan.Loan;
@@ -12,6 +14,8 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 public class BookCopy {
 
     @Id

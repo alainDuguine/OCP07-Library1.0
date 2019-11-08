@@ -1,8 +1,6 @@
 package org.alain.library.api.model.user;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.alain.library.api.model.loan.Loan;
 import org.alain.library.api.model.user.validation.PasswordMatches;
 import javax.persistence.*;
@@ -20,6 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "LibraryUser")
 @PasswordMatches
+@Builder
+@AllArgsConstructor
 public class User {
 
     @Id
