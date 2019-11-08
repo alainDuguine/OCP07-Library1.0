@@ -1,9 +1,9 @@
 package org.alain.library.api.business.impl;
 
-import org.alain.library.api.business.contract.SharedBookAuthorManagement;
 import org.alain.library.api.business.contract.BookManagement;
 import org.alain.library.api.business.exceptions.UnknownAuthorException;
 import org.alain.library.api.business.exceptions.UnknownBookException;
+import org.alain.library.api.consumer.repository.AuthorRepository;
 import org.alain.library.api.consumer.repository.BookCopyRepository;
 import org.alain.library.api.consumer.repository.BookRepository;
 import org.alain.library.api.model.book.Author;
@@ -18,13 +18,13 @@ public class BookManagementImpl extends CrudManagementImpl<Book> implements Book
 
     private final BookRepository bookRepository;
     private final BookCopyRepository bookCopyRepository;
-    private final SharedBookAuthorManagement sharedBookAuthorManagement;
+    private final AuthorRepository authorRepository;
 
-    public BookManagementImpl(BookRepository bookRepository, BookCopyRepository bookCopyRepository, SharedBookAuthorManagement sharedBookAuthorManagement) {
+    public BookManagementImpl(BookRepository bookRepository, BookCopyRepository bookCopyRepository, AuthorRepository authorRepository) {
         super(bookRepository);
         this.bookRepository = bookRepository;
         this.bookCopyRepository = bookCopyRepository;
-        this.sharedBookAuthorManagement = sharedBookAuthorManagement;
+        this.authorRepository = authorRepository;
     }
 
     @Override
@@ -119,7 +119,7 @@ public class BookManagementImpl extends CrudManagementImpl<Book> implements Book
         Set<Author> listAuthor = new HashSet<>();
         for (Iterator<Author> it = book.getAuthors().iterator(); it.hasNext();) {
             Author author = it.next();
-            Optional<Author> authorInDb = sharedBookAuthorManagement.getAuthorByFullName(author.getFirstName(), author.getLastName());
+            Optional<Author> authorInDb = authorRepository.findByFirstNameAndLastName(author.getFirstName(), author.getLastName());
             if(authorInDb.isPresent()){
                 it.remove();
                 listAuthor.add(authorInDb.get());

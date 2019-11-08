@@ -1,8 +1,8 @@
 package org.alain.library.api.business.impl;
 
 import org.alain.library.api.business.contract.AuthorManagement;
-import org.alain.library.api.business.contract.SharedBookAuthorManagement;
 import org.alain.library.api.consumer.repository.AuthorRepository;
+import org.alain.library.api.consumer.repository.BookRepository;
 import org.alain.library.api.model.book.Author;
 import org.alain.library.api.model.book.Book;
 import org.springframework.stereotype.Service;
@@ -14,12 +14,12 @@ import java.util.Optional;
 public class AuthorManagementImpl extends CrudManagementImpl<Author> implements AuthorManagement {
 
     private final AuthorRepository authorRepository;
-    private final SharedBookAuthorManagement sharedBookAuthorManagement;
+    private final BookRepository bookRepository;
 
-    public AuthorManagementImpl(AuthorRepository authorRepository, SharedBookAuthorManagement sharedBookAuthorManagement) {
+    public AuthorManagementImpl(AuthorRepository authorRepository, BookRepository bookRepository) {
         super(authorRepository);
         this.authorRepository = authorRepository;
-        this.sharedBookAuthorManagement = sharedBookAuthorManagement;
+        this.bookRepository = bookRepository;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class AuthorManagementImpl extends CrudManagementImpl<Author> implements 
             for (Book book : new HashSet<>(author.get().getBooks())) {
                 author.get().removeBook(book);
                 if(book.getAuthors().isEmpty()){
-                    sharedBookAuthorManagement.deleteBookWithEmptyAuthors(book.getId());
+                    bookRepository.deleteById(book.getId());
                 }
             }
             authorRepository.delete(author.get());
