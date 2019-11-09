@@ -3,38 +3,76 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <!-- Fragment #1 : Headerfiles contains css and js references -->
 <head th:fragment="headerfiles">
-    <title>Accueil </title>
+    <title>Introduction to SpringBoot Security</title>
     <meta charset="UTF-8"/>
-    <script defer src="https://friconix.com/cdn/friconix.js"></script>
-    <link  href="../static/css/bootstrap.min.css" th:href="@{~/css/bootstrap.min.css}" rel="stylesheet">
-<!--    <link th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css}" rel="stylesheet">-->
-    <link href="../static/css/style.css" th:href="@{~/css/style.css}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link th:href="@{~/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{~/fontawesome/css/all.css}" rel="stylesheet">
+    <link th:href="@{~/css/style.css}" rel="stylesheet">
+    <link th:href="@{https://fonts.googleapis.com/css?family=Literata&display=swap}" rel="stylesheet">
 </head>
 <body>
 <!-- Fragment #2 : Navbar contains nav links -->
 <div th:fragment="nav">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark nav-transparency">
         <a class="navbar-brand" href="#">Open Library Project</a>
+        <ul class="navbar-nav navbar-center">
+            <li class="nav-item active mx-2 hover-underline">
+                <a class="nav-link" href="#">Mes Emprunts<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item mx-2 hover-underline">
+                <a class="nav-link" href="#">Les Livres</a>
+            </li>
+            <li class="nav-item mx-2 hover-underline">
+                <a class="nav-link" href="#">Mon Compte</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-0">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" role=button data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    UserNameblablablabalbalbablaablaa
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">Mon Compte</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Logout</a>
+                </div>
+            </li>
+        </ul>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#" th:href="@{~/index}"><i class="fa fa-home"></i>Home</a>
-                </li>
-                <li sec:authorize="isAuthenticated()" class="nav-item">
-                    <a class="nav-link" href="#" th:href="@{~/profile/index}">Profile</a>
-                </li>
-                <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
-                    <a class="nav-link" href="#" th:href="@{~/admin/index}">Admin</a>
-                </li>
-                <li sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')" class="nav-item">
-                    <a class="nav-link" href="#" th:href="@{~/management/index}">Management</a>
-                </li>
-            </ul>
-            <button sec:authorize="isAuthenticated()" th:href="@{/logout}" class="btn btn-outline-danger mr-1" type="submit">Logout</button>
-            <button sec:authorize="isAnonymous()" th:href="@{/login}" class="btn btn-outline-info" type="submit">Login</button>
-        </div>
     </nav>
+
+<!--    <nav class="navbar navbar-expand-lg navbar-light bg-light static-top">-->
+<!--        <a class="navbar-brand" href="#">-->
+<!--            <img class="svg-logo" th:src="@{/img/openlibrary-logo-tighter.svg}" alt="Open Library Logo"/>-->
+<!--        </a>-->
+
+<!--        <div class="collapse navbar-collapse" id="navbarSupportedContent">-->
+<!--            <ul class="navbar-nav mr-auto">-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link" href="#" th:href="@{~/index}"><i class="fa fa-home"></i>Home</a>-->
+<!--                </li>-->
+<!--&lt;!&ndash;                <li sec:authorize="isAuthenticated()" class="nav-item">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a class="nav-link" href="#" th:href="@{~/profile/index}">Profile</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                </li>&ndash;&gt;-->
+<!--&lt;!&ndash;                <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a class="nav-link" href="#" th:href="@{~/admin/index}">Admin</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                </li>&ndash;&gt;-->
+<!--&lt;!&ndash;                <li sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')" class="nav-item">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a class="nav-link" href="#" th:href="@{~/management/index}">Management</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                </li>&ndash;&gt;-->
+<!--            </ul>-->
+<!--            <form class="form-inline my-2 my-lg-0" form-method="post" th:action="@{/logout}">-->
+<!--&lt;!&ndash;                <button sec:authorize="isAuthenticated()" class="btn btn-outline-danger" type="submit">Logout</button>&ndash;&gt;-->
+<!--&lt;!&ndash;                <button sec:authorize="isAnonymous()" th:href="@{~/login}" class="btn btn-outline-info" type="submit">Login</button>&ndash;&gt;-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </nav>-->
 </div>
+<footer th:fragment="linkscripts">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</footer>
 </body>
 </html>

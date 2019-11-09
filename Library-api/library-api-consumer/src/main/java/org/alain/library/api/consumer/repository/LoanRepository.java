@@ -14,7 +14,6 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
     @Query("Select l from Loan l WHERE (:status is null or l.currentStatus = :status) and (:id is null or l.user.id = :id)")
     List<Loan> findByCurrentStatusAndUserId(@Param("status") String status, @Param("id")Long id);
 
-    List<Loan> findLoansByCurrentStatusLike(String status);
     List<Loan> findLoansByUserId(Long id);
 
     @Query("select l from Loan l where l.endDate < CURRENT_DATE")

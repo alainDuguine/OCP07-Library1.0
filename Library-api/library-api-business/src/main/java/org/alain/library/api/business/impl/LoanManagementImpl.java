@@ -85,7 +85,7 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
         try {
             this.addLoanStatusToLoan(loan, StatusDesignation.LOANED);
         }catch (Exception e){
-            throw new UnknownParameterException(String.format("Cannot create loan for %d and %d", bookCopyId, userId),e);
+            throw new UnknownParameterException(String.format("Cannot create loan for bookCopy %d and user %d", bookCopyId, userId),e);
         }
         return loan;
     }
