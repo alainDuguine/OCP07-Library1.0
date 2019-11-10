@@ -12,8 +12,8 @@ body{
 }
 
 .navbar{
-    background-color: #181c13;
-    opacity: 0.7;
+    background-color: #364259;
+    opacity: 0.85;
     box-shadow: 0px 2px 2px #1b1e21;
     line-height: 2;
 }
@@ -45,4 +45,44 @@ body{
     padding-top: 2px;
     border-bottom: 1px solid #ced4da;
     transition: 0.8s;
+}
+
+@media (min-width: 768px) {
+    .h-md-100 {height: 100vh;}
+}
+
+.btn-round { border-radius: 30px;}
+
+.logo{
+    width: 10rem;
+    position: relative;
+    top: 10px;
+}
+
+.logoarea{
+    background-color:  rgba(54, 66, 89, 0.75);
+}
+
+.logoarea h1{
+    text-decoration: underline;
+}
+
+.loginform{
+    background-color: rgba(242, 242, 240, 0.75);
+    box-shadow: 0 0 5px #364259;
+}
+
+.loginarea > label{
+    color: #364259;
+}
+
+.loginarea button{
+    background-color: #f2f2f0;
+    color: #735C60;
+    border: 1px solid #735C60;
+}
+
+.loginarea button:hover{
+    background-color: #735C60;
+    color: #f2f2f0;
 }
