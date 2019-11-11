@@ -14,7 +14,7 @@ body{
 .navbar{
     background-color: #364259;
     opacity: 0.85;
-    box-shadow: 0px 2px 2px #1b1e21;
+    box-shadow: 0 2px 2px #1b1e21;
     line-height: 2;
 }
 
@@ -59,30 +59,63 @@ body{
     top: 10px;
 }
 
-.logoarea{
+.logoArea{
     background-color:  rgba(54, 66, 89, 0.75);
 }
 
-.logoarea h1{
+.logoArea h1{
     text-decoration: underline;
 }
 
-.loginform{
+a:not([href]):not([tabindex]):focus, a:not([href]):not([tabindex]):hover{
+    color: #364259;
+}
+
+.loginForm{
     background-color: rgba(242, 242, 240, 0.75);
     box-shadow: 0 0 5px #364259;
 }
 
-.loginarea > label{
+.loginArea > label{
     color: #364259;
 }
 
-.loginarea button{
+.loginArea button, .registerForm .btnSubmit{
     background-color: #f2f2f0;
     color: #735C60;
     border: 1px solid #735C60;
 }
 
-.loginarea button:hover{
+.registerForm .btnCancel, .registerForm .btnSubmit{
+    margin-top: 0;
+}
+
+.registerForm .btnCancel{
     background-color: #735C60;
     color: #f2f2f0;
+}
+
+.registerForm .btnCancel:hover{
+    background-color: #f2f2f0;
+    color: #735C60;
+    border: 1px solid #735C60;
+}
+
+.loginArea button:hover, .registerForm .btnSubmit:hover{
+    background-color: #735C60;
+    color: #f2f2f0;
+}
+
+.modal-content{
+    background-color: rgba(242, 242, 240, 0.75);
+    box-shadow: 0 0 5px #364259;
+    padding: 1.5em 3em;
+}
+
+.modal-title{
+    margin: 0 auto;
+}
+
+.modal-header, .modal-footer{
+    border: 0;
 }
