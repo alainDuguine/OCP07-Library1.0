@@ -1,68 +1,36 @@
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:fragment="headerfiles">
-    <title>Introduction to SpringBoot Security</title>
-    <meta charset="UTF-8"/>
-    <link th:href="@{~/css/bootstrap.min.css}" rel="stylesheet">
-    <link th:href="@{~/fontawesome/css/all.css}" rel="stylesheet">
-    <link th:href="@{~/css/style.css}" rel="stylesheet">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:insert="fragments.html :: headerfiles">
+    <title>Index</title>
 </head>
 <body>
-<!-- Main navigation -->
-<header>
-    <!--Navbar-->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <strong>Open Library Project</strong>
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-7" aria-controls="navbarSupportedContent-7" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent-7">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Home
-                            <span class="sr-only">(current)</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Profile</a>
-                    </li>
-                </ul>
-                <form class="form-inline">
-                    <div class="md-form my-0">
-                        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                    </div>
-                </form>
+<header th:insert="fragments.html :: nav"></header>
+
+<div class="container">
+    <div class="loanDiv my-3 p-3 rounded">
+        <h4 class="border-bottom border-dark pb-2 mb-0 text-center">Vos emprunts récents</h4>
+        <div class="media pt-3">
+            <i class="far fa-bookmark fa-2x"></i>
+            <div class="media-body pl-2 pb-2 mb-0 small lh-125 border-bottom border-dark">
+                <p class="h4 d-block text-capitalize text-gray-dark"><u>Titre livre - Auteur</u></p>
+                <p class="lead">Emprunté le 12/11/2019. Retour prévu avant le 12/12/2019</p>
+                <p><em> Vous avez la possibilité de prolonger cet emprunt de 4 semaines supplémentaires</em><br/>
+                    <button class="align-middle btn btn-round mt-2 mb-0 btnLoan">Prolonger</button>
+                </p>
             </div>
         </div>
-    </nav>
-    <!-- Full Page Intro -->
-    <div class="view" style="background-image: url('img/background.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center center;">
-
-    </div>
-
-</header>
-<!-- Main navigation -->
-<!--Main Layout-->
-<main>
-    <div class="container">
-        <!--Grid row-->
-        <div class="row py-5">
-            <!--Grid column-->
-            <div class="col-md-12 text-center">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <div class="media pt-3">
+            <i class="far fa-bookmark fa-2x"></i>
+            <div class="media-body pl-2 pb-2 mb-0 small lh-125 border-bottom border-dark">
+                <p class="h4 d-block text-capitalize text-gray-dark"><u>Titre livre - Auteur</u></p>
+                <p class="lead">Emprunté le 12/11/2019. Retour prévu avant le 12/12/2019</p>
+                <p><em> Vous avez la possibilité de prolonger cet emprunt de 4 semaines supplémentaires</em><br/>
+                    <button class="align-middle btn btn-round mt-2 mb-0 btnLoan">Prolonger</button>
+                </p>
             </div>
-            <!--Grid column-->
         </div>
-        <!--Grid row-->
     </div>
-</main>
-<!--Main Layout-->
-
+</div>
+<footer th:insert="fragments.html :: linkscripts"></footer>
 </body>
 </html>

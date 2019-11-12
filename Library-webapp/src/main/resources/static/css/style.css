@@ -120,8 +120,45 @@ a:not([href]):not([tabindex]):focus, a:not([href]):not([tabindex]):hover{
     border: 0;
 }
 
-.loanDiv{
+.loanDiv, .searchDiv{
     background-color: rgba(242, 242, 240, 0.90);
     box-shadow: 0 0 5px #364259;
     padding: 1.5em 3em;
+}
+
+.form-control:focus {
+    background-color: rgba(242, 242, 240, 0.75);
+    transition: 1s;
+    border-color: #364259;
+    border-bottom-width: 1px;
+    box-shadow: none;
+}
+
+.form-control-underlined {
+    background-color: rgba(242, 242, 240, 0);
+    border-width: 0;
+    border-bottom-width: 1px;
+    border-color: #364259;
+    border-radius: 0;
+    padding-left: 0;
+}
+
+.form-control::placeholder {
+    font-size: 1rem;
+    color: #364259;
+    font-style: italic;
+}
+
+#buttonSearch{
+    color: #364259;
+}
+
+.table thead th{
+    border-top: 2px solid #364259;
+    border-bottom: 2px solid #364259;
+}
+
+th, td, tbody{
+    border-top: 1px solid #364259;
+    border-bottom: 1px solid #364259;
 }

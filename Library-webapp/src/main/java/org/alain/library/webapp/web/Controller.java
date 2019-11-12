@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/")
 public class Controller {
 
-    @GetMapping("/index")
+    @GetMapping("/home")
     public String index(){
-        return "index";
+        return "home";
     }
 
     @GetMapping("/login")
@@ -18,8 +18,8 @@ public class Controller {
         return "login";
     }
 
-    @GetMapping("/home")
+    @GetMapping("/search")
     public String home(){
-        return "home";
+        return "search";
     }
 }
