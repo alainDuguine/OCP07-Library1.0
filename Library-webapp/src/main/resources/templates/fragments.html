@@ -4,9 +4,10 @@
 <!-- Fragment #1 : Headerfiles contains css and js references -->
 <head th:fragment="headerfiles" th:remove="tag">
     <meta charset="UTF-8"/>
+    <title>Open Library</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link th:href="@{~/css/bootstrap.min.css}" rel="stylesheet">
-    <link th:href="@{~/fontawesome/css/all.css}" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/f1548314f6.js" th:src="@{https://kit.fontawesome.com/f1548314f6.js}" crossorigin="anonymous"></script>
     <link th:href="@{~/css/style.css}" rel="stylesheet">
     <link th:href="@{https://fonts.googleapis.com/css?family=Literata&display=swap}" rel="stylesheet">
 </head>

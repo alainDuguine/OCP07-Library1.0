@@ -80,7 +80,7 @@ a:not([href]):not([tabindex]):focus, a:not([href]):not([tabindex]):hover{
     color: #364259;
 }
 
-.loginArea button, .registerForm .btnSubmit{
+.loginArea button, .registerForm .btnSubmit, .btnLoan{
     background-color: #f2f2f0;
     color: #735C60;
     border: 1px solid #735C60;
@@ -101,7 +101,7 @@ a:not([href]):not([tabindex]):focus, a:not([href]):not([tabindex]):hover{
     border: 1px solid #735C60;
 }
 
-.loginArea button:hover, .registerForm .btnSubmit:hover{
+.loginArea button:hover, .registerForm .btnSubmit:hover, .btnLoan:hover{
     background-color: #735C60;
     color: #f2f2f0;
 }
@@ -118,4 +118,10 @@ a:not([href]):not([tabindex]):focus, a:not([href]):not([tabindex]):hover{
 
 .modal-header, .modal-footer{
     border: 0;
+}
+
+.loanDiv{
+    background-color: rgba(242, 242, 240, 0.90);
+    box-shadow: 0 0 5px #364259;
+    padding: 1.5em 3em;
 }
