@@ -19,7 +19,7 @@ import java.util.List;
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-11-02T08:01:57.545+01:00")
 
 @Api(value = "books", description = "the books API")
-public interface BooksApi {
+public interface BookApi {
 
     @ApiOperation(value = "Add a new book", nickname = "addBook", notes = "Author should be added in the databse first", response = BookDto.class, tags={ "books", })
     @ApiResponses(value = { 

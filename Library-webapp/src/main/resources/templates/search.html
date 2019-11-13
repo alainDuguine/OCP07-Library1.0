@@ -12,9 +12,9 @@
         <div class="container">
             <div class="searchDiv my-3 p-3 rounded">
                 <!-- Underlined search bars -->
-                <form th:action="search">
+                <form th:action="@{/books}" method="get">
                         <div class="input-group mt-2 mb-3">
-                            <input id="exampleFormControlInput1" type="search" placeholder="Rechercher un livre par titre ou par auteur" class="form-control form-control-underlined">
+                            <input type="text" placeholder="Rechercher un livre par titre ou par auteur" name="title" class="form-control form-control-underlined" th:value="${title}">
                             <div class="input-group-append">
                                 <button id="buttonSearch" type="submit" class="btn btn-link"><i class="fa fa-search"></i></button>
                             </div>
@@ -25,30 +25,18 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">First</th>
-                        <th scope="col">Last</th>
-                        <th scope="col">Handle</th>
+                        <th scope="col">Titre</th>
+                        <th scope="col">Auteur</th>
+                        <th scope="col">isbn</th>
+                        <th scope="col">Exemplaires disponibles</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>@twitter</td>
+                    <tr th:each="livre:${livres}">
+                        <td th:text="${livre.getTitle()}"></td>
+                        <td th:text="${livre.getAuthors()}"></td>
+                        <td th:text="${livre.getIsbn()}"></td>
+                        <td>Pas implémenté</td>
                     </tr>
                     </tbody>
                 </table>

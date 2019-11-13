@@ -29,16 +29,16 @@ import java.util.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-10-31T15:23:24.407+01:00")
 
 @Controller
-public class LoansApiController implements LoansApi {
+public class LoanApiController implements LoanApi {
 
-    private static final Logger log = LoggerFactory.getLogger(LoansApiController.class);
+    private static final Logger log = LoggerFactory.getLogger(LoanApiController.class);
 
     private final ObjectMapper objectMapper;
     private final LoanManagement loanManagement;
     private final HttpServletRequest request;
 
     @org.springframework.beans.factory.annotation.Autowired
-    public LoansApiController(ObjectMapper objectMapper, LoanManagement loanManagement, HttpServletRequest request) {
+    public LoanApiController(ObjectMapper objectMapper, LoanManagement loanManagement, HttpServletRequest request) {
         this.objectMapper = objectMapper;
         this.loanManagement = loanManagement;
         this.request = request;

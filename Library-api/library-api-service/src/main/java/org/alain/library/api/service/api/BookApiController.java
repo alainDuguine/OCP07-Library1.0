@@ -28,16 +28,16 @@ import java.util.Optional;
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-11-01T07:19:44.790+01:00")
 
 @Controller
-public class BooksApiController implements BooksApi {
+public class BookApiController implements BookApi {
 
-    private static final Logger log = LoggerFactory.getLogger(BooksApiController.class);
+    private static final Logger log = LoggerFactory.getLogger(BookApiController.class);
 
     private final ObjectMapper objectMapper;
     private final BookManagement bookManagement;
     private final HttpServletRequest request;
 
     @org.springframework.beans.factory.annotation.Autowired
-    public BooksApiController(ObjectMapper objectMapper, BookManagement bookManagement, HttpServletRequest request) {
+    public BookApiController(ObjectMapper objectMapper, BookManagement bookManagement, HttpServletRequest request) {
         this.objectMapper = objectMapper;
         this.bookManagement = bookManagement;
         this.request = request;
@@ -145,6 +145,7 @@ public class BooksApiController implements BooksApi {
         for (Author author : bookModel.getAuthors()){
             bookDto.addAuthorsItem(convertAuthorModelToBooksAuthors(author));
         }
+//        bookDto.setExemplaire(bookModel.getCopyList().size());
         return bookDto;
     }
 

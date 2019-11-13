@@ -27,16 +27,16 @@ import java.util.Optional;
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-10-31T15:23:24.407+01:00")
 
 @Controller
-public class UsersApiController implements UsersApi {
+public class UserApiController implements UserApi {
 
-    private static final Logger log = LoggerFactory.getLogger(UsersApiController.class);
+    private static final Logger log = LoggerFactory.getLogger(UserApiController.class);
 
     private final ObjectMapper objectMapper;
     private final UserManagement userManagement;
     private final HttpServletRequest request;
 
     @org.springframework.beans.factory.annotation.Autowired
-    public UsersApiController(ObjectMapper objectMapper, UserManagement userManagement, HttpServletRequest request) {
+    public UserApiController(ObjectMapper objectMapper, UserManagement userManagement, HttpServletRequest request) {
         this.objectMapper = objectMapper;
         this.userManagement = userManagement;
         this.request = request;

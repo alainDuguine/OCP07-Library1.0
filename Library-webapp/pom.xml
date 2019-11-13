@@ -142,7 +142,11 @@
                             <!-- target to generate java client code -->
                             <language>java</language>
                             <configOptions>
-                                <sourceFolder>src/gen/java/main</sourceFolder>
+                                <output>${project.build.directory}/client</output>
+                                <generateApis>false</generateApis>
+                                <generateApiTests>false</generateApiTests>
+                                <generateApiDocumentation>false</generateApiDocumentation>
+                                <generateModels>false</generateModels>
                             </configOptions>
                             <library>retrofit2</library>
                         </configuration>
