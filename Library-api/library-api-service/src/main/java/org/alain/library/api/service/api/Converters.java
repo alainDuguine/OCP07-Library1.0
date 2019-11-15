@@ -165,6 +165,7 @@ class Converters {
         loanDto.setBookCopy(convertBookCopyModelToBookCopyDto(loanModel.getBookCopy()));
         loanDto.setUserId(loanModel.getUser().getId());
         loanDto.setCurrentStatus(loanModel.getCurrentStatus());
+        loanDto.setCurrentStatusDate(loanModel.getCurrentStatusDate().toString());
         return loanDto;
     }
 

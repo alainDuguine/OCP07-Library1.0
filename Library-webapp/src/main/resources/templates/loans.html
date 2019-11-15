@@ -15,15 +15,24 @@
                                         th:with="bookCopy=${loan.getBookCopy()}">
                     <i class="far fa-bookmark fa-2x"></i>
                     <div class="media-body pl-2 pb-2 mb-0 small lh-125 border-bottom border-dark">
-                        <p class="h4 d-block text-capitalize text-gray-dark"><u th:text="${loan.getBookCopy().getBook().getTitle()}">Titre livre - Auteur</u></p>
-<!--                            th:each="author, iterStat:${loan.getBookCopy().getBook().getAuthors()}"-->
-<!--                            th:with="authorName=${author.getFirstName()} + ' ' + ${author.getLastName()}  + ${iterStat.count != iterStat.size ? ', ' : ''}"-->
-<!--                            th:text="|${loan.getBookCopy().getBook().getTitle()} - ${authorName}|"-->
-
-                        <p class="lead" th:text="|Emprunté le ${loan.getStartDate()}. Retour prévu avante le ${loan.getEndDate()}|"></p>
-                        <p><em> Vous avez la possibilité de prolonger cet emprunt de 4 semaines supplémentaires</em><br/>
-                            <button class="align-middle btn btn-round mt-2 mb-0 btnLoan">Prolonger</button>
+                        <p class="h4 d-block text-capitalize text-gray-dark"><u th:each="author:${loan.getBookCopy().getBook().getAuthors()}"
+                                                                                th:with="authorName=${author.getFirstName()} + ' ' + ${author.getLastName()}  + ${authorStat.count != authorStat.size ? ', ' : ''}"
+                                                                                th:text="|${loan.getBookCopy().getBook().getTitle()} - ${authorName}|">Titre livre - Auteur</u>
                         </p>
+                        <p class="lead" th:text="|Emprunté le ${loan.getStartDate()}. Retour prévu avant le ${loan.getEndDate()}|"></p>
+                        <div th:switch="${loan.currentStatus}">
+                            <p th:case="LOANED"><em> Vous avez la possibilité de prolonger cet emprunt de 4 semaines supplémentaires</em><br/>
+                                <button class="align-middle btn btn-round mt-2 mb-0 btnLoan">Prolonger</button>
+                            </p>
+                            <p th:case="RETURNED" th:text="|Livre rendu le ${loan.getCurrentStatusDate()}|">
+                            </p>
+                            <p th:case="PROLONGED"
+                               th:text="|Emprunté le ${loan.getStartDate()}. Retour prévu avant le ${loan.getEndDate()}. Emprunt prolongé le ${loan.getCurrentStatusDate()}|">
+                            </p>
+                            <p th:case="LATE"
+                               th:classappend="alert-danger"
+                               th:text="|En retard. Le retour était prévu avant le ${loan.getEndDate()}|"></p>
+                        </div>
                     </div>
                 </div>
             </div>

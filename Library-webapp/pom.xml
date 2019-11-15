@@ -143,7 +143,7 @@
                             <language>java</language>
                             <configOptions>
                                 <output>${project.build.directory}/client</output>
-                                <generateApis>true</generateApis>
+                                <generateApis>false</generateApis>
                                 <generateApiTests>false</generateApiTests>
                                 <generateApiDocumentation>false</generateApiDocumentation>
                                 <generateModels>false</generateModels>

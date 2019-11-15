@@ -25,6 +25,7 @@ public class Loan {
     private LocalDate startDate;
     private LocalDate endDate;
     private String currentStatus;
+    private LocalDate currentStatusDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private BookCopy bookCopy;
@@ -41,7 +42,6 @@ public class Loan {
         status.getLoanStatuses().add(loanStatus);
         return loanStatus;
     }
-
 
     @Override
     public boolean equals(Object o) {

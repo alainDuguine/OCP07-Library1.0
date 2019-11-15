@@ -108,6 +108,7 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
         Status status = statusRepository.findStatusByDesignation(statusDesignation);
         loan.getBookCopy().setAvailable(statusDesignation == StatusDesignation.RETURNED);
         loan.setCurrentStatus(status.getDesignation().toString());
+        loan.setCurrentStatusDate(LocalDate.now());
         LoanStatus loanStatus = loan.addLoanStatus(status);
         loanRepository.save(loan);
         return loanStatus;
@@ -121,7 +122,7 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
             if(user.isPresent()){
                 String userCredentials = user.get().getEmail() + ':' + user.get().getPassword();
                 if(userManagement.checkUserCredentialsFromB64Encoded(userCredentials, authorization)){
-                    if(!loan.get().getCurrentStatus().equals("PROLONGED")){
+                    if(!loan.get().getCurrentStatus().equals("PROLONGED") && !loan.get().getCurrentStatus().equals("RETURNED")){
                         loan.get().setEndDate(loan.get().getEndDate().plusWeeks(4));
                         return Optional.of(this.addLoanStatusToLoan(loan.get(), StatusDesignation.PROLONGED));
                     }else{
