@@ -8,23 +8,24 @@ package org.alain.library.api.service.api;
 import io.swagger.annotations.*;
 import org.alain.library.api.service.dto.UserDto;
 import org.alain.library.api.service.dto.UserForm;
+import org.alain.library.api.service.dto.UserFormUpdate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-10-31T15:23:24.407+01:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-11-15T12:10:31.443+01:00")
 
 @Api(value = "users", description = "the users API")
 public interface UsersApi {
 
-    @ApiOperation(value = "Add a new user", nickname = "addUser", notes = "", response = UserDto.class, tags={ "users", })
+    @ApiOperation(value = "Add a new user", nickname = "addUser", notes = "", response = UserDto.class, tags={ "user", })
     @ApiResponses(value = { 
         @ApiResponse(code = 201, message = "User added successfully to database", response = UserDto.class),
         @ApiResponse(code = 400, message = "Parameters are incorrect"),
         @ApiResponse(code = 403, message = "You are not allowed to perform this request"),
-        @ApiResponse(code = 409, message = "Thiemail is alreday registered in database") })
+        @ApiResponse(code = 409, message = "This email is already registered in database") })
     @RequestMapping(value = "/users",
         produces = { "application/json" }, 
         consumes = { "application/json" },
@@ -32,7 +33,7 @@ public interface UsersApi {
     ResponseEntity<UserDto> addUser(@ApiParam(value = "User object that needs to be added to the database", required = true) @Valid @RequestBody UserForm userForm);
 
 
-    @ApiOperation(value = "Delete a user", nickname = "deleteUser", notes = "", tags={ "users", })
+    @ApiOperation(value = "Delete a user", nickname = "deleteUser", notes = "", tags={ "user", })
     @ApiResponses(value = {
         @ApiResponse(code = 204, message = "User successfully deleted"),
         @ApiResponse(code = 400, message = "Invalid ID supplied"),
@@ -44,7 +45,7 @@ public interface UsersApi {
     ResponseEntity<Void> deleteUser(@ApiParam(value = "User id to delete", required = true) @PathVariable("id") Long id);
 
 
-    @ApiOperation(value = "Get user by Id", nickname = "getUser", notes = "", response = UserDto.class, tags={ "users", })
+    @ApiOperation(value = "Get user by Id", nickname = "getUser", notes = "", response = UserDto.class, tags={ "user", })
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "User found", response = UserDto.class),
         @ApiResponse(code = 400, message = "Invalid ID supplied"),
@@ -55,7 +56,7 @@ public interface UsersApi {
     ResponseEntity<UserDto> getUser(@ApiParam(value = "Id of user to return", required = true) @PathVariable("id") Long id);
 
 
-    @ApiOperation(value = "Get a list of all users", nickname = "getUsers", notes = "", response = UserDto.class, responseContainer = "List", tags={ "users", })
+    @ApiOperation(value = "Get a list of all users", nickname = "getUsers", notes = "", response = UserDto.class, responseContainer = "List", tags={ "user", })
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Users found", response = UserDto.class, responseContainer = "List") })
     @RequestMapping(value = "/users",
@@ -66,7 +67,7 @@ public interface UsersApi {
 
     @ApiOperation(value = "Update a user", nickname = "updateUser", notes = "", response = UserDto.class, authorizations = {
         @Authorization(value = "basicAuth")
-    }, tags={ "users", })
+    }, tags={ "user", })
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "User updated successfully", response = UserDto.class),
         @ApiResponse(code = 400, message = "Parameters are incorrect"),
@@ -76,6 +77,6 @@ public interface UsersApi {
         produces = { "application/json" },
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<UserDto> updateUser(@ApiParam(value = "User id to update", required = true) @PathVariable("id") Long id, @ApiParam(value = "User object updated", required = true) @Valid @RequestBody UserDto user, @ApiParam(value = "User identification", required = true) @RequestHeader(value = "Authorization", required = true) String authorization);
+    ResponseEntity<UserDto> updateUser(@ApiParam(value = "User id to update", required = true) @PathVariable("id") Long id, @ApiParam(value = "User object to update", required = true) @Valid @RequestBody UserFormUpdate userFormUpdate, @ApiParam(value = "User identification", required = true) @RequestHeader(value = "Authorization", required = true) String authorization);
 
 }

@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiParam;
 import org.alain.library.api.business.contract.BookManagement;
 import org.alain.library.api.business.exceptions.UnknownAuthorException;
 import org.alain.library.api.business.exceptions.UnknownBookException;
-import org.alain.library.api.model.book.Author;
 import org.alain.library.api.model.book.Book;
 import org.alain.library.api.model.book.BookCopy;
 import org.alain.library.api.service.dto.*;

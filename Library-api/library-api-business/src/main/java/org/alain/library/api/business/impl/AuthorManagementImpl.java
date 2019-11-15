@@ -6,6 +6,9 @@ import org.alain.library.api.consumer.repository.BookRepository;
 import org.alain.library.api.model.book.Author;
 import org.alain.library.api.model.book.Book;
 import org.springframework.stereotype.Service;
+
+import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +45,11 @@ public class AuthorManagementImpl extends CrudManagementImpl<Author> implements 
         if(author.isPresent()){
             author.get().setFirstName(authorForm.getFirstName());
             author.get().setLastName(authorForm.getLastName());
-            return Optional.of(authorRepository.save(author.get()));
+            try {
+                return Optional.of(authorRepository.save(author.get()));
+            }catch (ConstraintViolationException e){
+                throw new ValidationException(e.getMessage());
+            }
         }
         return Optional.empty();
     }

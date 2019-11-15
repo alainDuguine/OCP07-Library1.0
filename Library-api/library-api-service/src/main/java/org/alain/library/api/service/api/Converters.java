@@ -231,10 +231,10 @@ class Converters {
         return userModel;
     }
 
-    static User convertUserDtoToUserModel(UserDto userDto) {
+    static User convertUserFormUpdateToUserModel(UserFormUpdate userFormUpdate) {
         User userModel = new User();
-        userModel.setFirstName(userDto.getFirstName());
-        userModel.setLastName(userDto.getLastName());
+        userModel.setFirstName(userFormUpdate.getFirstName());
+        userModel.setLastName(userFormUpdate.getLastName());
         return userModel;
     }
 }

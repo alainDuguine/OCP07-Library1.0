@@ -46,8 +46,12 @@ public class UserManagementImpl extends CrudManagementImpl<User> implements User
             // Check authorization
             String userCredentials = user.get().getEmail() + ':' + user.get().getPassword();
             if(checkUserCredentialsFromB64Encoded(userCredentials, authorization)){
-                user.get().setFirstName(userForm.getFirstName());
-                user.get().setLastName(userForm.getLastName());
+                if (userForm.getFirstName() != null) {
+                    user.get().setFirstName(userForm.getFirstName());
+                }
+                if (userForm.getLastName() != null) {
+                    user.get().setLastName(userForm.getLastName());
+                }
                 user.get().setPasswordConfirmation(user.get().getPassword());
                 return Optional.of(userRepository.save(user.get()));
             }else{
@@ -58,24 +62,27 @@ public class UserManagementImpl extends CrudManagementImpl<User> implements User
     }
 
     @Override
-    public boolean checkUserCredentialsFromB64Encoded(String userCredentials, String authorization){
-        return userCredentials.equals(decodeAuthorization(authorization));
-    }
-
-    @Override
     public void deleteUser(Long id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()){
             List<Loan> loanList = user.get().getLoans();
-            for (Loan loan : loanList){
-                if (!loan.getCurrentStatus().equals(StatusDesignation.RETURNED.toString())){
-                    throw new UnauthorizedException("Impossible to delete user n°"+id+", user concerned by loans who are still active");
-                }else{
-                    userRepository.deleteById(id);
+            if(!loanList.isEmpty()) {
+                for (Loan loan : loanList) {
+                    if (!loan.getCurrentStatus().equals(StatusDesignation.RETURNED.toString())) {
+                        throw new UnauthorizedException("Impossible to delete user n°" + id + ", user concerned by loans who are still active");
+                    }
                 }
+            }else{
+                userRepository.deleteById(id);
             }
         }
     }
+
+    @Override
+    public boolean checkUserCredentialsFromB64Encoded(String userCredentials, String authorization){
+        return userCredentials.equals(decodeAuthorization(authorization));
+    }
+
 
     private String decodeAuthorization(String encodedAuthorization){
         encodedAuthorization = encodedAuthorization.replace("Basic ","");
