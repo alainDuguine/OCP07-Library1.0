@@ -36,6 +36,9 @@ public class Book {
                inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Set<Author> authors = new HashSet<>();
 
+    @Transient
+    private int nbCopies;
+
     public Book(String title) {
         this.title = title;
         this.isbn = RandomStringUtils.randomAlphanumeric(10);

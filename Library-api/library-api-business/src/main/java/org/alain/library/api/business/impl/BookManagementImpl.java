@@ -28,21 +28,12 @@ public class BookManagementImpl extends CrudManagementImpl<Book> implements Book
     }
 
     @Override
-    public List<Book> findByTitleAndAuthor(String title, String author) {
-//        List<Book> bookList = bookRepository.findByTitleLikeAndAuthorsLike(title, author);
-//        List<Book> bookList = bookRepository.findByTitleLike("%"+title+"%");
-        List<Book> bookList = bookRepository.findBookWithCopies("%"+title+"%");
-//        List<Book> bookListByAuthor = bookRepository.findByAuthorsLike(author);
-//        bookList.addAll(bookListByAuthor);
-//        for(Book book:bookList){
-//            book.setCopyList(bookCopyRepository.findAllInBookWhereAvailable(book.getId(), true));
-//        }
-        return bookList;
-    }
-
-    @Override
     public List<Book> findByTitle(String title) {
-        return bookRepository.findByTitleLike("%"+title+"%");
+        List<Book> bookList = bookRepository.findByTitleLike("%"+title+"%");
+        for(Book book:bookList){
+            book.setCopyList(bookCopyRepository.findAllInBookWhereAvailable(book.getId(), true));
+        }
+        return bookList;
     }
 
     @Override

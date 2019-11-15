@@ -16,5 +16,4 @@ public interface BookManagement extends CrudManagement<Book> {
     Optional<BookCopy> saveBookCopy(Long id, BookCopy bookCopy);
     Optional<BookCopy> updateBookCopy(Long bookId, Long copyId, BookCopy bookCopy);
     Optional<Book> updateBook(Long id, Book book);
-    List<Book> findByTitleAndAuthor(String title, String author);
 }

@@ -14,10 +14,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findByTitleLike(String title);
     List<Book> findByAuthorsLike(String author);
 
-    @Query("select b from Book b join BookCopy bc where b.title like %:title% and bc.available = true")
-    List<Book> findBookWithCopies(@Param("title")String title);
-
-//    @Query("SELECT b, a FROM Book b INNER JOIN b.authors = Auth ON a.id = b.authors.id WHERE b.title LIKE %:title% AND a.firstname LIKE %:author% OR a.lastname LIKE %:author%")
-//    List<Book> findByTitleLikeAndAuthorsLike(@Param("title") String title, @Param("author")String author);
+    @Query(value = "select b, count(b.copyList) from Book b")
+    List<Book> findBooksByTitleWithCopies(@Param("title")String title);
 
 }

@@ -53,7 +53,7 @@ public class BooksApiController implements BooksApi {
 
     public ResponseEntity<List<BookDto>> getBooks(@ApiParam(value = "Title of book to return", defaultValue = "") @Valid @RequestParam(value = "title", required = false, defaultValue="") String title,
                                                   @ApiParam(value = "author of book to return", defaultValue = "") @Valid @RequestParam(value = "author", required = false, defaultValue="") String author) {
-        List<Book> bookList = bookManagement.findByTitleAndAuthor(title, author);
+        List<Book> bookList = bookManagement.findByTitle(title);
         return new ResponseEntity<List<BookDto>>(convertListBookModelToListBookDto(bookList), HttpStatus.OK);
         }
 
@@ -129,110 +129,5 @@ public class BooksApiController implements BooksApi {
         }
         return new ResponseEntity<BookCopyDto>(HttpStatus.NOT_FOUND);
     }
-
-
-    //=======================================================================
-    //================== CONVERTERS =========================================
-    //=======================================================================
-
-
-//    //================== Book =========================================
-//
-//    private BookDto convertBookModelToBookDto(Book bookModel) {
-//        BookDto bookDto = new BookDto();
-//        bookDto.setId(bookModel.getId());
-//        bookDto.setIsbn(bookModel.getIsbn());
-//        bookDto.setTitle(bookModel.getTitle());
-//        for (Author author : bookModel.getAuthors()){
-//            bookDto.addAuthorsItem(convertAuthorModelToBooksAuthors(author));
-//        }
-//        bookDto.setCopiesAvailable((long) bookModel.getCopyList().size());
-//        return bookDto;
-//    }
-//
-//    private Book convertBookDtoToBookModel(BookDto bookDto) {
-//        Book bookModel = new Book(bookDto.getTitle());
-//        try {
-//            for (BooksAuthors booksAuthors : bookDto.getAuthors()) {
-//                bookModel.addAuthor(convertBooksAuthorsToAuthorModel(booksAuthors));
-//            }
-//            return bookModel;
-//        }catch (NullPointerException ex){
-//            throw new UnknownAuthorException("A book should have at least one author");
-//        }
-//    }
-//
-//    private List<BookDto> convertListBookModelToListBookDto(List<Book> bookList) {
-//        List<BookDto> bookDtoList = new ArrayList<>();
-//        for (Book bookModel : bookList) {
-//            bookDtoList.add(convertBookModelToBookDto(bookModel));
-//        }
-//        return bookDtoList;
-//    }
-//
-//    private Book convertBookFormToBookModel(BookForm bookForm) {
-//        Book bookModel = new Book(bookForm.getTitle());
-//        try {
-//            for (BooksAuthors booksAuthors : bookForm.getAuthors()) {
-//                bookModel.addAuthor(convertBooksAuthorsToAuthorModel(booksAuthors));
-//            }
-//            return bookModel;
-//        }catch (NullPointerException ex){
-//            throw new UnknownAuthorException("A book should have at least one author");
-//        }
-//    }
-//
-//
-//    //================== Author =========================================
-//
-//    private BooksAuthors convertAuthorModelToBooksAuthors(Author authorModel){
-//        BooksAuthors booksAuthors = new BooksAuthors();
-//        booksAuthors.setFirstName(authorModel.getFirstName());
-//        booksAuthors.setLastName(authorModel.getLastName());
-//        return booksAuthors;
-//    }
-//
-//    private Author convertBooksAuthorsToAuthorModel(BooksAuthors booksAuthors) {
-//        Author author = new Author();
-//        author.setFirstName(booksAuthors.getFirstName());
-//        author.setLastName(booksAuthors.getLastName());
-//        return author;
-//    }
-//
-//
-//    //================== BookCopy =========================================
-//
-//    private BookCopyDto convertBookCopyModelToBookCopyDto(BookCopy bookCopy) {
-//        BookCopyDto bookCopyDto = new BookCopyDto();
-//        bookCopyDto.setId(bookCopy.getId());
-//        bookCopyDto.setBarcode(bookCopy.getBarcode());
-//        bookCopyDto.setEditor(bookCopy.getEditor());
-//        bookCopyDto.setAvailable(bookCopy.isAvailable());
-//        bookCopyDto.setBook(convertBookModelToBookDto(bookCopy.getBook()));
-//        return bookCopyDto;
-//    }
-//
-//    private BookCopy convertBookCopyDtoToBookCopyModel(BookCopyDto bookCopyDto) {
-//        BookCopy bookCopyModel = new BookCopy();
-//        bookCopyModel.setEditor(bookCopyDto.getEditor());
-//        return bookCopyModel;
-//    }
-//
-//    private List<BookCopyDto> convertListBookCopyModelToListBookCopyDto(List<BookCopy> bookCopyList) {
-//        List<BookCopyDto> bookCopyDtoList = new ArrayList<>();
-//        for (BookCopy bookCopy : bookCopyList){
-//            bookCopyDtoList.add(convertBookCopyModelToBookCopyDto(bookCopy));
-//        }
-//        return bookCopyDtoList;
-//    }
-//
-//    private BookCopy convertBookCopyFormToBookCopyModel(CopyForm bookCopyForm) {
-//        BookCopy bookCopy = new BookCopy();
-//        bookCopy.setEditor(bookCopyForm.getEditor());
-//        if(bookCopyForm.getBarcode() != null){
-//            bookCopy.setBarcode(bookCopyForm.getBarcode());
-//        }
-//        return bookCopy;
-//    }
 
 }
