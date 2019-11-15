@@ -11,6 +11,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.Transactional;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.util.List;
+
 @SpringBootApplication
 @ComponentScan(basePackages = {"org.alain.library.api"})
 @EntityScan(basePackages = {"org.alain.library.api"})
@@ -30,11 +32,14 @@ public class LibraryApiServiceApplication implements CommandLineRunner {
 
     @Override
     @Transactional
-    public void run(String... args) throws Exception {
-//        for (StatusDesignation statusDesignation: StatusDesignation.values()){
-//            Status status = new Status(statusDesignation);
-//            statusRepository.save(status);
-//        }
+    public void run(String... args){
+        List<Status> statusList = statusRepository.findAll();
+        if (statusList.size() != StatusDesignation.values().length) {
+            for (StatusDesignation statusDesignation : StatusDesignation.values()) {
+                Status status = new Status(statusDesignation);
+                statusRepository.save(status);
+            }
+        }
     }
 
 //    @Bean

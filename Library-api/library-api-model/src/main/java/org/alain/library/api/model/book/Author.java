@@ -24,7 +24,7 @@ public class Author {
     @Column (length = 30)
     private String firstName;
 
-    @Size( min = 2, max = 30)
+    @Size(max = 30)
     @Column (length = 30)
     private String lastName;
 
