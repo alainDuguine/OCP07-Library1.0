@@ -22,4 +22,7 @@ public interface BookCopyRepository extends JpaRepository<BookCopy, Long> {
     @Modifying
     @Query("delete from BookCopy b where book.id = :bookId and b.id = :copyId")
     void deleteByIdAndAndBookId(@Param("copyId")Long copyId, @Param("bookId") Long bookId);
+
+    @Query("select b from BookCopy b where b.book.id = :bookId and b.available = :available")
+    List<BookCopy> findAllInBookWhereAvailable(@Param("bookId")Long bookId, @Param("available")boolean available);
 }

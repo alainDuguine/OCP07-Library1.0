@@ -32,11 +32,16 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="livre:${livres}">
-                        <td th:text="${livre.getTitle()}"></td>
-                        <td th:text="${livre.getAuthors()}"></td>
-                        <td th:text="${livre.getIsbn()}"></td>
-                        <td>Pas implémenté</td>
+                    <tr th:each="book:${books}">
+                        <td th:text="${book.getTitle()}"></td>
+                        <td>
+                            <span th:each="author, iterStat:${book.getAuthors()}"
+                                  th:with="authorName=${author.getFirstName()} + ' ' + ${author.getLastName()}  + ${iterStat.count != iterStat.size ? ', ' : ''}"
+                                  th:text="${authorName}">
+                            </span>
+                        </td>
+                        <td th:text="${book.getIsbn()}"></td>
+                        <td th:text="${book.getCopiesAvailable()}"></td>
                     </tr>
                     </tbody>
                 </table>

@@ -1,5 +1,6 @@
 package org.alain.library.api.model.book;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,6 +29,7 @@ public class BookCopy {
     @ManyToOne(fetch = FetchType.LAZY)
     private Book book;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "bookCopy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Loan> loanList = new ArrayList<>();
 

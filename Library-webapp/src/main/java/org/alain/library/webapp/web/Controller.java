@@ -5,6 +5,7 @@ import io.swagger.client.api.BookApi;
 import io.swagger.client.api.LoanApi;
 import io.swagger.client.api.UserApi;
 import io.swagger.client.model.BookDto;
+import io.swagger.client.model.LoanDto;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,17 +39,24 @@ public class Controller {
         return "login";
     }
 
-    @GetMapping("/home")
-    public String home(){
-        return "home";
+    @GetMapping("/loans")
+    public String loans(Model model){
+        try {
+            List<LoanDto> loanDtoList = loanApi.getLoans(null,1L).execute().body();
+            model.addAttribute("loanList", loanDtoList);
+        }catch (Exception ex){
+            return "Connexion failed";
+        }
+        return "loans";
     }
 
     @GetMapping({"/search", "/books"})
     public String books(Model model,
-                        @RequestParam(name = "title", defaultValue = "") String title){
+                        @RequestParam(name = "title", defaultValue = "") String title,
+                        @RequestParam(name = "author", defaultValue = "") String author){
         try {
-            List<BookDto> bookDtoLists = bookApi.getBooks(title).execute().body();
-            model.addAttribute("livres", bookDtoLists);
+            List<BookDto> bookDtoLists = bookApi.getBooks(title, author).execute().body();
+            model.addAttribute("books", bookDtoLists);
         }catch (Exception ex){
             return "Connexion failed";
         }

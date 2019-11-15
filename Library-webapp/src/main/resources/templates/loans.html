@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Mes Emprunts</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container">
+            <div class="loanDiv my-3 p-3 rounded">
+                <h4 class="border-bottom border-dark pb-2 mb-0 text-center">Vos emprunts récents</h4>
+                <div class="media pt-3" th:each="loan:${loanList}"
+                                        th:with="bookCopy=${loan.getBookCopy()}">
+                    <i class="far fa-bookmark fa-2x"></i>
+                    <div class="media-body pl-2 pb-2 mb-0 small lh-125 border-bottom border-dark">
+                        <p class="h4 d-block text-capitalize text-gray-dark"><u th:text="${loan.getBookCopy().getId()}">Titre livre - Auteur</u></p>
+<!--                            th:each="author, iterStat:${loan.getBookCopy().getBook().getAuthors()}"-->
+<!--                            th:with="authorName=${author.getFirstName()} + ' ' + ${author.getLastName()}  + ${iterStat.count != iterStat.size ? ', ' : ''}"-->
+<!--                            th:text="|${loan.getBookCopy().getBook().getTitle()} - ${authorName}|"-->
+
+                        <p class="lead" th:text="|Emprunté le ${loan.getStartDate()}. Retour prévu avante le ${loan.getEndDate()}|"></p>
+                        <p><em> Vous avez la possibilité de prolonger cet emprunt de 4 semaines supplémentaires</em><br/>
+                            <button class="align-middle btn btn-round mt-2 mb-0 btnLoan">Prolonger</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

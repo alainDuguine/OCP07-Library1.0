@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-11-02T08:01:57.545+01:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-11-14T07:50:27.514+01:00")
 
 @Api(value = "books", description = "the books API")
-public interface BookApi {
+public interface BooksApi {
 
-    @ApiOperation(value = "Add a new book", nickname = "addBook", notes = "Author should be added in the databse first", response = BookDto.class, tags={ "books", })
+    @ApiOperation(value = "Add a new book", nickname = "addBook", notes = "Author should be added in the databse first", response = BookDto.class, tags={ "book", })
     @ApiResponses(value = { 
         @ApiResponse(code = 201, message = "Book added successfully to database", response = BookDto.class),
         @ApiResponse(code = 400, message = "Parameters are incorrect"),
@@ -33,7 +33,7 @@ public interface BookApi {
     ResponseEntity<BookDto> addBook(@ApiParam(value = "Book object that needs to be added to the database", required = true) @Valid @RequestBody BookForm bookForm);
 
 
-    @ApiOperation(value = "Add a new book copy", nickname = "addBookCopy", notes = "", response = BookCopyDto.class, tags={ "books", })
+    @ApiOperation(value = "Add a new book copy", nickname = "addBookCopy", notes = "", response = BookCopyDto.class, tags={ "book", })
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "Book added successfully to database", response = BookCopyDto.class),
         @ApiResponse(code = 400, message = "Parameters are incorrect"),
@@ -45,7 +45,7 @@ public interface BookApi {
     ResponseEntity<BookCopyDto> addBookCopy(@ApiParam(value = "Id of book to find copies from", required = true) @PathVariable("id") Long id, @ApiParam(value = "Book copy object that needs to be added to the database", required = true) @Valid @RequestBody CopyForm copyForm);
 
 
-    @ApiOperation(value = "Delete a book by id", nickname = "deleteBook", notes = "", tags={ "books", })
+    @ApiOperation(value = "Delete a book by id", nickname = "deleteBook", notes = "", tags={ "book", })
     @ApiResponses(value = {
         @ApiResponse(code = 204, message = "Book successfully deleted"),
         @ApiResponse(code = 400, message = "Invalid ID supplied"),
@@ -57,7 +57,7 @@ public interface BookApi {
     ResponseEntity<Void> deleteBook(@ApiParam(value = "Book id to delete", required = true) @PathVariable("id") Long id);
 
 
-    @ApiOperation(value = "Delete a book copy by id", nickname = "deleteBookCopy", notes = "", tags={ "books", })
+    @ApiOperation(value = "Delete a book copy by id", nickname = "deleteBookCopy", notes = "", tags={ "book", })
     @ApiResponses(value = {
         @ApiResponse(code = 204, message = "Book copy successfully deleted"),
         @ApiResponse(code = 400, message = "Invalid ID supplied"),
@@ -69,7 +69,7 @@ public interface BookApi {
     ResponseEntity<Void> deleteBookCopy(@ApiParam(value = "Book id to delete a copy from", required = true) @PathVariable("bookId") Long bookId, @ApiParam(value = "BookCopy id to delete", required = true) @PathVariable("copyId") Long copyId);
 
 
-    @ApiOperation(value = "Get book by Id", nickname = "getBook", notes = "", response = BookDto.class, tags={ "books", })
+    @ApiOperation(value = "Get book by Id", nickname = "getBook", notes = "", response = BookDto.class, tags={ "book", })
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Book found", response = BookDto.class),
         @ApiResponse(code = 400, message = "Invalid ID supplied"),
@@ -80,16 +80,16 @@ public interface BookApi {
     ResponseEntity<BookDto> getBook(@ApiParam(value = "Id of book to return", required = true) @PathVariable("id") Long id);
 
 
-    @ApiOperation(value = "Get a list of all books", nickname = "getBooks", notes = "Can be filtered by title", response = BookDto.class, responseContainer = "List", tags={ "books", })
+    @ApiOperation(value = "Get a list of all books", nickname = "getBooks", notes = "Can be filtered by title", response = BookDto.class, responseContainer = "List", tags={ "book", })
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Books found", response = BookDto.class, responseContainer = "List") })
     @RequestMapping(value = "/books",
         produces = { "application/json" },
         method = RequestMethod.GET)
-    ResponseEntity<List<BookDto>> getBooks(@ApiParam(value = "Title of book to return", defaultValue = "") @Valid @RequestParam(value = "title", required = false, defaultValue = "") String title);
+    ResponseEntity<List<BookDto>> getBooks(@ApiParam(value = "Title of book to return", defaultValue = "") @Valid @RequestParam(value = "title", required = false, defaultValue = "") String title, @ApiParam(value = "author of book to return", defaultValue = "") @Valid @RequestParam(value = "author", required = false, defaultValue = "") String author);
 
 
-    @ApiOperation(value = "Get a list of all book's copies", nickname = "getCopies", notes = "", response = BookCopyDto.class, responseContainer = "List", tags={ "books", })
+    @ApiOperation(value = "Get a list of all book's copies", nickname = "getCopies", notes = "", response = BookCopyDto.class, responseContainer = "List", tags={ "book", })
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Book's copies found", response = BookCopyDto.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "Invalid Id Supplied"),
@@ -100,7 +100,7 @@ public interface BookApi {
     ResponseEntity<List<BookCopyDto>> getCopies(@ApiParam(value = "Id of book to find copies from", required = true) @PathVariable("id") Long id);
 
 
-    @ApiOperation(value = "Get bookcopy by Id", nickname = "getCopy", notes = "", response = BookCopyDto.class, tags={ "books", })
+    @ApiOperation(value = "Get bookcopy by Id", nickname = "getCopy", notes = "", response = BookCopyDto.class, tags={ "book", })
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Book found", response = BookCopyDto.class),
         @ApiResponse(code = 400, message = "Invalid BookID supplied"),
@@ -111,7 +111,7 @@ public interface BookApi {
     ResponseEntity<BookCopyDto> getCopy(@ApiParam(value = "Book id concerned by the copy", required = true) @PathVariable("bookId") Long bookId, @ApiParam(value = "BookCopy id to get", required = true) @PathVariable("copyId") Long copyId);
 
 
-    @ApiOperation(value = "Update a book", nickname = "updateBook", notes = "", response = BookDto.class, tags={ "books", })
+    @ApiOperation(value = "Update a book", nickname = "updateBook", notes = "", response = BookDto.class, tags={ "book", })
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "Book updated successfully", response = BookDto.class),
         @ApiResponse(code = 400, message = "Parameters are incorrect"),
@@ -124,7 +124,7 @@ public interface BookApi {
     ResponseEntity<BookDto> updateBook(@ApiParam(value = "Book id to update", required = true) @PathVariable("id") Long id, @ApiParam(value = "Book object updated", required = true) @Valid @RequestBody BookDto book);
 
 
-    @ApiOperation(value = "Update a book copy", nickname = "updateBookCopy", notes = "", response = BookCopyDto.class, tags={ "books", })
+    @ApiOperation(value = "Update a book copy", nickname = "updateBookCopy", notes = "", response = BookCopyDto.class, tags={ "book", })
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "Book Copy updated successfully", response = BookCopyDto.class),
         @ApiResponse(code = 400, message = "Parameters are incorrect"),

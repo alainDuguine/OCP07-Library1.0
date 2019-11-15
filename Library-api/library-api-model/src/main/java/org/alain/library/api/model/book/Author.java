@@ -1,5 +1,6 @@
 package org.alain.library.api.model.book;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -27,6 +28,7 @@ public class Author {
     @Column (length = 30)
     private String lastName;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "authors")
     private Set<Book> books = new HashSet<>();
 

@@ -22,19 +22,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.alain.library.api.service.api.Converters.*;
+
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-10-31T08:40:05.054+01:00")
 
 @Controller
-public class AuthorApiController implements AuthorApi {
+public class AuthorsApiController implements AuthorsApi {
 
-    private static final Logger log = LoggerFactory.getLogger(AuthorApiController.class);
+    private static final Logger log = LoggerFactory.getLogger(AuthorsApiController.class);
 
     private final ObjectMapper objectMapper;
     private final AuthorManagement authorManagement;
     private final HttpServletRequest request;
 
     @org.springframework.beans.factory.annotation.Autowired
-    public AuthorApiController(ObjectMapper objectMapper, AuthorManagement authorManagement, HttpServletRequest request) {
+    public AuthorsApiController(ObjectMapper objectMapper, AuthorManagement authorManagement, HttpServletRequest request) {
         this.objectMapper = objectMapper;
         this.authorManagement = authorManagement;
         this.request = request;
@@ -80,36 +82,36 @@ public class AuthorApiController implements AuthorApi {
     //================== CONVERTERS =========================================
     //=======================================================================
 
-    private AuthorDto convertAuthorModelToAuthorDto(Author author){
-        AuthorDto authorDto = new AuthorDto();
-        authorDto.setId(author.getId());
-        authorDto.setFirstName(author.getFirstName());
-        authorDto.setLastName(author.getLastName());
-        for (Book book: author.getBooks()) {
-            authorDto.addBooksItem(book.getTitle());
-        }
-        return authorDto;
-    }
-
-    private List<AuthorDto> convertListAuthorModelToListAuthorDto(List<Author> authorList) {
-        List<AuthorDto> authorDtoList = new ArrayList<>();
-        for (Author author:authorList) {
-            authorDtoList.add(convertAuthorModelToAuthorDto(author));
-        }
-        return authorDtoList;
-    }
-
-    private Author convertAuthorFormToAuthorModel(AuthorForm author) {
-        Author authorModel = new Author();
-        authorModel.setFirstName(author.getFirstName());
-        authorModel.setLastName(author.getLastName());
-        return authorModel;
-    }
-
-    private Author convertAuthorDtoToAuthorModel(AuthorDto authorDto) {
-        Author authorModel = new Author();
-        authorModel.setFirstName(authorDto.getFirstName());
-        authorModel.setLastName(authorDto.getLastName());
-        return authorModel;
-    }
+//    private AuthorDto convertAuthorModelToAuthorDto(Author author){
+//        AuthorDto authorDto = new AuthorDto();
+//        authorDto.setId(author.getId());
+//        authorDto.setFirstName(author.getFirstName());
+//        authorDto.setLastName(author.getLastName());
+//        for (Book book: author.getBooks()) {
+//            authorDto.addBooksItem(book.getTitle());
+//        }
+//        return authorDto;
+//    }
+//
+//    private List<AuthorDto> convertListAuthorModelToListAuthorDto(List<Author> authorList) {
+//        List<AuthorDto> authorDtoList = new ArrayList<>();
+//        for (Author author:authorList) {
+//            authorDtoList.add(convertAuthorModelToAuthorDto(author));
+//        }
+//        return authorDtoList;
+//    }
+//
+//    private Author convertAuthorFormToAuthorModel(AuthorForm author) {
+//        Author authorModel = new Author();
+//        authorModel.setFirstName(author.getFirstName());
+//        authorModel.setLastName(author.getLastName());
+//        return authorModel;
+//    }
+//
+//    private Author convertAuthorDtoToAuthorModel(AuthorDto authorDto) {
+//        Author authorModel = new Author();
+//        authorModel.setFirstName(authorDto.getFirstName());
+//        authorModel.setLastName(authorDto.getLastName());
+//        return authorModel;
+//    }
 }

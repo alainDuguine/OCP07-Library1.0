@@ -24,19 +24,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.alain.library.api.service.api.Converters.*;
+
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-10-31T15:23:24.407+01:00")
 
 @Controller
-public class UserApiController implements UserApi {
+public class UsersApiController implements UsersApi {
 
-    private static final Logger log = LoggerFactory.getLogger(UserApiController.class);
+    private static final Logger log = LoggerFactory.getLogger(UsersApiController.class);
 
     private final ObjectMapper objectMapper;
     private final UserManagement userManagement;
     private final HttpServletRequest request;
 
     @org.springframework.beans.factory.annotation.Autowired
-    public UserApiController(ObjectMapper objectMapper, UserManagement userManagement, HttpServletRequest request) {
+    public UsersApiController(ObjectMapper objectMapper, UserManagement userManagement, HttpServletRequest request) {
         this.objectMapper = objectMapper;
         this.userManagement = userManagement;
         this.request = request;
@@ -86,42 +88,42 @@ public class UserApiController implements UserApi {
         }
     }
 
-    //=======================================================================
-    //================== CONVERTERS =========================================
-    //=======================================================================
-
-    private UserDto convertUserModelToUserDto(User userModel) {
-        UserDto userDto = new UserDto();
-        userDto.setId(userModel.getId());
-        userDto.setEmail(userModel.getEmail());
-        userDto.setPassword(userModel.getPassword());
-        userDto.setFirstName(userModel.getFirstName());
-        userDto.setLastName(userModel.getLastName());
-        userDto.setRoles(userModel.getRoles());
-        return userDto;
-    }
-
-    private List<UserDto> convertListUsersModelToListUsersDto(List<User> listUsers) {
-        List<UserDto> listUsersDto = new ArrayList<>();
-        listUsers.forEach(user -> listUsersDto.add(convertUserModelToUserDto(user)));
-        return listUsersDto;
-    }
-
-    private User convertUserFormToUserModel(UserForm userForm) {
-        User userModel = new User();
-        userModel.setEmail(userForm.getEmail());
-        userModel.setPassword(userForm.getPassword());
-        userModel.setPasswordConfirmation(userForm.getPasswordConfirmation());
-        userModel.setFirstName(userForm.getFirstName());
-        userModel.setLastName(userForm.getLastName());
-        return userModel;
-    }
-
-    private User convertUserDtoToUserModel(UserDto userDto) {
-        User userModel = new User();
-        userModel.setFirstName(userDto.getFirstName());
-        userModel.setLastName(userDto.getLastName());
-        return userModel;
-    }
+//    //=======================================================================
+//    //================== CONVERTERS =========================================
+//    //=======================================================================
+//
+//    private UserDto convertUserModelToUserDto(User userModel) {
+//        UserDto userDto = new UserDto();
+//        userDto.setId(userModel.getId());
+//        userDto.setEmail(userModel.getEmail());
+//        userDto.setPassword(userModel.getPassword());
+//        userDto.setFirstName(userModel.getFirstName());
+//        userDto.setLastName(userModel.getLastName());
+//        userDto.setRoles(userModel.getRoles());
+//        return userDto;
+//    }
+//
+//    private List<UserDto> convertListUsersModelToListUsersDto(List<User> listUsers) {
+//        List<UserDto> listUsersDto = new ArrayList<>();
+//        listUsers.forEach(user -> listUsersDto.add(convertUserModelToUserDto(user)));
+//        return listUsersDto;
+//    }
+//
+//    private User convertUserFormToUserModel(UserForm userForm) {
+//        User userModel = new User();
+//        userModel.setEmail(userForm.getEmail());
+//        userModel.setPassword(userForm.getPassword());
+//        userModel.setPasswordConfirmation(userForm.getPasswordConfirmation());
+//        userModel.setFirstName(userForm.getFirstName());
+//        userModel.setLastName(userForm.getLastName());
+//        return userModel;
+//    }
+//
+//    private User convertUserDtoToUserModel(UserDto userDto) {
+//        User userModel = new User();
+//        userModel.setFirstName(userDto.getFirstName());
+//        userModel.setLastName(userDto.getLastName());
+//        return userModel;
+//    }
 
 }

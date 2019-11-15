@@ -31,78 +31,10 @@ public class LibraryApiServiceApplication implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws Exception {
-        for (StatusDesignation statusDesignation: StatusDesignation.values()){
-            Status status = new Status(statusDesignation);
-            statusRepository.save(status);
-        }
-//
-//        User user = new User();
-//        user.setEmail("alain_duguine@hotmail.fr");
-//        user.setPassword("admin");
-//        user.setPasswordConfirmation("admin");
-//        user.setFirstName("Alain");
-//        user.setLastName(("Duguine"));
-//        userRepository.save(user);
-//
-//        Author author = new Author();
-//        author.setFirstName("Victor");
-//        author.setLastName("Hugo");
-//        authorRepository.save(author);
-//
-//        Book book = new Book();
-//        book.setTitle("Notre dame de Paris");
-//        book.addAuthor(author);
-//        bookRepository.save(book);
-//
-//        BookCopy bookCopy = new BookCopy();
-//        bookCopy.setEditor("Editions du seuil");
-//        bookCopy.setBook(book);
-//        bookCopyRepository.save(bookCopy);
-//
-//        // Création prêt 1
-//
-//        Loan loan = new Loan();
-//        loan.setBookCopy(bookCopy);
-//        loan.setUser(user);
-//        loan.setStartDate(LocalDate.now());
-//        loan.setEndDate(loan.getStartDate().plusWeeks(4));
-//
-//        Status status = (statusRepository.findStatusByDesignation(StatusDesignation.LOANED));
-//
-//        LoanStatus loanStatus = new LoanStatus(loan, status);
-//        loan.getLoanStatuses().add(loanStatus);
-//        status.getLoanStatuses().add(loanStatus);
-//
-//        loanRepository.save(loan);
-////
-//        // Création prêt 2
-//
-//        Loan loan2 = new Loan();
-//        loan2.setBookCopy(bookCopy);
-//        loan2.setUser(user);
-//        loan2.setEndDate(loan.getStartDate().plusWeeks(4));
-//
-//        Status status2 = (statusRepository.findStatusByDesignation(StatusDesignation.RETURNED));
-//
-//        LoanStatus loanStatus2 = new LoanStatus(loan2, status2);
-//        loan2.getLoanStatuses().add(loanStatus2);
-//        status2.getLoanStatuses().add(loanStatus2);
-//
-//        LoanStatus loanStatus3 = new LoanStatus(loan2, status);
-//        loanStatus3.setDate(LocalDate.now().minusWeeks(2));
-//        loan2.getLoanStatuses().add(loanStatus3);
-//        status.getLoanStatuses().add(loanStatus3);
-//
-//        Status status3 = (statusRepository.findStatusByDesignation(StatusDesignation.LATE));
-//
-//        LoanStatus loanStatus4 = new LoanStatus(loan2, status3);
-//        loanStatus3.setDate(LocalDate.now().plusWeeks(2));
-//        loan2.getLoanStatuses().add(loanStatus4);
-//        status3.getLoanStatuses().add(loanStatus4);
-//
-//
-//        loanRepository.save(loan2);
-
+//        for (StatusDesignation statusDesignation: StatusDesignation.values()){
+//            Status status = new Status(statusDesignation);
+//            statusRepository.save(status);
+//        }
     }
 
 //    @Bean
