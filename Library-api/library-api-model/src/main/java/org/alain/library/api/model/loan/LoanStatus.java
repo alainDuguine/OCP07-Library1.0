@@ -1,10 +1,5 @@
 package org.alain.library.api.model.loan;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;

@@ -14,7 +14,7 @@
                 <!-- Underlined search bars -->
                 <form th:action="@{/books}" method="get">
                         <div class="input-group mt-2 mb-3">
-                            <input type="text" placeholder="Rechercher un livre par titre ou par auteur" name="title" class="form-control form-control-underlined" th:value="${title}">
+                            <input type="text" placeholder="Rechercher un livre par titre" name="title" class="form-control form-control-underlined" th:value="${title}">
                             <div class="input-group-append">
                                 <button id="buttonSearch" type="submit" class="btn btn-link"><i class="fa fa-search"></i></button>
                             </div>

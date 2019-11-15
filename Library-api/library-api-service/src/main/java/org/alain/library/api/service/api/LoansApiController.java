@@ -115,49 +115,4 @@ public class LoansApiController implements LoansApi {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "You are not allowed to extend this loan");
         }
     }
-//
-//    //=======================================================================
-//    //================== CONVERTERS =========================================
-//    //=======================================================================
-//
-//
-//    //================== Loan =========================================
-//
-//    private LoanDto convertLoanModelToLoanDto(Loan loanModel) {
-//        LoanDto loanDto = new LoanDto();
-//        loanDto.setId(loanModel.getId());
-//        loanDto.startDate(String.valueOf(loanModel.getStartDate()));
-//        loanDto.endDate(String.valueOf(loanModel.getEndDate()));
-//        loanDto.setBookCopy().;
-//        loanDto.setUserId(loanModel.getUser().getId());
-//        loanDto.setCurrentStatus(loanModel.getCurrentStatus());
-//        return loanDto;
-//    }
-//
-//    private List<LoanDto> convertListLoanModelToListLoanDto(List<Loan> loanList) {
-//        List<LoanDto> loanDtoList = new ArrayList<>();
-//        for (Loan loan : loanList) {
-//            loanDtoList.add(convertLoanModelToLoanDto(loan));
-//        }
-//        return loanDtoList;
-//    }
-//
-//    //================== Loan Status =========================================
-//
-//    private List<LoanStatusDto> convertListLoanStatusModelToListLoanStatusDto(List<LoanStatus> loanStatusListModel) {
-//        List<LoanStatusDto> loanStatusDtoList = new ArrayList<>();
-//        for(LoanStatus loanStatus : loanStatusListModel){
-//            loanStatusDtoList.add(convertLoanStatusModelToLoanStatusDto(loanStatus));
-//        }
-//        return loanStatusDtoList;
-//    }
-//
-//    private LoanStatusDto convertLoanStatusModelToLoanStatusDto(LoanStatus loanStatusModel){
-//        LoanStatusDto loanStatusDto = new LoanStatusDto();
-//        loanStatusDto.setId(loanStatusModel.getLoan().getId());
-//        loanStatusDto.setDate(loanStatusModel.getDate().toString());
-//        loanStatusDto.setStatus(loanStatusModel.getStatus().getDesignation().name());
-//        return loanStatusDto;
-//    }
-
 }

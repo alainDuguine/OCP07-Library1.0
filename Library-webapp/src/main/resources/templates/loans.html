@@ -15,7 +15,7 @@
                                         th:with="bookCopy=${loan.getBookCopy()}">
                     <i class="far fa-bookmark fa-2x"></i>
                     <div class="media-body pl-2 pb-2 mb-0 small lh-125 border-bottom border-dark">
-                        <p class="h4 d-block text-capitalize text-gray-dark"><u th:text="${loan.getBookCopy().getId()}">Titre livre - Auteur</u></p>
+                        <p class="h4 d-block text-capitalize text-gray-dark"><u th:text="${loan.getBookCopy().getBook().getTitle()}">Titre livre - Auteur</u></p>
 <!--                            th:each="author, iterStat:${loan.getBookCopy().getBook().getAuthors()}"-->
 <!--                            th:with="authorName=${author.getFirstName()} + ' ' + ${author.getLastName()}  + ${iterStat.count != iterStat.size ? ', ' : ''}"-->
 <!--                            th:text="|${loan.getBookCopy().getBook().getTitle()} - ${authorName}|"-->

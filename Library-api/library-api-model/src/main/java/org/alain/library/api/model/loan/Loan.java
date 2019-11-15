@@ -1,6 +1,5 @@
 package org.alain.library.api.model.loan;
 
-
 import lombok.*;
 import org.alain.library.api.model.book.BookCopy;
 import org.alain.library.api.model.user.User;
@@ -11,7 +10,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
 
 @Entity
 @Getter

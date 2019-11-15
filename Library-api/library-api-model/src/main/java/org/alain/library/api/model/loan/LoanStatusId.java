@@ -1,7 +1,5 @@
 package org.alain.library.api.model.loan;
 
-import lombok.*;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;

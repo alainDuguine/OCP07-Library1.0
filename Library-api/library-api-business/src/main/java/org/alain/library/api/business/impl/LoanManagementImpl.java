@@ -52,7 +52,7 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
                 throw new UnauthorizedException("You are not allowed to acces these user's loans");
             }
         }else{
-            throw new UnknownUserException("User n°" + userId + " doesn't exist");
+            throw new UnknownUserException("Unknown user "+userId);
         }
     }
 
@@ -61,35 +61,31 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
         if(loanRepository.findById(id).isPresent()) {
             return loanStatusRepository.findAllByLoanId(id);
         }else{
-            throw new UnknownLoanException("Loan n°" + id + " doesn't exist");
+            throw new UnknownLoanException("Unknown loan "+id);
         }
     }
 
     @Override
     public Loan createNewLoan(Long bookCopyId, Long userId) {
         Optional<BookCopy> bookCopy = bookCopyRepository.findById(bookCopyId);
-//        Optional<User> user = userRepository.findById(userId);
-//        if (!bookCopy.isPresent()) {
-//            throw new UnknownBookCopyException("BookCopy n°" + bookCopyId + " doesn't exist");
-//        } else
-        if (!bookCopy.get().isAvailable()) {
-            throw new BookCopyNotAvailableException("BookCopy n°" + bookCopyId + " is not available");
+        if (bookCopy.isPresent()){
+            if (!bookCopy.get().isAvailable()) {
+                throw new BookCopyNotAvailableException("Unknown BookCopy "+bookCopyId);
+            }
+            Loan loan = new Loan();
+            loan.setBookCopy(bookCopy.get());
+            loan.setUser(User.builder().id(userId).build());
+            loan.setStartDate(LocalDate.now());
+            loan.setEndDate(LocalDate.now().plusWeeks(4));
+            try {
+                this.addLoanStatusToLoan(loan, StatusDesignation.LOANED);
+            }catch (Exception e) {
+                throw new UnknownParameterException(String.format("Cannot create loan for bookCopy %d and user %d", bookCopyId, userId), e);
+            }
+            return loan;
+        }else{
+            throw new UnknownBookCopyException("Unknown bookCopy "+bookCopyId);
         }
-//        if (!user.isPresent()) {
-//            throw new UnknownUserException("User n°" + userId + " doesn't exist");
-//        }
-        Loan loan = new Loan();
-        loan.setBookCopy(bookCopy.get());
-//        loan.setBookCopy(BookCopy.builder().id(bookCopyId).build());
-        loan.setUser(User.builder().id(userId).build());
-        loan.setStartDate(LocalDate.now());
-        loan.setEndDate(LocalDate.now().plusWeeks(4));
-        try {
-            this.addLoanStatusToLoan(loan, StatusDesignation.LOANED);
-        }catch (Exception e){
-            throw new UnknownParameterException(String.format("Cannot create loan for bookCopy %d and user %d", bookCopyId, userId),e);
-        }
-        return loan;
     }
 
     @Override
@@ -103,7 +99,7 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
                 return Optional.empty();
             }
         }catch(IllegalArgumentException ex){
-            throw new UnknowStatusException("The status "+status+" doesn't exists.");
+            throw new UnknowStatusException("Unknown status "+status);
         }
 
     }
@@ -135,10 +131,10 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
                     throw new UnauthorizedException();
                 }
             }else{
-                throw new UnknownUserException("User n°" + loan.get().getUser().getId() + " doesn't exist");
+                throw new UnknownUserException("Unknown user "+loan.get().getUser().getId());
             }
         }else{
-            throw new UnknownLoanException("Loan n°" + id + " doesn't exist");
+            throw new UnknownLoanException("Unknown loan "+id);
         }
     }
 }

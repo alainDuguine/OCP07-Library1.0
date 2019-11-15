@@ -12,7 +12,6 @@ import java.util.List;
 public interface BookRepository extends JpaRepository<Book, Long> {
 
     List<Book> findByTitleLike(String title);
-    List<Book> findByAuthorsLike(String author);
 
     @Query(value = "select b, count(b.copyList) from Book b")
     List<Book> findBooksByTitleWithCopies(@Param("title")String title);
