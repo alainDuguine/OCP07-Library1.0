@@ -37,7 +37,7 @@ public class Book {
     private Set<Author> authors = new HashSet<>();
 
     @Transient
-    private int nbCopies;
+    private Long nbCopiesAvailable;
 
     public Book(String title) {
         this.title = title;

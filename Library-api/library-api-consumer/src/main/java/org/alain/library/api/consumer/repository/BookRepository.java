@@ -13,7 +13,10 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     List<Book> findByTitleLike(String title);
 
-    @Query(value = "select b, count(b.copyList) from Book b")
-    List<Book> findBooksByTitleWithCopies(@Param("title")String title);
+//    @Query(value = "select b, sum(case when (c.available = TRUE) then 1 else null end) from Book b left join b.copyList c where b.title like %:title% group by b")
+    @Query(value = "select b, count(c.available), c.available from Book b left join b.copyList c where b.title like %:title% group by b, c.available")
+//    @Query("select b, count(c) from Book b left join fetch b.copyList c where b.title like :title and c.available = true group by b")
+    List<Object> findBooksByTitleWithCopies(@Param("title")String title);
+
 
 }

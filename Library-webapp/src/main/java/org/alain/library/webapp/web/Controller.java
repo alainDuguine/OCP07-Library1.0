@@ -6,12 +6,15 @@ import io.swagger.client.api.LoanApi;
 import io.swagger.client.api.UserApi;
 import io.swagger.client.model.BookDto;
 import io.swagger.client.model.LoanDto;
+import io.swagger.client.model.UserDto;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 
 
 @org.springframework.stereotype.Controller
@@ -42,7 +45,9 @@ public class Controller {
     @GetMapping("/loans")
     public String loans(Model model){
         try {
-            List<LoanDto> loanDtoList = loanApi.getLoans(null,1L).execute().body();
+            UserDto user = Objects.requireNonNull(userApi.getUsers("alain_duguine@hotmail.fr").execute().body()).get(0);
+            String authorization = "Basic " + Base64.getEncoder().encodeToString(("alain_duguine@hotmail.fr:admin").getBytes());
+            List<LoanDto> loanDtoList = loanApi.getLoans(authorization,null,user.getId()).execute().body();
             model.addAttribute("loanList", loanDtoList);
         }catch (Exception ex){
             return "Connexion failed";

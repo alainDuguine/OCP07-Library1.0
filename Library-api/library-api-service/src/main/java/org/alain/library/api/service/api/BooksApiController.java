@@ -53,7 +53,7 @@ public class BooksApiController implements BooksApi {
 
     public ResponseEntity<List<BookDto>> getBooks(@ApiParam(value = "Title of book to return", defaultValue = "") @Valid @RequestParam(value = "title", required = false, defaultValue="") String title,
                                                   @ApiParam(value = "author of book to return", defaultValue = "") @Valid @RequestParam(value = "author", required = false, defaultValue="") String author) {
-        List<Book> bookList = bookManagement.findByTitle(title);
+        List<Book> bookList = bookManagement.findByTitleWithAvailableCopies(title);
         return new ResponseEntity<List<BookDto>>(convertListBookModelToListBookDto(bookList), HttpStatus.OK);
         }
 

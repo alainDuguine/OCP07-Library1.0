@@ -69,7 +69,7 @@ class Converters {
         bookDto.setTitle(bookModel.getTitle());
         List<Author> authorsList = new ArrayList<>(bookModel.getAuthors());
         bookDto.setAuthors(convertListAuthorModelToListAuthorDto(authorsList));
-        bookDto.setCopiesAvailable((long) bookModel.getCopyList().size());
+        bookDto.setCopiesAvailable(bookModel.getNbCopiesAvailable());
         return bookDto;
     }
 

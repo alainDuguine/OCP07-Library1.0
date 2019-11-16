@@ -45,7 +45,7 @@ public class UserManagementImpl extends CrudManagementImpl<User> implements User
         if (user.isPresent()){
             // Check authorization
             String userCredentials = user.get().getEmail() + ':' + user.get().getPassword();
-            if(checkUserCredentialsFromB64Encoded(userCredentials, authorization)){
+            if(checkUserCredentialsFromB64Encoded(userCredentials, authorization) || user.get().getRoles().equals("ADMIN")){
                 if (userForm.getFirstName() != null) {
                     user.get().setFirstName(userForm.getFirstName());
                 }

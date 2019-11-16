@@ -54,23 +54,11 @@ public class LoansApiController implements LoansApi {
         return new ResponseEntity<LoanDto>(HttpStatus.NOT_FOUND);
     }
 
-    public ResponseEntity<List<LoanDto>> getLoans(@ApiParam(value = "Status values as filter in research", allowableValues = "loaned, returned, prolonged") @Valid @RequestParam(value = "status", required = false) String status,
+    public ResponseEntity<List<LoanDto>> getLoans(@ApiParam(value = "User identification" ,required=true) @RequestHeader(value="Authorization", required=true) String authorization,
+                                                  @ApiParam(value = "Status values as filter in research", allowableValues = ", loaned, returned, prolonged", defaultValue = "") @Valid @RequestParam(value = "status", required = false, defaultValue="") String status,
                                                   @ApiParam(value = "User id as filter in research") @Valid @RequestParam(value = "user", required = false) Long user) {
-        List<Loan> loanList = loanManagement.findLoans(status, user);
+        List<Loan> loanList = loanManagement.findLoansByStatusAndUserId(status, user, authorization);
         return new ResponseEntity<List<LoanDto>>(convertListLoanModelToListLoanDto(loanList), HttpStatus.OK);
-    }
-
-    public ResponseEntity<List<LoanDto>> getLoanByUserId(@ApiParam(value = "User Id to look for loans",required=true) @PathVariable("userId") Long userId,
-                                                         @ApiParam(value = "User identification" ,required=true) @RequestHeader(value="Authorization", required=true) String authorization) {
-        try {
-            List<Loan> loanModelList = loanManagement.getLoansByUserId(userId, authorization);
-            return new ResponseEntity<List<LoanDto>>(convertListLoanModelToListLoanDto(loanModelList), HttpStatus.OK);
-        }catch(UnauthorizedException ex){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ex.getMessage());
-        }catch (UnknownUserException ex){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
-        }
-
     }
 
     public ResponseEntity<List<LoanStatusDto>> getLoanHistory(@ApiParam(value = "Id of loan",required=true) @PathVariable("id") Long id) {

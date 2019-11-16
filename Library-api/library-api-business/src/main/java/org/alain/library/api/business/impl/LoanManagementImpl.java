@@ -37,17 +37,32 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
     }
 
     @Override
-    public List<Loan> findLoans(String status, Long user) {
-        return loanRepository.findByCurrentStatusAndUserId(status, user);
-    }
-
-    @Override
-    public List<Loan> getLoansByUserId(Long userId, String authorization) {
+    public List<Loan> findLoansByStatusAndUserId(String status, Long userId, String authorization) {
         Optional<User> user = userRepository.findById(userId);
         if (user.isPresent()) {
             String userCredentials = user.get().getEmail() + ':' + user.get().getPassword();
-            if (userManagement.checkUserCredentialsFromB64Encoded(userCredentials, authorization)) {
+            if (userManagement.checkUserCredentialsFromB64Encoded(userCredentials, authorization) || user.get().getRoles().equals("ADMIN")) {
+//                return loanRepository.findByCurrentStatusAndUserId(status, userId);
                 return loanRepository.findLoansByUserId(userId);
+            }else{
+                throw new UnauthorizedException("You are not allowed to acces these user's loans");
+            }
+        }else{
+            throw new UnknownUserException("Unknown user "+userId);
+        }
+    }
+
+//    @Override
+//    public List<Loan> findLoansByStatusAndUserId(String status, Long userId, String authorization) {
+//        return loanRepository.findByCurrentStatusAndUserId(status, userId);
+//    }
+
+    public List<Loan> findLoansForConnectedUser(Long userId, String authorization){
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            String userCredentials = user.get().getEmail() + ':' + user.get().getPassword();
+            if (userManagement.checkUserCredentialsFromB64Encoded(userCredentials, authorization)){
+                return loanRepository.findByCurrentStatusAndUserId(null, userId);
             }else{
                 throw new UnauthorizedException("You are not allowed to acces these user's loans");
             }
@@ -70,7 +85,7 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
         Optional<BookCopy> bookCopy = bookCopyRepository.findById(bookCopyId);
         if (bookCopy.isPresent()){
             if (!bookCopy.get().isAvailable()) {
-                throw new BookCopyNotAvailableException("Unknown BookCopy "+bookCopyId);
+                throw new BookCopyNotAvailableException("Book Copy Unavailable "+bookCopyId);
             }
             Loan loan = new Loan();
             loan.setBookCopy(bookCopy.get());
@@ -121,7 +136,7 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
             Optional<User> user = userRepository.findById(loan.get().getUser().getId());
             if(user.isPresent()){
                 String userCredentials = user.get().getEmail() + ':' + user.get().getPassword();
-                if(userManagement.checkUserCredentialsFromB64Encoded(userCredentials, authorization)){
+                if(userManagement.checkUserCredentialsFromB64Encoded(userCredentials, authorization) || user.get().getRoles().equals("ADMIN")){
                     if(!loan.get().getCurrentStatus().equals("PROLONGED") && !loan.get().getCurrentStatus().equals("RETURNED")){
                         loan.get().setEndDate(loan.get().getEndDate().plusWeeks(4));
                         return Optional.of(this.addLoanStatusToLoan(loan.get(), StatusDesignation.PROLONGED));
