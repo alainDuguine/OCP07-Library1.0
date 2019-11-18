@@ -14,4 +14,5 @@ public interface UserManagement extends CrudManagement<User> {
     Optional<User> updateUser(Long id, User userForm, String authorization);
     boolean checkUserCredentialsFromB64Encoded(String userCredentials, String authorization);
     void deleteUser(Long id);
+    Optional<User> findUserByIdWithAuthorization(Long id, String authorization);
 }

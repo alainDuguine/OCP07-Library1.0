@@ -26,6 +26,7 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
     private final UserManagement userManagement;
     private final BookCopyRepository bookCopyRepository;
 
+
     public LoanManagementImpl(LoanRepository loanRepository, LoanStatusRepository loanStatusRepository, UserRepository userRepository, StatusRepository statusRepository, UserManagement userManagement, BookCopyRepository bookCopyRepository) {
         super(loanRepository);
         this.loanRepository = loanRepository;
@@ -50,20 +51,6 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
             }else{
                 return loanRepository.findByCurrentStatus(status.toUpperCase());
             }
-        }
-    }
-
-    public List<Loan> findLoansForConnectedUser(Long userId, String authorization){
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isPresent()) {
-            String userCredentials = user.get().getEmail() + ':' + user.get().getPassword();
-            if (userManagement.checkUserCredentialsFromB64Encoded(userCredentials, authorization)){
-                return loanRepository.findByCurrentStatusAndUserId(null, userId);
-            }else{
-                throw new UnauthorizedException("You are not allowed to access these user's loans");
-            }
-        }else{
-            throw new UnknownUserException("Unknown user "+userId);
         }
     }
 

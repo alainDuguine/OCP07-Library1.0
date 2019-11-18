@@ -29,6 +29,21 @@ public class UserManagementImpl extends CrudManagementImpl<User> implements User
     }
 
     @Override
+    public Optional<User> findUserByIdWithAuthorization(Long id, String authorization) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            String userCredentials = user.get().getEmail() + ':' + user.get().getPassword();
+            if (checkUserCredentialsFromB64Encoded(userCredentials, authorization)){
+                return user;
+            }else{
+                throw new UnauthorizedException("You are not allowed to access these user's loans");
+            }
+        }else{
+            return Optional.empty();
+        }
+    }
+
+    @Override
     public Optional<User> saveUser(User user) {
         if (this.findUserByMail(user.getEmail()).isEmpty()){
 //            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -82,7 +97,6 @@ public class UserManagementImpl extends CrudManagementImpl<User> implements User
     public boolean checkUserCredentialsFromB64Encoded(String userCredentials, String authorization){
         return userCredentials.equals(decodeAuthorization(authorization));
     }
-
 
     private String decodeAuthorization(String encodedAuthorization){
         encodedAuthorization = encodedAuthorization.replace("Basic ","");
