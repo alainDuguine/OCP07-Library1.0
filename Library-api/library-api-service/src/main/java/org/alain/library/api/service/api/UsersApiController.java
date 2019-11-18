@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiParam;
 import org.alain.library.api.business.contract.UserManagement;
 import org.alain.library.api.business.exceptions.UnauthorizedException;
 import org.alain.library.api.model.user.User;
+import org.alain.library.api.service.dto.LoanDto;
 import org.alain.library.api.service.dto.UserDto;
 import org.alain.library.api.service.dto.UserForm;
 import org.alain.library.api.service.dto.UserFormUpdate;
@@ -21,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,6 +57,20 @@ public class UsersApiController implements UsersApi {
     public ResponseEntity<List<UserDto>> getUsers(@ApiParam(value = "Email of user to return", defaultValue = "") @Valid @RequestParam(value = "email", required = false, defaultValue = "") String email) {
         List<User> userList = userManagement.findUserByMail(email);
         return new ResponseEntity<List<UserDto>>(convertListUsersModelToListUsersDto(userList), HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<LoanDto>> getLoansForUser(@ApiParam(value = "Id of user to return",required=true) @PathVariable("id") Long id, @ApiParam(value = "User identification" ,required=true) @RequestHeader(value="Authorization", required=true) String authorization) {
+        String accept = request.getHeader("Accept");
+        if (accept != null && accept.contains("application/json")) {
+            try {
+                return new ResponseEntity<List<LoanDto>>(objectMapper.readValue("[ {  \"endDate\" : \"endDate\",  \"currentStatus\" : \"currentStatus\",  \"currentStatusDate\" : \"currentStatusDate\",  \"bookCopy\" : {    \"editor\" : \"editor\",    \"book\" : {      \"copiesAvailable\" : 2,      \"isbn\" : \"isbn\",      \"id\" : 5,      \"title\" : \"title\",      \"authors\" : [ {        \"firstName\" : \"firstName\",        \"lastName\" : \"lastName\",        \"books\" : [ \"books\", \"books\" ],        \"id\" : 5      }, {        \"firstName\" : \"firstName\",        \"lastName\" : \"lastName\",        \"books\" : [ \"books\", \"books\" ],        \"id\" : 5      } ]    },    \"available\" : true,    \"id\" : 1,    \"barcode\" : \"barcode\"  },  \"id\" : 0,  \"userId\" : 6,  \"startDate\" : \"startDate\"}, {  \"endDate\" : \"endDate\",  \"currentStatus\" : \"currentStatus\",  \"currentStatusDate\" : \"currentStatusDate\",  \"bookCopy\" : {    \"editor\" : \"editor\",    \"book\" : {      \"copiesAvailable\" : 2,      \"isbn\" : \"isbn\",      \"id\" : 5,      \"title\" : \"title\",      \"authors\" : [ {        \"firstName\" : \"firstName\",        \"lastName\" : \"lastName\",        \"books\" : [ \"books\", \"books\" ],        \"id\" : 5      }, {        \"firstName\" : \"firstName\",        \"lastName\" : \"lastName\",        \"books\" : [ \"books\", \"books\" ],        \"id\" : 5      } ]    },    \"available\" : true,    \"id\" : 1,    \"barcode\" : \"barcode\"  },  \"id\" : 0,  \"userId\" : 6,  \"startDate\" : \"startDate\"} ]", List.class), HttpStatus.NOT_IMPLEMENTED);
+            } catch (IOException e) {
+                log.error("Couldn't serialize response for content type application/json", e);
+                return new ResponseEntity<List<LoanDto>>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        return new ResponseEntity<List<LoanDto>>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<Void> deleteUser(@ApiParam(value = "User id to delete", required = true) @PathVariable("id") Long id) {

@@ -54,10 +54,10 @@ public class LoansApiController implements LoansApi {
         return new ResponseEntity<LoanDto>(HttpStatus.NOT_FOUND);
     }
 
-    public ResponseEntity<List<LoanDto>> getLoans(@ApiParam(value = "User identification" ,required=true) @RequestHeader(value="Authorization", required=true) String authorization,
-                                                  @ApiParam(value = "Status values as filter in research", allowableValues = ", loaned, returned, prolonged", defaultValue = "") @Valid @RequestParam(value = "status", required = false, defaultValue="") String status,
+    public ResponseEntity<List<LoanDto>> getLoans(@ApiParam(value = "Status values as filter in research", allowableValues = "loaned, returned, prolonged")
+                                                  @Valid @RequestParam(value = "status", required = false) String status,
                                                   @ApiParam(value = "User id as filter in research") @Valid @RequestParam(value = "user", required = false) Long user) {
-        List<Loan> loanList = loanManagement.findLoansByStatusAndUserId(status, user, authorization);
+        List<Loan> loanList = loanManagement.findLoansByStatusAndUserId(status, user);
         return new ResponseEntity<List<LoanDto>>(convertListLoanModelToListLoanDto(loanList), HttpStatus.OK);
     }
 

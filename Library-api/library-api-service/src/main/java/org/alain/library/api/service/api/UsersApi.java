@@ -6,6 +6,7 @@
 package org.alain.library.api.service.api;
 
 import io.swagger.annotations.*;
+import org.alain.library.api.service.dto.LoanDto;
 import org.alain.library.api.service.dto.UserDto;
 import org.alain.library.api.service.dto.UserForm;
 import org.alain.library.api.service.dto.UserFormUpdate;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-11-15T12:10:31.443+01:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-11-18T07:55:25.512+01:00")
 
 @Api(value = "users", description = "the users API")
 public interface UsersApi {
@@ -43,6 +44,16 @@ public interface UsersApi {
         produces = { "application/json" },
         method = RequestMethod.DELETE)
     ResponseEntity<Void> deleteUser(@ApiParam(value = "User id to delete", required = true) @PathVariable("id") Long id);
+
+
+    @ApiOperation(value = "Get a list of all loans from user", nickname = "getLoansForUser", notes = "", response = LoanDto.class, responseContainer = "List", tags={ "user", })
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Loans found", response = LoanDto.class, responseContainer = "List"),
+        @ApiResponse(code = 403, message = "You are not allowed to perform this request") })
+    @RequestMapping(value = "/users/{id}/loan",
+        produces = { "application/json" },
+        method = RequestMethod.GET)
+    ResponseEntity<List<LoanDto>> getLoansForUser(@ApiParam(value = "Id of user to return", required = true) @PathVariable("id") Long id, @ApiParam(value = "User identification", required = true) @RequestHeader(value = "Authorization", required = true) String authorization);
 
 
     @ApiOperation(value = "Get user by Id", nickname = "getUser", notes = "", response = UserDto.class, tags={ "user", })

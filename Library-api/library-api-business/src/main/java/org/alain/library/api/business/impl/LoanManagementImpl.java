@@ -37,25 +37,21 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
     }
 
     @Override
-    public List<Loan> findLoansByStatusAndUserId(String status, Long userId, String authorization) {
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isPresent()) {
-            String userCredentials = user.get().getEmail() + ':' + user.get().getPassword();
-            if (userManagement.checkUserCredentialsFromB64Encoded(userCredentials, authorization) || user.get().getRoles().equals("ADMIN")) {
-//                return loanRepository.findByCurrentStatusAndUserId(status, userId);
-                return loanRepository.findLoansByUserId(userId);
+    public List<Loan> findLoansByStatusAndUserId(String status, Long userId) {
+        if(status == null){
+            if(userId == null){
+               return  loanRepository.findAll();
             }else{
-                throw new UnauthorizedException("You are not allowed to acces these user's loans");
+                return loanRepository.findByUserId(userId);
             }
         }else{
-            throw new UnknownUserException("Unknown user "+userId);
+            if (userId != null){
+                return loanRepository.findByCurrentStatusAndUserId(status.toUpperCase(), userId);
+            }else{
+                return loanRepository.findByCurrentStatus(status.toUpperCase());
+            }
         }
     }
-
-//    @Override
-//    public List<Loan> findLoansByStatusAndUserId(String status, Long userId, String authorization) {
-//        return loanRepository.findByCurrentStatusAndUserId(status, userId);
-//    }
 
     public List<Loan> findLoansForConnectedUser(Long userId, String authorization){
         Optional<User> user = userRepository.findById(userId);
@@ -64,7 +60,7 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
             if (userManagement.checkUserCredentialsFromB64Encoded(userCredentials, authorization)){
                 return loanRepository.findByCurrentStatusAndUserId(null, userId);
             }else{
-                throw new UnauthorizedException("You are not allowed to acces these user's loans");
+                throw new UnauthorizedException("You are not allowed to access these user's loans");
             }
         }else{
             throw new UnknownUserException("Unknown user "+userId);
