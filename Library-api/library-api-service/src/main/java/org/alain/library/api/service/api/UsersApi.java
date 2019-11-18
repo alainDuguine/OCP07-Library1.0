@@ -11,9 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-11-18T16:55:54.495+01:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-11-18T17:31:45.005+01:00")
 
 @Api(value = "users", description = "the users API")
 public interface UsersApi {
@@ -62,6 +63,16 @@ public interface UsersApi {
         produces = { "application/json" },
         method = RequestMethod.GET)
     ResponseEntity<UserDto> getUser(@ApiParam(value = "Id of user to return", required = true) @PathVariable("id") Long id);
+
+
+    @ApiOperation(value = "Get one user by email", nickname = "getUserByEmail", notes = "", response = UserDto.class, tags={ "user", })
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "User found", response = UserDto.class),
+        @ApiResponse(code = 404, message = "User not found") })
+    @RequestMapping(value = "/users/findByEmail",
+        produces = { "application/json" },
+        method = RequestMethod.GET)
+    ResponseEntity<UserDto> getUserByEmail(@NotNull @ApiParam(value = "Email of user to return", required = true) @Valid @RequestParam(value = "email", required = true) String email);
 
 
     @ApiOperation(value = "Get a list of all users", nickname = "getUsers", notes = "", response = UserDto.class, responseContainer = "List", tags={ "user", })

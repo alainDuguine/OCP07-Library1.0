@@ -45,7 +45,7 @@ public class Controller {
     @GetMapping("/loans")
     public String loans(Model model){
         try {
-            UserDto user = Objects.requireNonNull(userApi.getUsers("alain_duguine@hotmail.fr").execute().body()).get(0);
+            UserDto user = userApi.getUsers("alain_duguine@hotmail.fr").execute().body()).get(0);
             String authorization = "Basic " + Base64.getEncoder().encodeToString(("alain_duguine@hotmail.fr:admin").getBytes());
             List<LoanDto> loanDtoList = loanApi.getLoans(authorization,null,user.getId()).execute().body();
             model.addAttribute("loanList", loanDtoList);

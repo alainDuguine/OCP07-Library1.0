@@ -38,8 +38,17 @@ public class UserManagementImpl extends CrudManagementImpl<User> implements User
     }
 
     @Override
-    public List<User> findUsersByMail(String email) {
+    public List<User> findUsersByEMail(String email) {
         return userRepository.findByEmailLike("%"+email+"%");
+    }
+
+    @Override
+    public Optional<User> getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user != null){
+            return Optional.of(user);
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -68,7 +77,7 @@ public class UserManagementImpl extends CrudManagementImpl<User> implements User
 
     @Override
     public Optional<User> saveUser(User user) {
-        if (this.findUsersByMail(user.getEmail()).isEmpty()){
+        if (this.findUsersByEMail(user.getEmail()).isEmpty()){
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             if(user.getRoles().isEmpty()) {

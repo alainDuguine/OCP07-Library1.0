@@ -19,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,8 +52,16 @@ public class UsersApiController implements UsersApi {
     }
 
     public ResponseEntity<List<UserDto>> getUsers(@ApiParam(value = "Email of user to return", defaultValue = "") @Valid @RequestParam(value = "email", required = false, defaultValue = "") String email) {
-        List<User> userList = userManagement.findUsersByMail(email);
+        List<User> userList = userManagement.findUsersByEMail(email);
         return new ResponseEntity<List<UserDto>>(convertListUsersModelToListUsersDto(userList), HttpStatus.OK);
+    }
+
+    public ResponseEntity<UserDto> getUserByEmail(@NotNull @ApiParam(value = "Email of user to return", required = true) @Valid @RequestParam(value = "email", required = true) String email) {
+        Optional<User> user = userManagement.getUserByEmail(email);
+        if (user.isPresent()){
+            return new ResponseEntity<UserDto>(convertUserModelToUserDto(user.get()), HttpStatus.OK);
+        }
+        return new ResponseEntity<UserDto>(HttpStatus.NOT_FOUND);
     }
 
     public ResponseEntity<List<LoanDto>> getLoansForUser(@ApiParam(value = "Id of user to return",required=true) @PathVariable("id") Long id, @ApiParam(value = "User identification" ,required=true) @RequestHeader(value="Authorization", required=true) String authorization) {

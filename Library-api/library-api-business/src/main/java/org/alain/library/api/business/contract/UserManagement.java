@@ -9,7 +9,8 @@ import java.util.Optional;
 
 @Service
 public interface UserManagement extends CrudManagement<User>{
-    List<User> findUsersByMail(String email);
+    List<User> findUsersByEMail(String email);
+    Optional<User> getUserByEmail(String email);
     Optional<User> saveUser(User user);
     Optional<User> updateUser(Long id, User userForm, String authorization);
     boolean checkUserCredentialsFromB64Encoded(String userCredentials, String authorization);
