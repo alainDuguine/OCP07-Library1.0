@@ -5,10 +5,7 @@ import io.swagger.annotations.ApiParam;
 import org.alain.library.api.business.contract.UserManagement;
 import org.alain.library.api.business.exceptions.UnauthorizedException;
 import org.alain.library.api.model.user.User;
-import org.alain.library.api.service.dto.LoanDto;
-import org.alain.library.api.service.dto.UserDto;
-import org.alain.library.api.service.dto.UserForm;
-import org.alain.library.api.service.dto.UserFormUpdate;
+import org.alain.library.api.service.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -54,7 +51,7 @@ public class UsersApiController implements UsersApi {
     }
 
     public ResponseEntity<List<UserDto>> getUsers(@ApiParam(value = "Email of user to return", defaultValue = "") @Valid @RequestParam(value = "email", required = false, defaultValue = "") String email) {
-        List<User> userList = userManagement.findUserByMail(email);
+        List<User> userList = userManagement.findUsersByMail(email);
         return new ResponseEntity<List<UserDto>>(convertListUsersModelToListUsersDto(userList), HttpStatus.OK);
     }
 
@@ -100,5 +97,12 @@ public class UsersApiController implements UsersApi {
         } catch (UnauthorizedException ex) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not allowed to update this user");
         }
+    }
+
+    public ResponseEntity<Void> login(@ApiParam(value = "User email and password" ,required=true )  @Valid @RequestBody UserCredentials userCredentials) {
+        if(userManagement.login(userCredentials.getEmail(), userCredentials.getPassword())){
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        }
+        return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
     }
 }

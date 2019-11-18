@@ -6,17 +6,14 @@
 package org.alain.library.api.service.api;
 
 import io.swagger.annotations.*;
-import org.alain.library.api.service.dto.LoanDto;
-import org.alain.library.api.service.dto.UserDto;
-import org.alain.library.api.service.dto.UserForm;
-import org.alain.library.api.service.dto.UserFormUpdate;
+import org.alain.library.api.service.dto.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-11-18T07:55:25.512+01:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-11-18T16:55:54.495+01:00")
 
 @Api(value = "users", description = "the users API")
 public interface UsersApi {
@@ -74,6 +71,16 @@ public interface UsersApi {
         produces = { "application/json" },
         method = RequestMethod.GET)
     ResponseEntity<List<UserDto>> getUsers(@ApiParam(value = "Email of user to return", defaultValue = "") @Valid @RequestParam(value = "email", required = false, defaultValue = "") String email);
+
+
+    @ApiOperation(value = "Authenticate user", nickname = "login", notes = "", tags={ "user", })
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Credentials valid"),
+        @ApiResponse(code = 400, message = "Invalid credentials supplied") })
+    @RequestMapping(value = "/users/login",
+        consumes = { "application/json" },
+        method = RequestMethod.POST)
+    ResponseEntity<Void> login(@ApiParam(value = "User email and password", required = true) @Valid @RequestBody UserCredentials userCredentials);
 
 
     @ApiOperation(value = "Update a user", nickname = "updateUser", notes = "", response = UserDto.class, authorizations = {

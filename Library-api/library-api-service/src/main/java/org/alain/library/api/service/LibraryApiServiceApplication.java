@@ -1,7 +1,9 @@
 package org.alain.library.api.service;
 
+import org.alain.library.api.business.contract.UserManagement;
 import org.alain.library.api.consumer.repository.*;
 import org.alain.library.api.model.loan.*;
+import org.alain.library.api.model.user.User;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,10 +22,12 @@ import java.util.List;
 @EnableSwagger2
 public class LibraryApiServiceApplication implements CommandLineRunner {
 
-    private StatusRepository statusRepository;
+    private final StatusRepository statusRepository;
+    private final UserManagement userManagement;
 
-    public LibraryApiServiceApplication(StatusRepository statusRepository) {
+    public LibraryApiServiceApplication(StatusRepository statusRepository, UserManagement userManagement) {
         this.statusRepository = statusRepository;
+        this.userManagement = userManagement;
     }
 
     public static void main(String[] args) {
@@ -39,6 +43,11 @@ public class LibraryApiServiceApplication implements CommandLineRunner {
                 Status status = new Status(statusDesignation);
                 statusRepository.save(status);
             }
+            User user1 = new User("alain_duguine@hotmail.fr", "user","user","Alain", "Duguine");
+            User user2 = new User("admin@openlibrary.fr", "admin","admin","Admin", "Library");
+            user2.setRoles("USER,ADMIN");
+            userManagement.saveUser(user1);
+            userManagement.saveUser(user2);
         }
     }
 

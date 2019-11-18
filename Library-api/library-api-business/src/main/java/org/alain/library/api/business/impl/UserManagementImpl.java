@@ -6,6 +6,11 @@ import org.alain.library.api.consumer.repository.UserRepository;
 import org.alain.library.api.model.loan.Loan;
 import org.alain.library.api.model.loan.StatusDesignation;
 import org.alain.library.api.model.user.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
@@ -14,7 +19,7 @@ import java.util.Optional;
 
 
 @Service
-public class UserManagementImpl extends CrudManagementImpl<User> implements UserManagement {
+public class UserManagementImpl extends CrudManagementImpl<User> implements UserManagement, UserDetailsService{
 
     private final UserRepository userRepository;
 
@@ -24,7 +29,16 @@ public class UserManagementImpl extends CrudManagementImpl<User> implements User
     }
 
     @Override
-    public List<User> findUserByMail(String email) {
+    public UserDetails loadUserByUsername(String s){
+        User user = userRepository.findByEmail(s);
+        if (user == null){
+            throw new UsernameNotFoundException("Unknown user " +s);
+        }
+        return new UserPrincipal(user);
+    }
+
+    @Override
+    public List<User> findUsersByMail(String email) {
         return userRepository.findByEmailLike("%"+email+"%");
     }
 
@@ -44,11 +58,22 @@ public class UserManagementImpl extends CrudManagementImpl<User> implements User
     }
 
     @Override
+    public boolean login(String email, String password) {
+        User user = userRepository.findByEmail(email);
+        if(user != null){
+            return BCrypt.checkpw(password, user.getPassword());
+        }
+        return false;
+    }
+
+    @Override
     public Optional<User> saveUser(User user) {
-        if (this.findUserByMail(user.getEmail()).isEmpty()){
-//            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-//            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            user.setRoles("USER");
+        if (this.findUsersByMail(user.getEmail()).isEmpty()){
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            if(user.getRoles().isEmpty()) {
+                user.setRoles("USER");
+            }
             return Optional.of(userRepository.save(user));
         }
         return Optional.empty();
