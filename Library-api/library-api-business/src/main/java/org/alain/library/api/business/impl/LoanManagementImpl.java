@@ -39,19 +39,7 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
 
     @Override
     public List<Loan> findLoansByStatusAndUserId(String status, Long userId) {
-        if(status == null){
-            if(userId == null){
-               return  loanRepository.findAll();
-            }else{
-                return loanRepository.findByUserId(userId);
-            }
-        }else{
-            if (userId != null){
-                return loanRepository.findByCurrentStatusAndUserId(status.toUpperCase(), userId);
-            }else{
-                return loanRepository.findByCurrentStatus(status.toUpperCase());
-            }
-        }
+        return loanRepository.findByCurrentStatusAndUserId(status, userId);
     }
 
     @Override

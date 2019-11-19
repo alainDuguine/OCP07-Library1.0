@@ -6,7 +6,6 @@ import org.alain.library.api.business.contract.LoanManagement;
 import org.alain.library.api.business.exceptions.UnauthorizedException;
 import org.alain.library.api.business.exceptions.UnknowStatusException;
 import org.alain.library.api.business.exceptions.UnknownLoanException;
-import org.alain.library.api.business.exceptions.UnknownUserException;
 import org.alain.library.api.model.loan.Loan;
 import org.alain.library.api.model.loan.LoanStatus;
 import org.alain.library.api.service.dto.LoanDto;

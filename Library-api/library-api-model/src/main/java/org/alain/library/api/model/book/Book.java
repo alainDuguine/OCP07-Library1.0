@@ -64,6 +64,16 @@ public class Book {
         bookCopy.setBook(null);
     }
 
+    @Transient
+    public Long getNbCopiesAvailable() {
+        List<BookCopy> list = new ArrayList<>();
+        this.getCopyList().stream()
+                .filter(BookCopy::isAvailable)
+                .forEach(list::add);
+        return (long) list.size();
+    }
+
+
     @Override
     public String toString() {
         StringBuilder listAuthors = new StringBuilder();

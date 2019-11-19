@@ -28,30 +28,24 @@ public class BookManagementImpl extends CrudManagementImpl<Book> implements Book
     }
 
     @Override
-    public List<Book> findByTitleWithAvailableCopies(String title) {
-        List<Object> resultSet = bookRepository.findBooksByTitleWithCopies("%"+title+"%");
-        List<Book> bookList = new ArrayList<>();
+    public List<Book> findByTitle(String title) {
+        //        List<Object> resultSet = bookRepository.findBooksByTitleWithCopies("%"+title+"%");
+//        List<Book> bookList = new ArrayList<>();
 //        for (Object res: resultSet) {
 //            Object[] row = (Object[]) res;
-//            Book book = (Book) row[0];
-//            book.setNbCopiesAvailable((Long) row[1]);
-//            bookList.add(book);
+//            if(row[2] != null && row[2].equals(true)){
+//                Book book = (Book) row[0];
+//                book.setNbCopiesAvailable((Long)row[1]);
+//                bookList.add(book);
+//            }else{
+//                if(((Book)row[0]).getCopyList().size() == (Long)row[1]){
+//                    Book book = (Book) row[0];
+//                    book.setNbCopiesAvailable(0L);
+//                    bookList.add(book);
+//                }
+//            }
 //        }
-        for (Object res: resultSet) {
-            Object[] row = (Object[]) res;
-            if(row[2] != null && row[2].equals(true)){
-                Book book = (Book) row[0];
-                book.setNbCopiesAvailable((Long)row[1]);
-                bookList.add(book);
-            }else{
-                if(((Book)row[0]).getCopyList().size() == (Long)row[1]){
-                    Book book = (Book) row[0];
-                    book.setNbCopiesAvailable(0L);
-                    bookList.add(book);
-                }
-            }
-        }
-        return bookList;
+        return bookRepository.findByTitleLike("%"+title+"%");
     }
 
     @Override

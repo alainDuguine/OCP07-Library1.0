@@ -6,12 +6,13 @@ import io.swagger.client.api.LoanApi;
 import io.swagger.client.api.UserApi;
 import io.swagger.client.model.BookDto;
 import io.swagger.client.model.LoanDto;
+import io.swagger.client.model.UserCredentials;
 import io.swagger.client.model.UserDto;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
@@ -19,16 +20,15 @@ import java.util.Objects;
 
 @org.springframework.stereotype.Controller
 @RequestMapping("/")
+@SessionAttributes("UserSession")
 public class Controller {
 
     private final LoanApi loanApi;
-    private final AuthorApi authorApi;
     private final BookApi bookApi;
     private final UserApi userApi;
 
-    public Controller(LoanApi loanApi, AuthorApi authorApi, BookApi bookApi, UserApi userApi) {
+    public Controller(LoanApi loanApi, BookApi bookApi, UserApi userApi) {
         this.loanApi = loanApi;
-        this.authorApi = authorApi;
         this.bookApi = bookApi;
         this.userApi = userApi;
     }
@@ -42,13 +42,30 @@ public class Controller {
         return "login";
     }
 
+    @PostMapping("/signin")
+    public String signin(HttpServletRequest request,
+                        @RequestParam(name = "username")String username,
+                         @RequestParam(name = "password")String password){
+        try{
+            UserCredentials userCredentials = new UserCredentials();
+            userCredentials.setEmail(username);
+            userCredentials.setPassword(password);
+            if(userApi.login(userCredentials).execute().code() == 200){
+                return "redirect:/home";
+            }
+        }catch (Exception ex){
+            return "Connexion failed";
+        }
+        return "login";
+    }
+
     @GetMapping("/loans")
     public String loans(Model model){
         try {
-            UserDto user = userApi.getUsers("alain_duguine@hotmail.fr").execute().body()).get(0);
+            UserDto user = userApi.getUserByEmail("alain_duguine@hotmail.fr").execute().body();
             String authorization = "Basic " + Base64.getEncoder().encodeToString(("alain_duguine@hotmail.fr:admin").getBytes());
-            List<LoanDto> loanDtoList = loanApi.getLoans(authorization,null,user.getId()).execute().body();
-            model.addAttribute("loanList", loanDtoList);
+//            List<LoanDto> loanDtoList = user.get;
+//            model.addAttribute("loanList", loanDtoList);
         }catch (Exception ex){
             return "Connexion failed";
         }

@@ -56,22 +56,33 @@
     </div>
 
     <!-- Login Area -->
-    <div class="col-md-6 p-0 h-md-100 loginArea">
+    <div class="col-md-6 p-0 h-md-100 loginArea" th:action="@{/signin}" method="post">
         <div class="d-md-flex align-items-center h-md-100 p-5 justify-content-center">
             <form class="border rounded p-5 loginForm">
                 <h3 class="mb-4 text-center">Sign In</h3>
+
+                <div th:if="${param.error}" class="alert alert-danger">
+                    Invalid username and password.
+                </div>
+
+                <div th:if="${param.logout}" class="alert alert-success">
+                    You have been logged out.
+                </div>
+
                 <div class="form-group">
-                    <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="E-mail" required="">
+                    <input type="email" class="form-control" id="username" name="username" aria-describedby="emailHelp" placeholder="E-mail" required>
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control" id="password" placeholder="Password" required="">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
                 </div>
                 <div class="form-group form-check">
                     <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe">
                     <label class="form-check-label small" for="rememberMe">Remember me</label>
                 </div>
-                <button type="submit" class="btn btn-round btn-block shadow-sm">Sign in</button>
-                <small class="d-block mt-4 text-center"><a class="text-gray" href="#">Forgot your password?</a></small>
+                <div class="form-action">
+                    <button type="submit" class="btn btn-round btn-block shadow-sm">Sign in</button>
+                    <small class="d-block mt-4 text-center"><a class="text-gray" href="#">Forgot your password?</a></small>
+                </div>
             </form>
         </div>
     </div>

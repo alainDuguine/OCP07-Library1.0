@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface LoanRepository extends JpaRepository<Loan, Long> {
 
-    @Query("Select l from Loan l WHERE (l.currentStatus is null or l.currentStatus = :status) and (l.user.id is null or  l.user.id = :id)")
+    @Query("Select l from Loan l WHERE (:status is null or l.currentStatus = upper(:status)) and (:id is null or  l.user.id = :id)")
     List<Loan> findByCurrentStatusAndUserId(@Param("status") String status, @Param("id")Long id);
 
     List<Loan> findByCurrentStatus(String status);
