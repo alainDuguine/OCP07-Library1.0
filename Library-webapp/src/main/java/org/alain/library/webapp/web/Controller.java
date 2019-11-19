@@ -1,87 +1,137 @@
 package org.alain.library.webapp.web;
 
-import io.swagger.client.api.AuthorApi;
 import io.swagger.client.api.BookApi;
 import io.swagger.client.api.LoanApi;
 import io.swagger.client.api.UserApi;
 import io.swagger.client.model.BookDto;
-import io.swagger.client.model.LoanDto;
 import io.swagger.client.model.UserCredentials;
 import io.swagger.client.model.UserDto;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 import java.util.Base64;
 import java.util.List;
-import java.util.Objects;
 
 
 @org.springframework.stereotype.Controller
 @RequestMapping("/")
-@SessionAttributes("UserSession")
 public class Controller {
 
-    private final LoanApi loanApi;
     private final BookApi bookApi;
     private final UserApi userApi;
+    private final LoanApi loanApi;
 
-    public Controller(LoanApi loanApi, BookApi bookApi, UserApi userApi) {
-        this.loanApi = loanApi;
+    private static String EMAIL_FIELD = "email";
+    private static String PASSWORD_FIELD = "password";
+    private static  String REDIRECT_LOGIN = "redirect:/login";
+    private static  String CONNEXION_FAILED = "Connexion failed";
+
+    public Controller(BookApi bookApi, UserApi userApi, LoanApi loanApi) {
         this.bookApi = bookApi;
         this.userApi = userApi;
+        this.loanApi = loanApi;
     }
 
 
     @GetMapping("/")
-    public String def(){return "redirect:/login";}
+    public String def(){return REDIRECT_LOGIN;}
 
     @GetMapping("/login")
     public String login(){
         return "login";
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpSession session){
+        session.invalidate();
+        return "redirect:/login?logout";
+    }
+
     @PostMapping("/signin")
-    public String signin(HttpServletRequest request,
-                        @RequestParam(name = "username")String username,
-                         @RequestParam(name = "password")String password){
+    public String signin(HttpSession session,
+                         @RequestParam(name = "username")String username,
+                         @RequestParam(name = "password")String password,
+                         @RequestParam(name="rememberMe", required = false)String rememberMe){
         try{
             UserCredentials userCredentials = new UserCredentials();
             userCredentials.setEmail(username);
             userCredentials.setPassword(password);
             if(userApi.login(userCredentials).execute().code() == 200){
-                return "redirect:/home";
+                session.setAttribute(EMAIL_FIELD, username);
+                session.setAttribute(PASSWORD_FIELD, password);
+                if (rememberMe != null){
+                    Cookie cookie = new Cookie("username", username);
+                    cookie.setMaxAge(30 * 24 * 60 * 60);
+                    cookie.setHttpOnly(true);
+                }
+                return "redirect:/loans";
             }
         }catch (Exception ex){
-            return "Connexion failed";
+            return CONNEXION_FAILED;
         }
-        return "login";
+        return "redirect:/login?error";
     }
 
     @GetMapping("/loans")
-    public String loans(Model model){
+    public String loans(Model model, HttpSession session){
         try {
-            UserDto user = userApi.getUserByEmail("alain_duguine@hotmail.fr").execute().body();
-            String authorization = "Basic " + Base64.getEncoder().encodeToString(("alain_duguine@hotmail.fr:admin").getBytes());
-//            List<LoanDto> loanDtoList = user.get;
-//            model.addAttribute("loanList", loanDtoList);
+            String email = (String) session.getAttribute(EMAIL_FIELD);
+            if(email != null){
+                UserDto user = userApi.getUserByEmail(email, getEncodedAuthorization(session)).execute().body();
+                assert user != null;
+                model.addAttribute("loanList", user.getLoans());
+                return "loans";
+            }else{
+                return REDIRECT_LOGIN;
+            }
         }catch (Exception ex){
-            return "Connexion failed";
+            return CONNEXION_FAILED;
         }
-        return "loans";
+    }
+
+    @GetMapping("/extend")
+    public String extend(@RequestParam(name = "loanId") long loanId, HttpSession session){
+        try{
+            String email = (String) session.getAttribute(EMAIL_FIELD);
+            if(email != null){
+                if(loanApi.extendLoan(loanId, getEncodedAuthorization(session)).execute().code() == 200){
+                    return "redirect:/loans?success&loanId="+loanId;
+                }else{
+                    return "redirect:/loans?error&loanId="+loanId;
+                }
+            }else{
+                return "redirect:/login";
+            }
+        } catch (Exception e) {
+            return CONNEXION_FAILED;
+        }
     }
 
     @GetMapping({"/search", "/books"})
     public String books(Model model,
+                        HttpSession session,
                         @RequestParam(name = "title", defaultValue = "") String title,
                         @RequestParam(name = "author", defaultValue = "") String author){
         try {
-            List<BookDto> bookDtoLists = bookApi.getBooks(title, author).execute().body();
-            model.addAttribute("books", bookDtoLists);
+            if(session.getAttribute(EMAIL_FIELD) != null) {
+                List<BookDto> bookDtoLists = bookApi.getBooks(title, author).execute().body();
+                model.addAttribute("title", title);
+                model.addAttribute("author", author);
+                model.addAttribute("books", bookDtoLists);
+            }else{
+                return REDIRECT_LOGIN;
+            }
         }catch (Exception ex){
-            return "Connexion failed";
+            return CONNEXION_FAILED;
         }
         return "search";
+    }
+
+    private String getEncodedAuthorization(HttpSession session){
+        String email = (String) session.getAttribute(EMAIL_FIELD);
+        String password = (String) session.getAttribute(PASSWORD_FIELD);
+        return "Basic " + Base64.getEncoder().encodeToString((email + ":" + password).getBytes());
     }
 }

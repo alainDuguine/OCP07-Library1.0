@@ -213,6 +213,7 @@ class Converters {
         userDto.setFirstName(userModel.getFirstName());
         userDto.setLastName(userModel.getLastName());
         userDto.setRoles(userModel.getRoles());
+        userDto.setLoans(convertListLoanModelToListLoanDto(userModel.getLoans()));
         return userDto;
     }
 

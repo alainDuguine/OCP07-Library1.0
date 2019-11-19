@@ -36,6 +36,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(restAuthenticationEntryPoint)
                 .and()
                 .authorizeRequests()
+                .antMatchers("/users/login").permitAll()
+                .antMatchers("/loans/{id}/extension").authenticated()
                 .antMatchers("/books/**").authenticated()
                 .antMatchers("/authors/**").authenticated()
                 .antMatchers("/users/**").authenticated()

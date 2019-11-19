@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <div th:replace="layout.html :: headerfiles"></div>
+    <title>Open Library</title>
 </head>
 <body>
 
@@ -56,9 +57,9 @@
     </div>
 
     <!-- Login Area -->
-    <div class="col-md-6 p-0 h-md-100 loginArea" th:action="@{/signin}" method="post">
+    <div class="col-md-6 p-0 h-md-100 loginArea">
         <div class="d-md-flex align-items-center h-md-100 p-5 justify-content-center">
-            <form class="border rounded p-5 loginForm">
+            <form class="border rounded p-5 loginForm" th:action="@{/signin}" method="post">
                 <h3 class="mb-4 text-center">Sign In</h3>
 
                 <div th:if="${param.error}" class="alert alert-danger">

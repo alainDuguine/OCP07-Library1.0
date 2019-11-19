@@ -39,6 +39,8 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
 
     @Override
     public List<Loan> findLoansByStatusAndUserId(String status, Long userId) {
+        if(status!=null)
+            status = status.toUpperCase();
         return loanRepository.findByCurrentStatusAndUserId(status, userId);
     }
 
@@ -106,8 +108,7 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
         if (loan.isPresent()){
             Optional<User> user = userRepository.findById(loan.get().getUser().getId());
             if(user.isPresent()){
-                String userCredentials = user.get().getEmail() + ':' + user.get().getPassword();
-                if(userManagement.checkUserCredentialsFromB64Encoded(userCredentials, authorization) || user.get().getRoles().equals("ADMIN")){
+                if(userManagement.checkUserCredentialsFromB64Encoded(user.get().getEmail(), user.get().getPassword(),authorization) || user.get().getRoles().equals("ADMIN")){
                     if(!loan.get().getCurrentStatus().equals("PROLONGED") && !loan.get().getCurrentStatus().equals("RETURNED")){
                         loan.get().setEndDate(loan.get().getEndDate().plusWeeks(4));
                         return Optional.of(this.addLoanStatusToLoan(loan.get(), StatusDesignation.PROLONGED));

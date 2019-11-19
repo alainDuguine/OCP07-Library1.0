@@ -34,13 +34,13 @@
             </ul>
             <ul class="navbar-nav ml-0">
                 <li class="nav-item dropdown hover-underline">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role=button data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        UserNameblablablabalbalbablaablaa
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role=button data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="${session.email}">
+                        UserName
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="#">Mon Compte</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" th:href="@{/login}">Logout</a>
+                        <a class="dropdown-item" th:href="@{/logout}">Logout</a>
                     </div>
                 </li>
             </ul>

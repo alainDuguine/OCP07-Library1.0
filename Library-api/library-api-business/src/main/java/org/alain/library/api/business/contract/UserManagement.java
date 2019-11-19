@@ -10,11 +10,11 @@ import java.util.Optional;
 @Service
 public interface UserManagement extends CrudManagement<User>{
     List<User> findUsersByEMail(String email);
-    Optional<User> getUserByEmail(String email);
+    Optional<User> getUserByEmail(String email, String authorization);
     Optional<User> saveUser(User user);
     Optional<User> updateUser(Long id, User userForm, String authorization);
-    boolean checkUserCredentialsFromB64Encoded(String userCredentials, String authorization);
+    boolean checkUserCredentialsFromB64Encoded(String username, String password, String authorization);
     void deleteUser(Long id);
-    Optional<User> findUserByIdWithAuthorization(Long id, String authorization);
+//    Optional<User> findUserByIdWithAuthorization(Long id, String authorization);
     boolean login(String email, String password);
 }

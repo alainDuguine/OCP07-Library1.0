@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-11-18T17:31:45.005+01:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-11-19T09:35:39.403+01:00")
 
 @Api(value = "users", description = "the users API")
 public interface UsersApi {
@@ -43,15 +43,15 @@ public interface UsersApi {
         method = RequestMethod.DELETE)
     ResponseEntity<Void> deleteUser(@ApiParam(value = "User id to delete", required = true) @PathVariable("id") Long id);
 
-
-    @ApiOperation(value = "Get a list of all loans from user", nickname = "getLoansForUser", notes = "", response = LoanDto.class, responseContainer = "List", tags={ "user", })
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Loans found", response = LoanDto.class, responseContainer = "List"),
-        @ApiResponse(code = 403, message = "You are not allowed to perform this request") })
-    @RequestMapping(value = "/users/{id}/loan",
-        produces = { "application/json" },
-        method = RequestMethod.GET)
-    ResponseEntity<List<LoanDto>> getLoansForUser(@ApiParam(value = "Id of user to return", required = true) @PathVariable("id") Long id, @ApiParam(value = "User identification", required = true) @RequestHeader(value = "Authorization", required = true) String authorization);
+//
+//    @ApiOperation(value = "Get a list of all loans from user", nickname = "getLoansForUser", notes = "", response = LoanDto.class, responseContainer = "List", tags={ "user", })
+//    @ApiResponses(value = {
+//        @ApiResponse(code = 200, message = "Loans found", response = LoanDto.class, responseContainer = "List"),
+//        @ApiResponse(code = 403, message = "You are not allowed to perform this request") })
+//    @RequestMapping(value = "/users/{id}/loan",
+//        produces = { "application/json" },
+//        method = RequestMethod.GET)
+//    ResponseEntity<List<LoanDto>> getLoansForUser(@ApiParam(value = "Id of user to return", required = true) @PathVariable("id") Long id, @ApiParam(value = "User identification", required = true) @RequestHeader(value = "Authorization", required = true) String authorization);
 
 
     @ApiOperation(value = "Get user by Id", nickname = "getUser", notes = "", response = UserDto.class, tags={ "user", })
@@ -72,7 +72,7 @@ public interface UsersApi {
     @RequestMapping(value = "/users/findByEmail",
         produces = { "application/json" },
         method = RequestMethod.GET)
-    ResponseEntity<UserDto> getUserByEmail(@NotNull @ApiParam(value = "Email of user to return", required = true) @Valid @RequestParam(value = "email", required = true) String email);
+    ResponseEntity<UserDto> getUserByEmail(@NotNull @ApiParam(value = "Email of user to return", required = true) @Valid @RequestParam(value = "email", required = true) String email, @ApiParam(value = "User identification", required = true) @RequestHeader(value = "Authorization", required = true) String authorization);
 
 
     @ApiOperation(value = "Get a list of all users", nickname = "getUsers", notes = "", response = UserDto.class, responseContainer = "List", tags={ "user", })

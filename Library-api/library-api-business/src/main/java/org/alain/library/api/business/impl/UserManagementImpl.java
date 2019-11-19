@@ -43,28 +43,31 @@ public class UserManagementImpl extends CrudManagementImpl<User> implements User
     }
 
     @Override
-    public Optional<User> getUserByEmail(String email) {
+    public Optional<User> getUserByEmail(String email, String authorization) {
         User user = userRepository.findByEmail(email);
         if (user != null){
-            return Optional.of(user);
+            if (checkUserCredentialsFromB64Encoded(user.getEmail(), user.getPassword(), authorization)) {
+                return Optional.of(user);
+            }else{
+                throw new UnauthorizedException("You are not allowed to access these user's loans");
+            }
         }
         return Optional.empty();
     }
 
-    @Override
-    public Optional<User> findUserByIdWithAuthorization(Long id, String authorization) {
-        Optional<User> user = userRepository.findById(id);
-        if (user.isPresent()) {
-            String userCredentials = user.get().getEmail() + ':' + user.get().getPassword();
-            if (checkUserCredentialsFromB64Encoded(userCredentials, authorization)){
-                return user;
-            }else{
-                throw new UnauthorizedException("You are not allowed to access these user's loans");
-            }
-        }else{
-            return Optional.empty();
-        }
-    }
+//    @Override
+//    public Optional<User> findUserByIdWithAuthorization(Long id, String authorization) {
+//        Optional<User> user = userRepository.findById(id);
+//        if (user.isPresent()) {
+//            if (checkUserCredentialsFromB64Encoded(user.get().getEmail(), user.get().getPassword(), authorization)){
+//                return user;
+//            }else{
+//                throw new UnauthorizedException("You are not allowed to access these user's loans");
+//            }
+//        }else{
+//            return Optional.empty();
+//        }
+//    }
 
     @Override
     public boolean login(String email, String password) {
@@ -93,8 +96,7 @@ public class UserManagementImpl extends CrudManagementImpl<User> implements User
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()){
             // Check authorization
-            String userCredentials = user.get().getEmail() + ':' + user.get().getPassword();
-            if(checkUserCredentialsFromB64Encoded(userCredentials, authorization) || user.get().getRoles().equals("ADMIN")){
+            if(checkUserCredentialsFromB64Encoded(user.get().getEmail(), user.get().getPassword(), authorization) || user.get().getRoles().equals("ADMIN")){
                 if (userForm.getFirstName() != null) {
                     user.get().setFirstName(userForm.getFirstName());
                 }
@@ -127,9 +129,10 @@ public class UserManagementImpl extends CrudManagementImpl<User> implements User
         }
     }
 
-    @Override
-    public boolean checkUserCredentialsFromB64Encoded(String userCredentials, String authorization){
-        return userCredentials.equals(decodeAuthorization(authorization));
+    public boolean checkUserCredentialsFromB64Encoded(String username, String password, String authorization){
+        String authorizationDecoded = decodeAuthorization(authorization);
+        String[] parts = authorizationDecoded.split(":");
+        return username.equals(parts[0]) && BCrypt.checkpw(parts[1], password);
     }
 
     private String decodeAuthorization(String encodedAuthorization){
