@@ -94,8 +94,7 @@ public class Controller {
     @GetMapping("/extend")
     public String extend(@RequestParam(name = "loanId") long loanId, HttpSession session){
         try{
-            String email = (String) session.getAttribute(EMAIL_FIELD);
-            if(email != null){
+            if(session.getAttribute(EMAIL_FIELD) != null){
                 if(loanApi.extendLoan(loanId, getEncodedAuthorization(session)).execute().code() == 200){
                     return "redirect:/loans?success&loanId="+loanId;
                 }else{

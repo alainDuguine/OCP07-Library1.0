@@ -3,6 +3,7 @@ package org.alain.library.api.service.security;
 import org.alain.library.api.business.impl.UserManagementImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -41,7 +42,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/users/login").permitAll()
                 .antMatchers("/users/findByEmail").authenticated()
                 .antMatchers("/loans/{id}/extension").authenticated()
-                .antMatchers("/books").authenticated()
+                .antMatchers(HttpMethod.GET,"/books").permitAll()
+                .antMatchers("/books").hasRole(ADMIN_ROLE)
+                .antMatchers("/books/**").hasRole(ADMIN_ROLE)
                 .antMatchers("/authors/**").hasRole(ADMIN_ROLE)
                 .antMatchers("/users/**").hasRole(ADMIN_ROLE)
                 .antMatchers("/loans/**").hasRole(ADMIN_ROLE)

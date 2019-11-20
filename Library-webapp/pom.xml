@@ -4,11 +4,10 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.alain</groupId>
-        <version>1.0-SNAPSHOT</version>
         <artifactId>library</artifactId>
+        <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.alain.library</groupId>
     <artifactId>library-webapp</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>library-webapp</name>
@@ -141,7 +140,7 @@
                             <!-- target to generate java client code -->
                             <language>java</language>
                             <configOptions>
-                                <output>${project.build.directory}/client</output>
+                                <output>src/gen/java/main</output>
                                 <generateApis>false</generateApis>
                                 <generateApiTests>false</generateApiTests>
                                 <generateApiDocumentation>false</generateApiDocumentation>

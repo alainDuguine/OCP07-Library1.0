@@ -18,6 +18,7 @@
 
   <modules>
     <module>Library-api</module>
+    <module>Library-webapp</module>
   </modules>
 
   <name>library</name>
