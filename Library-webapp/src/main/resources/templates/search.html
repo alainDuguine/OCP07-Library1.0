@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
 <head>
@@ -14,8 +13,8 @@
                 <!-- Underlined search bars -->
                 <form th:action="@{/books}" method="get">
                     <div class="input-group mt-2 mb-3">
-                        <input type="text" placeholder="Rechercher un livre par titre" name="title" class="form-control form-control-underlined" th:value="${title}">
-                        <input type="text" placeholder="Rechercher un livre par auteur" name="author" class="form-control form-control-underlined" th:value="${author}">
+                        <input type="text" placeholder="Rechercher un livre par titre" name="title" class="form-control form-control-underlined mx-1" th:value="${title}">
+                        <input type="text" placeholder="Rechercher un livre par auteur" name="author" class="form-control form-control-underlined mx-1" th:value="${author}">
                         <div class="input-group-append">
                             <button id="buttonSearch" type="submit" class="btn btn-link"><i class="fa fa-search"></i></button>
                         </div>

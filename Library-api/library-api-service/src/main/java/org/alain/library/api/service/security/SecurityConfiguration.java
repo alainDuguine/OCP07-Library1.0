@@ -18,6 +18,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final UserManagementImpl userManagement;
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
+    private static final String ADMIN_ROLE = "ADMIN";
+
     public SecurityConfiguration(UserManagementImpl userManagement, RestAuthenticationEntryPoint restAuthenticationEntryPoint) {
         this.userManagement = userManagement;
         this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
@@ -37,11 +39,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/users/login").permitAll()
+                .antMatchers("/users/findByEmail").authenticated()
                 .antMatchers("/loans/{id}/extension").authenticated()
-                .antMatchers("/books/**").authenticated()
-                .antMatchers("/authors/**").authenticated()
-                .antMatchers("/users/**").authenticated()
-                .antMatchers("/loans/**").hasRole("ADMIN")
+                .antMatchers("/books").authenticated()
+                .antMatchers("/authors/**").hasRole(ADMIN_ROLE)
+                .antMatchers("/users/**").hasRole(ADMIN_ROLE)
+                .antMatchers("/loans/**").hasRole(ADMIN_ROLE)
                 .and()
                 .httpBasic();
     }

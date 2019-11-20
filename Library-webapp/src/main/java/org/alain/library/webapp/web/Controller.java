@@ -116,10 +116,10 @@ public class Controller {
                         @RequestParam(name = "author", defaultValue = "") String author){
         try {
             if(session.getAttribute(EMAIL_FIELD) != null) {
-                List<BookDto> bookDtoLists = bookApi.getBooks(title, author).execute().body();
+                List<BookDto> bookDtoList = bookApi.getBooks(title, author).execute().body();
                 model.addAttribute("title", title);
                 model.addAttribute("author", author);
-                model.addAttribute("books", bookDtoLists);
+                model.addAttribute("books", bookDtoList);
             }else{
                 return REDIRECT_LOGIN;
             }

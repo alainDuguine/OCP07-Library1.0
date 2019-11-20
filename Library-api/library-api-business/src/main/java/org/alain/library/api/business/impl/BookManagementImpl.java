@@ -28,7 +28,7 @@ public class BookManagementImpl extends CrudManagementImpl<Book> implements Book
     }
 
     @Override
-    public List<Book> findByTitle(String title) {
+    public List<Book> findByTitleAndAuthor(String title, String author) {
         //        List<Object> resultSet = bookRepository.findBooksByTitleWithCopies("%"+title+"%");
 //        List<Book> bookList = new ArrayList<>();
 //        for (Object res: resultSet) {
@@ -45,7 +45,7 @@ public class BookManagementImpl extends CrudManagementImpl<Book> implements Book
 //                }
 //            }
 //        }
-        return bookRepository.findByTitleLike("%"+title+"%");
+        return bookRepository.findByTitleAndAuthor(title, author);
     }
 
     @Override
@@ -147,7 +147,7 @@ public class BookManagementImpl extends CrudManagementImpl<Book> implements Book
     }
 
     private boolean bookAlreadyExists(Book book) {
-        List<Book> bookList = bookRepository.findByTitleLike(book.getTitle());
+        List<Book> bookList = bookRepository.findByTitle(book.getTitle());
         if (!bookList.isEmpty()) {
             for (Book bookInList : bookList) {
                 if(bookInList.getAuthors().equals(book.getAuthors()) && !bookInList.getId().equals(book.getId())){
