@@ -29,6 +29,19 @@ public class UserPrincipal implements UserDetails {
         return authorities;
     }
 
+    public boolean hasRole(String role){
+        for (GrantedAuthority authority : getAuthorities()){
+            if(authority.getAuthority().equals(role)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Long getId(){
+        return user.getId();
+    }
+
     @Override
     public String getPassword() {
         return user.getPassword();

@@ -37,7 +37,7 @@ public class Book {
                inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Set<Author> authors = new HashSet<>();
 
-    @Transient
+    @Formula("(SELECT COUNT(bc.id) FROM book b left join book_copy bc on bc.book_id = b.id WHERE bc.available = 'true' and b.id = id)")
     private Long nbCopiesAvailable;
 
     public Book(String title) {
@@ -64,16 +64,6 @@ public class Book {
         this.copyList.remove(bookCopy);
         bookCopy.setBook(null);
     }
-
-    @Transient
-    public Long getNbCopiesAvailable() {
-        List<BookCopy> list = new ArrayList<>();
-        this.getCopyList().stream()
-                .filter(BookCopy::isAvailable)
-                .forEach(list::add);
-        return (long) list.size();
-    }
-
 
     @Override
     public String toString() {

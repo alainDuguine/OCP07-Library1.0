@@ -4,12 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiParam;
 import org.alain.library.api.business.contract.UserManagement;
 import org.alain.library.api.business.exceptions.UnauthorizedException;
+import org.alain.library.api.business.impl.UserPrincipal;
 import org.alain.library.api.model.user.User;
 import org.alain.library.api.service.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -86,14 +92,15 @@ public class UsersApiController implements UsersApi {
     public ResponseEntity<UserDto> updateUser(@ApiParam(value = "User id to update", required = true) @PathVariable("id") Long id,
                                               @ApiParam(value = "User object to update", required = true) @Valid @RequestBody UserFormUpdate userFormUpdate,
                                               @ApiParam(value = "User identification", required = true) @RequestHeader(value = "Authorization", required = true) String authorization) {
-        try {
-            Optional<User> userModel = userManagement.updateUser(id, convertUserFormUpdateToUserModel(userFormUpdate), authorization);
+        UserPrincipal user = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication();
+        if(user.hasRole("ADMIN") || user.getId() == id) {
+            Optional<User> userModel = userManagement.updateUser(id, convertUserFormUpdateToUserModel(userFormUpdate));
             if (userModel.isPresent()) {
                 return new ResponseEntity<UserDto>(convertUserModelToUserDto(userModel.get()), HttpStatus.OK);
             }
             return new ResponseEntity<UserDto>(HttpStatus.NOT_FOUND);
-        } catch (UnauthorizedException ex) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not allowed to update this user");
+        }else{
+            return new ResponseEntity<UserDto>(HttpStatus.UNAUTHORIZED);
         }
     }
 

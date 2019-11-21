@@ -41,7 +41,7 @@
                             </span>
                         </td>
                         <td th:text="${book.getIsbn()}"></td>
-                        <td th:text="${book.getCopiesAvailable()}"></td>
+                        <td th:text="${book.getCopiesAvailable() == null}? 0 : ${book.getCopiesAvailable()} "></td>
                     </tr>
                     </tbody>
                 </table>

@@ -7,9 +7,8 @@ import org.alain.library.api.model.user.User;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Entity
 @Getter
@@ -24,8 +23,9 @@ public class Loan {
     @NotNull
     private LocalDate startDate;
     private LocalDate endDate;
+
     private String currentStatus;
-    private LocalDate currentStatusDate;
+    private LocalDateTime currentStatusDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private BookCopy bookCopy;
@@ -42,6 +42,21 @@ public class Loan {
         status.getLoanStatuses().add(loanStatus);
         return loanStatus;
     }
+//
+//    @Transient
+//    public String getCurrentStatus() {
+//        return this.getMostRecentLoanStatusFromStatusList().getStatus().getDesignation().toString();
+//    }
+//
+//    @Transient
+//    public LocalDateTime getCurrentStatusDate(){
+//        return this.getMostRecentLoanStatusFromStatusList().getDate();
+//    }
+//
+//    private LoanStatus getMostRecentLoanStatusFromStatusList(){
+//        Comparator<LoanStatus> loanStatusComparator = Comparator.comparing(LoanStatus::getDate);
+//        return Collections.max(this.getLoanStatuses(), loanStatusComparator);
+//    }
 
     @Override
     public boolean equals(Object o) {

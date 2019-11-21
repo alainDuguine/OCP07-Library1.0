@@ -2,6 +2,7 @@ package org.alain.library.api.model.loan;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -26,7 +27,7 @@ public class LoanStatus {
     private Status status;
 
     @Column
-    private LocalDate date = LocalDate.now();
+    private LocalDateTime date = LocalDateTime.now();
 
     public LoanStatus() {
     }
@@ -61,11 +62,11 @@ public class LoanStatus {
         this.status = status;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

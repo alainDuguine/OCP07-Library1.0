@@ -13,6 +13,7 @@ import org.alain.library.api.model.user.User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,7 +48,7 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
     @Override
     public List<LoanStatus> getLoanStatusList(Long id) {
         if(loanRepository.findById(id).isPresent()) {
-            return loanStatusRepository.findAllByLoanId(id);
+            return loanStatusRepository.findAllByLoanIdOrderByDateDesc(id);
         }else{
             throw new UnknownLoanException("Unknown loan "+id);
         }
@@ -96,7 +97,7 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
         Status status = statusRepository.findStatusByDesignation(statusDesignation);
         loan.getBookCopy().setAvailable(statusDesignation == StatusDesignation.RETURNED);
         loan.setCurrentStatus(status.getDesignation().toString());
-        loan.setCurrentStatusDate(LocalDate.now());
+        loan.setCurrentStatusDate(LocalDateTime.now());
         LoanStatus loanStatus = loan.addLoanStatus(status);
         loanRepository.save(loan);
         return loanStatus;

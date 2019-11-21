@@ -55,20 +55,6 @@ public class UserManagementImpl extends CrudManagementImpl<User> implements User
         return Optional.empty();
     }
 
-//    @Override
-//    public Optional<User> findUserByIdWithAuthorization(Long id, String authorization) {
-//        Optional<User> user = userRepository.findById(id);
-//        if (user.isPresent()) {
-//            if (checkUserCredentialsFromB64Encoded(user.get().getEmail(), user.get().getPassword(), authorization)){
-//                return user;
-//            }else{
-//                throw new UnauthorizedException("You are not allowed to access these user's loans");
-//            }
-//        }else{
-//            return Optional.empty();
-//        }
-//    }
-
     @Override
     public boolean login(String email, String password) {
         User user = userRepository.findByEmail(email);
@@ -92,22 +78,17 @@ public class UserManagementImpl extends CrudManagementImpl<User> implements User
     }
 
     @Override
-    public Optional<User> updateUser(Long id, User userForm, String authorization) {
+    public Optional<User> updateUser(Long id, User userForm) {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()){
-            // Check authorization
-            if(checkUserCredentialsFromB64Encoded(user.get().getEmail(), user.get().getPassword(), authorization) || user.get().getRoles().equals("ADMIN")){
-                if (userForm.getFirstName() != null) {
-                    user.get().setFirstName(userForm.getFirstName());
-                }
-                if (userForm.getLastName() != null) {
-                    user.get().setLastName(userForm.getLastName());
-                }
-                user.get().setPasswordConfirmation(user.get().getPassword());
-                return Optional.of(userRepository.save(user.get()));
-            }else{
-                throw new UnauthorizedException();
+            if (userForm.getFirstName() != null) {
+                user.get().setFirstName(userForm.getFirstName());
             }
+            if (userForm.getLastName() != null) {
+                user.get().setLastName(userForm.getLastName());
+            }
+            user.get().setPasswordConfirmation(user.get().getPassword());
+            return Optional.of(userRepository.save(user.get()));
         }
         return Optional.empty();
     }

@@ -42,12 +42,12 @@
                             <p th:case="LOANED"><em> Vous avez la possibilité de prolonger cet emprunt de 4 semaines supplémentaires</em><br/>
                                 <button class="align-middle btn btn-round mt-2 mb-0 btnLoan"><a class="extendButton" th:href="@{/extend(loanId=${loan.getId()})}">Prolonger</a></button>
                             </p>
-                            <p th:case="RETURNED" th:text="|Livre rendu le ${loan.getCurrentStatusDate()}|">
+                            <p class="lead" th:case="RETURNED" th:classappend="alert-success" th:text="|Livre rendu le ${loan.getCurrentStatusDate()}|">
                             </p>
                             <p th:case="PROLONGED"
                                th:text="|Emprunt prolongé le ${loan.getCurrentStatusDate()}|">
                             </p>
-                            <p th:case="LATE"
+                            <p class="lead" th:case="LATE"
                                th:classappend="alert-danger"
                                th:text="|En retard. Le retour était prévu avant le ${loan.getEndDate()}|"></p>
                         </div>
