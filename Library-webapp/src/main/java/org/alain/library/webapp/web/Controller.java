@@ -62,9 +62,9 @@ public class Controller {
                 session.setAttribute(EMAIL_FIELD, username);
                 session.setAttribute(PASSWORD_FIELD, password);
                 if (rememberMe != null){
-                    Cookie cookie = new Cookie("username", username);
-                    cookie.setMaxAge(30 * 24 * 60 * 60);
-                    cookie.setHttpOnly(true);
+//                    Cookie cookie = new Cookie("username", username);
+//                    cookie.setMaxAge(30 * 24 * 60 * 60);
+//                    cookie.setHttpOnly(true);
                 }
                 return "redirect:/loans";
             }

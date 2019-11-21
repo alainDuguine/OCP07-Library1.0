@@ -43,17 +43,6 @@ public interface UsersApi {
         method = RequestMethod.DELETE)
     ResponseEntity<Void> deleteUser(@ApiParam(value = "User id to delete", required = true) @PathVariable("id") Long id);
 
-//
-//    @ApiOperation(value = "Get a list of all loans from user", nickname = "getLoansForUser", notes = "", response = LoanDto.class, responseContainer = "List", tags={ "user", })
-//    @ApiResponses(value = {
-//        @ApiResponse(code = 200, message = "Loans found", response = LoanDto.class, responseContainer = "List"),
-//        @ApiResponse(code = 403, message = "You are not allowed to perform this request") })
-//    @RequestMapping(value = "/users/{id}/loan",
-//        produces = { "application/json" },
-//        method = RequestMethod.GET)
-//    ResponseEntity<List<LoanDto>> getLoansForUser(@ApiParam(value = "Id of user to return", required = true) @PathVariable("id") Long id, @ApiParam(value = "User identification", required = true) @RequestHeader(value = "Authorization", required = true) String authorization);
-
-
     @ApiOperation(value = "Get user by Id", nickname = "getUser", notes = "", response = UserDto.class, tags={ "user", })
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "User found", response = UserDto.class),

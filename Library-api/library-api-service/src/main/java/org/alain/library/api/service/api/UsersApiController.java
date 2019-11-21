@@ -66,19 +66,6 @@ public class UsersApiController implements UsersApi {
         return new ResponseEntity<UserDto>(HttpStatus.NOT_FOUND);
     }
 
-//    public ResponseEntity<List<LoanDto>> getLoansForUser(@ApiParam(value = "Id of user to return",required=true) @PathVariable("id") Long id, @ApiParam(value = "User identification" ,required=true) @RequestHeader(value="Authorization", required=true) String authorization) {
-//        try {
-//            Optional<User> user = userManagement.findUserByIdWithAuthorization(id, authorization);
-//            if (user.isPresent()) {
-//                return new ResponseEntity<List<LoanDto>>(convertListLoanModelToListLoanDto(user.get().getLoans()), HttpStatus.OK);
-//            }else{
-//                return new ResponseEntity<List<LoanDto>>(HttpStatus.NOT_FOUND);
-//            }
-//        }catch(UnauthorizedException ex){
-//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ex.getMessage());
-//        }
-//    }
-
     public ResponseEntity<Void> deleteUser(@ApiParam(value = "User id to delete", required = true) @PathVariable("id") Long id) {
         try {
             userManagement.deleteUser(id);
