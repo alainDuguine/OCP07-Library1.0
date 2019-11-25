@@ -126,4 +126,15 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
             throw new UnknownLoanException("Unknown loan "+id);
         }
     }
+
+    @Override
+    public List<Loan> updateAndFindLateLoans() {
+        List<Loan> loanList = loanRepository.findLateLoans();
+        for (Loan loan : loanList){
+            if(!loan.getCurrentStatus().equals("LATE")){
+                this.addLoanStatusToLoan(loan, StatusDesignation.valueOf("LATE"));
+            }
+        }
+        return loanList;
+    }
 }

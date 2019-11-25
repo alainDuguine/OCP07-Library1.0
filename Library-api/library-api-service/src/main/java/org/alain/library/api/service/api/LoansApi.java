@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-11-18T08:21:47.439+01:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-11-22T14:12:06.752+01:00")
 
 @Api(value = "loans", description = "the loans API")
 public interface LoansApi {
@@ -29,6 +29,15 @@ public interface LoansApi {
         consumes = { "application/x-www-form-urlencoded" },
         method = RequestMethod.POST)
     ResponseEntity<LoanDto> addLoan(@ApiParam(value = "bookCopy Id To loan", required = true) @RequestParam(value = "copyId", required = true) Long copyId, @ApiParam(value = "user id to affect the loan to", required = true) @RequestParam(value = "userId", required = true) Long userId);
+
+
+    @ApiOperation(value = "check and get loan list that are late", nickname = "checkAndGetLateLoans", notes = "trigger a checkup for all loan's and add late status to expired one's", response = LoanDto.class, responseContainer = "List", tags={ "loan", })
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Loan found", response = LoanDto.class, responseContainer = "List") })
+    @RequestMapping(value = "/loans/findLate",
+        produces = { "application/json" },
+        method = RequestMethod.GET)
+    ResponseEntity<List<LoanDto>> checkAndGetLateLoans(@ApiParam(value = "User identification", required = true) @RequestHeader(value = "Authorization", required = true) String authorization);
 
 
     @ApiOperation(value = "Extend an existing loan", nickname = "extendLoan", notes = "", tags={ "loan", })
@@ -71,7 +80,7 @@ public interface LoansApi {
     @RequestMapping(value = "/loans",
         produces = { "application/json" },
         method = RequestMethod.GET)
-    ResponseEntity<List<LoanDto>> getLoans(@ApiParam(value = "Status values as filter in research", allowableValues = "loaned, returned, prolonged") @Valid @RequestParam(value = "status", required = false) String status, @ApiParam(value = "User id as filter in research") @Valid @RequestParam(value = "user", required = false) Long user);
+    ResponseEntity<List<LoanDto>> getLoans(@ApiParam(value = "Status values as filter in research", allowableValues = "loaned, returned, prolonged, late") @Valid @RequestParam(value = "status", required = false) String status, @ApiParam(value = "User id as filter in research") @Valid @RequestParam(value = "user", required = false) Long user);
 
 
     @ApiOperation(value = "Update a loan by adding a status to it", nickname = "updateLoan", notes = "", tags={ "loan", })

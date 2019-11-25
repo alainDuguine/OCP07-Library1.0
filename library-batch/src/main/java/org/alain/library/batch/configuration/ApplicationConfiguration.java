@@ -1,4 +1,4 @@
-package org.alain.library.webapp.configuration;
+package org.alain.library.batch.configuration;
 
 import io.swagger.client.api.AuthorApi;
 import io.swagger.client.api.BookApi;
@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
 
 @Configuration
 public class ApplicationConfiguration {
@@ -46,4 +47,5 @@ public class ApplicationConfiguration {
     public AuthorApi authorApi(Retrofit retrofit) {
         return retrofit.create(AuthorApi.class);
     }
+
 }

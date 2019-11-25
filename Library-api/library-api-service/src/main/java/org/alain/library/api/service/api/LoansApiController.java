@@ -2,18 +2,23 @@ package org.alain.library.api.service.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.alain.library.api.business.contract.LoanManagement;
 import org.alain.library.api.business.exceptions.UnauthorizedException;
 import org.alain.library.api.business.exceptions.UnknowStatusException;
 import org.alain.library.api.business.exceptions.UnknownLoanException;
+import org.alain.library.api.business.impl.UserPrincipal;
 import org.alain.library.api.model.loan.Loan;
 import org.alain.library.api.model.loan.LoanStatus;
+import org.alain.library.api.model.user.User;
 import org.alain.library.api.service.dto.LoanDto;
 import org.alain.library.api.service.dto.LoanStatusDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +35,7 @@ import static org.alain.library.api.service.api.Converters.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-10-31T15:23:24.407+01:00")
 
 @Controller
+@Slf4j
 public class LoansApiController implements LoansApi {
 
     private static final Logger log = LoggerFactory.getLogger(LoansApiController.class);
@@ -69,6 +75,7 @@ public class LoansApiController implements LoansApi {
         }
     }
 
+
     public ResponseEntity<LoanDto> addLoan(@ApiParam(value = "bookCopy Id To loan", required=true) @RequestParam(value="copyId", required=true)  Long copyId,
                                            @ApiParam(value = "user id to affect the loan to", required=true) @RequestParam(value="userId", required=true)  Long userId) {
         try {
@@ -100,6 +107,16 @@ public class LoansApiController implements LoansApi {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not allowed to extend this loan");
         }catch(Exception ex){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "You are not allowed to extend this loan");
+        }
+    }
+
+    public ResponseEntity<List<LoanDto>> checkAndGetLateLoans(@ApiParam(value = "User identification" ,required=true) @RequestHeader(value="Authorization", required=true) String authorization) {
+        UserPrincipal user = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(user.hasRole("ADMIN")){
+            List<Loan> loanList = loanManagement.updateAndFindLateLoans();
+            return new ResponseEntity<List<LoanDto>>(convertListLoanModelToListLoanDto(loanList),HttpStatus.OK);
+        }else{
+            return new ResponseEntity<List<LoanDto>>(HttpStatus.UNAUTHORIZED);
         }
     }
 }

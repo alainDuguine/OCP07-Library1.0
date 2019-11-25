@@ -9,7 +9,6 @@ import io.swagger.client.model.UserDto;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 import java.util.Base64;
 import java.util.List;

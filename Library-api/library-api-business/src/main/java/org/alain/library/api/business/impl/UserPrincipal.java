@@ -31,7 +31,7 @@ public class UserPrincipal implements UserDetails {
 
     public boolean hasRole(String role){
         for (GrantedAuthority authority : getAuthorities()){
-            if(authority.getAuthority().equals(role)){
+            if(authority.getAuthority().equals("ROLE_"+role)){
                 return true;
             }
         }
