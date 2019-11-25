@@ -35,8 +35,6 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @NotNull
-    @Column(nullable = false)
     @Transient
     private String passwordConfirmation;
 

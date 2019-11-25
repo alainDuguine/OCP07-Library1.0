@@ -87,7 +87,6 @@ public class UserManagementImpl extends CrudManagementImpl<User> implements User
             if (userForm.getLastName() != null) {
                 user.get().setLastName(userForm.getLastName());
             }
-            user.get().setPasswordConfirmation(user.get().getPassword());
             return Optional.of(userRepository.save(user.get()));
         }
         return Optional.empty();

@@ -11,9 +11,12 @@ public class PasswordMatchesValidator implements ConstraintValidator<PasswordMat
     @Override
     public boolean isValid(Object o, ConstraintValidatorContext constraintValidatorContext) {
         User user = (User) o;
-        if(user.getPassword() == null){
-            return false;
+        if (user.getId()==null) {
+            if (user.getPassword() == null) {
+                return false;
+            }
+            return BCrypt.checkpw(user.getPasswordConfirmation(), user.getPassword());
         }
-        return BCrypt.checkpw(user.getPasswordConfirmation(), user.getPassword());
+        return true;
     }
 }
