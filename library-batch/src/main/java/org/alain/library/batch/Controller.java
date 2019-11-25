@@ -45,7 +45,7 @@ public class Controller {
         }else {
             for (LoanDto loan : loanDtoList){
                 this.prepareAndSend(loan);
-                TimeUnit.SECONDS.sleep(1);
+                TimeUnit.SECONDS.sleep(5);
             }
         }
     }
@@ -54,8 +54,7 @@ public class Controller {
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setFrom(BATCH_USERNAME);
-//            messageHelper.setTo(loanDto.getUserEmail());
-            messageHelper.setTo("alain_duguine@hotmail.fr");
+            messageHelper.setTo(loanDto.getUserEmail());
             messageHelper.setSubject("OpenLibrary.fr : Votre emprunt est en retard !");
             String content = emailBuilder.build(loanDto);
             messageHelper.setText(content, true);
