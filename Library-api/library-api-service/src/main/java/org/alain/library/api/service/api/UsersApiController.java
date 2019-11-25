@@ -64,7 +64,7 @@ public class UsersApiController implements UsersApi {
                                                   @ApiParam(value = "User identification" ,required=true) @RequestHeader(value="Authorization", required=true) String authorization) {
         UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(userPrincipal.getUsername().equals(email)) {
-            Optional<User> user = userManagement.getUserByEmail(email, authorization);
+            Optional<User> user = userManagement.getUserByEmail(email);
             if (user.isPresent()) {
                 return new ResponseEntity<UserDto>(convertUserModelToUserDto(user.get()), HttpStatus.OK);
             }

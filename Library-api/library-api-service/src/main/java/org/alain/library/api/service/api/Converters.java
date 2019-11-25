@@ -9,10 +9,14 @@ import org.alain.library.api.model.loan.LoanStatus;
 import org.alain.library.api.model.user.User;
 import org.alain.library.api.service.dto.*;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 class Converters {
+
+    private static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/YYYY");
+    private static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/YYYY 'à' HH:mm");
 
     private Converters() {
     }
@@ -160,12 +164,12 @@ class Converters {
     static LoanDto convertLoanModelToLoanDto(Loan loanModel) {
         LoanDto loanDto = new LoanDto();
         loanDto.setId(loanModel.getId());
-        loanDto.startDate(String.valueOf(loanModel.getStartDate()));
-        loanDto.endDate(String.valueOf(loanModel.getEndDate()));
+        loanDto.startDate(dateFormatter.format(loanModel.getStartDate()));
+        loanDto.endDate(dateFormatter.format(loanModel.getEndDate()));
         loanDto.setBookCopy(convertBookCopyModelToBookCopyDto(loanModel.getBookCopy()));
         loanDto.setUserId(loanModel.getUser().getId());
         loanDto.setCurrentStatus(loanModel.getCurrentStatus());
-        loanDto.setCurrentStatusDate(loanModel.getCurrentStatusDate().toString());
+        loanDto.setCurrentStatusDate(dateTimeFormatter.format(loanModel.getCurrentStatusDate()));
         return loanDto;
     }
 
@@ -186,7 +190,7 @@ class Converters {
     static LoanStatusDto convertLoanStatusModelToLoanStatusDto(LoanStatus loanStatusModel){
         LoanStatusDto loanStatusDto = new LoanStatusDto();
         loanStatusDto.setId(loanStatusModel.getLoan().getId());
-        loanStatusDto.setDate(loanStatusModel.getDate().toString());
+        loanStatusDto.setDate(dateFormatter.format(loanStatusModel.getDate()));
         loanStatusDto.setStatus(loanStatusModel.getStatus().getDesignation().name());
         return loanStatusDto;
     }

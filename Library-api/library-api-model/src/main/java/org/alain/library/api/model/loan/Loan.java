@@ -42,21 +42,6 @@ public class Loan {
         status.getLoanStatuses().add(loanStatus);
         return loanStatus;
     }
-//
-//    @Transient
-//    public String getCurrentStatus() {
-//        return this.getMostRecentLoanStatusFromStatusList().getStatus().getDesignation().toString();
-//    }
-//
-//    @Transient
-//    public LocalDateTime getCurrentStatusDate(){
-//        return this.getMostRecentLoanStatusFromStatusList().getDate();
-//    }
-//
-//    private LoanStatus getMostRecentLoanStatusFromStatusList(){
-//        Comparator<LoanStatus> loanStatusComparator = Comparator.comparing(LoanStatus::getDate);
-//        return Collections.max(this.getLoanStatuses(), loanStatusComparator);
-//    }
 
     @Override
     public boolean equals(Object o) {
