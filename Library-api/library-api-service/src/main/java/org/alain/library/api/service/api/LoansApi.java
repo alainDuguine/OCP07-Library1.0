@@ -7,6 +7,7 @@ package org.alain.library.api.service.api;
 
 import io.swagger.annotations.*;
 import org.alain.library.api.service.dto.LoanDto;
+import org.alain.library.api.service.dto.LoanForm;
 import org.alain.library.api.service.dto.LoanStatusDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-11-22T14:12:06.752+01:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-11-25T07:35:05.950+01:00")
 
 @Api(value = "loans", description = "the loans API")
 public interface LoansApi {
@@ -26,9 +27,9 @@ public interface LoansApi {
         @ApiResponse(code = 403, message = "You are not allowed to perform this request") })
     @RequestMapping(value = "/loans",
         produces = { "application/json" }, 
-        consumes = { "application/x-www-form-urlencoded" },
+        consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<LoanDto> addLoan(@ApiParam(value = "bookCopy Id To loan", required = true) @RequestParam(value = "copyId", required = true) Long copyId, @ApiParam(value = "user id to affect the loan to", required = true) @RequestParam(value = "userId", required = true) Long userId);
+    ResponseEntity<LoanDto> addLoan(@ApiParam(value = "Loan that needs to be added to the database", required = true) @Valid @RequestBody LoanForm loanForm);
 
 
     @ApiOperation(value = "check and get loan list that are late", nickname = "checkAndGetLateLoans", notes = "trigger a checkup for all loan's and add late status to expired one's", response = LoanDto.class, responseContainer = "List", tags={ "loan", })
@@ -90,7 +91,7 @@ public interface LoansApi {
         @ApiResponse(code = 404, message = "Loan not found") })
     @RequestMapping(value = "/loans/{id}",
         produces = { "application/json" },
-        consumes = { "text/plain" },
+        consumes = { "application/json" },
         method = RequestMethod.PUT)
     ResponseEntity<Void> updateLoan(@ApiParam(value = "Id of loan to update", required = true) @PathVariable("id") Long id, @ApiParam(value = "Status values to add to loan history", required = true) @Valid @RequestBody String status);
 

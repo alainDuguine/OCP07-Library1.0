@@ -10,14 +10,13 @@ import org.alain.library.api.business.exceptions.UnknownLoanException;
 import org.alain.library.api.business.impl.UserPrincipal;
 import org.alain.library.api.model.loan.Loan;
 import org.alain.library.api.model.loan.LoanStatus;
-import org.alain.library.api.model.user.User;
 import org.alain.library.api.service.dto.LoanDto;
+import org.alain.library.api.service.dto.LoanForm;
 import org.alain.library.api.service.dto.LoanStatusDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -75,16 +74,15 @@ public class LoansApiController implements LoansApi {
         }
     }
 
-
-    public ResponseEntity<LoanDto> addLoan(@ApiParam(value = "bookCopy Id To loan", required=true) @RequestParam(value="copyId", required=true)  Long copyId,
-                                           @ApiParam(value = "user id to affect the loan to", required=true) @RequestParam(value="userId", required=true)  Long userId) {
+    public ResponseEntity<LoanDto> addLoan(@ApiParam(value = "Loan that needs to be added to the database" ,required=true )  @Valid @RequestBody LoanForm loanForm) {
         try {
-            Loan loanModel = loanManagement.createNewLoan(copyId, userId);
+            Loan loanModel = loanManagement.createNewLoan(loanForm.getCopyId(), loanForm.getUserId());
             return new ResponseEntity<LoanDto>(convertLoanModelToLoanDto(loanModel), HttpStatus.OK);
         }catch(Exception ex){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
     }
+
 
     public ResponseEntity<Void> updateLoan(@ApiParam(value = "Id of loan to update",required=true) @PathVariable("id") Long id,
                                            @ApiParam(value = "Status values to add to loan history" ,required=true )  @Valid @RequestBody String status) {
