@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.alain.library.api.business.contract.LoanManagement;
-import org.alain.library.api.business.exceptions.UnauthorizedException;
 import org.alain.library.api.business.exceptions.UnknowStatusException;
 import org.alain.library.api.business.exceptions.UnknownLoanException;
 import org.alain.library.api.business.impl.UserPrincipal;
@@ -95,22 +94,26 @@ public class LoansApiController implements LoansApi {
     public ResponseEntity<Void> extendLoan(@ApiParam(value = "Id of loan",required=true) @PathVariable("id") Long id,
                                            @ApiParam(value = "User identification" ,required=true) @RequestHeader(value="Authorization", required=true) String authorization) {
         try {
-            Optional<LoanStatus> loanStatus = loanManagement.extendLoan(id, authorization);
-            if(loanStatus.isPresent()) {
-                return new ResponseEntity<Void>(HttpStatus.OK);
+            UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if(userPrincipal.hasRole("ADMIN") || userPrincipal.getId() == id) {
+                Optional<LoanStatus> loanStatus = loanManagement.extendLoan(id, authorization);
+                if (loanStatus.isPresent()) {
+                    return new ResponseEntity<Void>(HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+                }
             }else{
-                return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not allowed to extend this loan");
             }
-        }catch(UnauthorizedException ex){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not allowed to extend this loan");
         }catch(Exception ex){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "You are not allowed to extend this loan");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
 
-    public ResponseEntity<List<LoanDto>> checkAndGetLateLoans(@ApiParam(value = "User identification" ,required=true) @RequestHeader(value="Authorization", required=true) String authorization) {
-        UserPrincipal user = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(user.hasRole("ADMIN")){
+    public ResponseEntity<List<LoanDto>> checkAndGetLateLoans(@ApiParam(value = "User identification" ,required=true)
+                                                              @RequestHeader(value="Authorization", required=true) String authorization) {
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(userPrincipal.hasRole("ADMIN")){
             List<Loan> loanList = loanManagement.updateAndFindLateLoans();
             return new ResponseEntity<List<LoanDto>>(convertListLoanModelToListLoanDto(loanList),HttpStatus.OK);
         }else{

@@ -13,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,7 +42,7 @@ public class UserManagementImpl extends CrudManagementImpl<User> implements User
     }
 
     @Override
-    public Optional<User> getUserByEmail(String email, String authorization) {
+    public Optional<User> getUserByEmail(String email) {
         User user = userRepository.findByEmail(email);
         if (user != null){
             return Optional.of(user);
@@ -104,17 +103,4 @@ public class UserManagementImpl extends CrudManagementImpl<User> implements User
             }
         }
     }
-
-    public boolean checkUserCredentialsFromB64Encoded(String username, String password, String authorization){
-        String authorizationDecoded = decodeAuthorization(authorization);
-        String[] parts = authorizationDecoded.split(":");
-        return username.equals(parts[0]) && BCrypt.checkpw(parts[1], password);
-    }
-
-    private String decodeAuthorization(String encodedAuthorization){
-        encodedAuthorization = encodedAuthorization.replace("Basic ","");
-        byte[] decodedAuthorization = Base64.getDecoder().decode(encodedAuthorization);
-        return new String(decodedAuthorization);
-    }
-
 }

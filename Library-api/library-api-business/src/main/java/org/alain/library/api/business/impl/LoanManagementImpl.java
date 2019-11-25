@@ -1,7 +1,6 @@
 package org.alain.library.api.business.impl;
 
 import org.alain.library.api.business.contract.LoanManagement;
-import org.alain.library.api.business.contract.UserManagement;
 import org.alain.library.api.business.exceptions.*;
 import org.alain.library.api.consumer.repository.*;
 import org.alain.library.api.model.book.BookCopy;
@@ -22,19 +21,15 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
 
     private final LoanRepository loanRepository;
     private final LoanStatusRepository loanStatusRepository;
-    private final UserRepository userRepository;
     private final StatusRepository statusRepository;
-    private final UserManagement userManagement;
     private final BookCopyRepository bookCopyRepository;
 
 
-    public LoanManagementImpl(LoanRepository loanRepository, LoanStatusRepository loanStatusRepository, UserRepository userRepository, StatusRepository statusRepository, UserManagement userManagement, BookCopyRepository bookCopyRepository) {
+    public LoanManagementImpl(LoanRepository loanRepository, LoanStatusRepository loanStatusRepository, StatusRepository statusRepository, BookCopyRepository bookCopyRepository) {
         super(loanRepository);
         this.loanRepository = loanRepository;
         this.loanStatusRepository = loanStatusRepository;
-        this.userRepository = userRepository;
         this.statusRepository = statusRepository;
-        this.userManagement = userManagement;
         this.bookCopyRepository = bookCopyRepository;
     }
 
@@ -107,20 +102,11 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
     public Optional<LoanStatus> extendLoan(Long id, String authorization) {
         Optional<Loan> loan = loanRepository.findById(id);
         if (loan.isPresent()){
-            Optional<User> user = userRepository.findById(loan.get().getUser().getId());
-            if(user.isPresent()){
-                if(userManagement.checkUserCredentialsFromB64Encoded(user.get().getEmail(), user.get().getPassword(),authorization) || user.get().getRoles().equals("ADMIN")){
-                    if(!loan.get().getCurrentStatus().equals("PROLONGED") && !loan.get().getCurrentStatus().equals("RETURNED")){
-                        loan.get().setEndDate(loan.get().getEndDate().plusWeeks(4));
-                        return Optional.of(this.addLoanStatusToLoan(loan.get(), StatusDesignation.PROLONGED));
-                    }else{
-                        return Optional.empty();
-                    }
-                }else{
-                    throw new UnauthorizedException();
-                }
+            if(!loan.get().getCurrentStatus().equals("PROLONGED") && !loan.get().getCurrentStatus().equals("RETURNED")){
+                loan.get().setEndDate(loan.get().getEndDate().plusWeeks(4));
+                return Optional.of(this.addLoanStatusToLoan(loan.get(), StatusDesignation.PROLONGED));
             }else{
-                throw new UnknownUserException("Unknown user "+loan.get().getUser().getId());
+                return Optional.empty();
             }
         }else{
             throw new UnknownLoanException("Unknown loan "+id);
