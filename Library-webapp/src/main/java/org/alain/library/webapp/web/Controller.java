@@ -4,7 +4,6 @@ import io.swagger.client.api.BookApi;
 import io.swagger.client.api.LoanApi;
 import io.swagger.client.api.UserApi;
 import io.swagger.client.model.BookDto;
-import io.swagger.client.model.LoanDto;
 import io.swagger.client.model.UserCredentials;
 import io.swagger.client.model.UserDto;
 import org.springframework.ui.Model;
@@ -12,9 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Base64;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @org.springframework.stereotype.Controller
@@ -83,10 +80,7 @@ public class Controller {
             if(email != null){
                 UserDto user = userApi.getUserByEmail(email, getEncodedAuthorization(session)).execute().body();
                 assert user != null;
-                List<LoanDto> loanList = user.getLoans().stream()
-                        .sorted(Comparator.comparing(LoanDto::getCurrentStatusDate).reversed())
-                        .collect(Collectors.toList());
-                model.addAttribute("loanList", loanList);
+                model.addAttribute("loanList", user.getLoans());
                 return "loans";
             }else{
                 return REDIRECT_LOGIN;

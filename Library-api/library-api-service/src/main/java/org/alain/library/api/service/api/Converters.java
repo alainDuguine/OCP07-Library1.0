@@ -168,6 +168,7 @@ class Converters {
         loanDto.endDate(dateFormatter.format(loanModel.getEndDate()));
         loanDto.setBookCopy(convertBookCopyModelToBookCopyDto(loanModel.getBookCopy()));
         loanDto.setUserId(loanModel.getUser().getId());
+        loanDto.setUserEmail(loanModel.getUser().getEmail());
         loanDto.setCurrentStatus(loanModel.getCurrentStatus());
         loanDto.setCurrentStatusDate(dateTimeFormatter.format(loanModel.getCurrentStatusDate()));
         return loanDto;

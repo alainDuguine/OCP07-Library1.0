@@ -99,7 +99,7 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
     }
 
     @Override
-    public Optional<LoanStatus> extendLoan(Long id, String authorization) {
+    public Optional<LoanStatus> extendLoan(Long id) {
         Optional<Loan> loan = loanRepository.findById(id);
         if (loan.isPresent()){
             if(!loan.get().getCurrentStatus().equals("PROLONGED") && !loan.get().getCurrentStatus().equals("RETURNED")){

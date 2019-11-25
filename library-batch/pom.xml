@@ -8,7 +8,6 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.alain</groupId>
     <artifactId>library-batch</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>library-batch</name>
@@ -28,18 +27,17 @@
     </properties>
 
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-batch</artifactId>-->
-<!--        </dependency>-->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-security</artifactId>-->
-<!--        </dependency>-->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -159,6 +157,7 @@
                                 <generateApiTests>false</generateApiTests>
                                 <generateApiDocumentation>false</generateApiDocumentation>
                                 <generateModels>false</generateModels>
+                                <generateModelTests>false</generateModelTests>
                             </configOptions>
                             <library>retrofit2</library>
                         </configuration>
