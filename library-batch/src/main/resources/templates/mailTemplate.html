@@ -1,43 +1,45 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Sending Email with Thymeleaf HTML Template Example</title>
-
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Open Library</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Literata&display=swap" rel="stylesheet">
+        <style>
 
-    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+            body {
+                font-family: 'Literata', sans-serif;
+                font-size: 20px;
+                color: black;
+            }
 
-    <!-- use the font -->
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            font-size: 48px;
-        }
-    </style>
+            .logo{width: 100px}
+
+        </style>
+
 </head>
-<body style="margin: 0; padding: 0;">
-
-<table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
-    <tr>
-        <td align="center" bgcolor="#78ab46" style="padding: 40px 0 30px 0;">
-            <img src="cid:logo.png" alt="https://memorynotfound.com" style="display: block;" />
-        </td>
-    </tr>
-    <tr>
-        <td bgcolor="#eaeaea" style="padding: 40px 30px 40px 30px;">
-            <p>Dear</p>
-            <p>Sending Email using Spring Boot with <b>Thymeleaf template !!!</b></p>
-            <p>Thanks</p>
-        </td>
-    </tr>
-    <tr>
-        <td bgcolor="#777777" style="padding: 30px 30px 30px 30px;">
-            <p>${signature}</p>
-            <p>${location}</p>
-        </td>
-    </tr>
-</table>
-
+<body>
+    <div class="col-md-12 p-0 text-center">
+        <div class="align-items-center text-center justify-content-center">
+            <div class="pb-2 title" style="background-color: #735C60">
+                <p>
+                    <img class="logo pt-2" alt="Logo" th:src="@{static/img/Logo.png}" src="../static/img/Logo.png"/>
+                </p>
+                <h1 class="mb-0 mt-3 display-4" >Open Library</h1>
+                <hr style="border-bottom: 1px solid black">
+            </div>
+        </div>
+        <div class="jumbotron mx-5 text-center">
+          <h1 class="display-4">Bonjour !</h1>
+          <p class="lead">Vous avez un emprunt de livre en retard !</p>
+          <hr class="my-4" style="border-bottom: 1px solid black;">
+            <p>Le <span th:text="${loan.getStartDate()}">21/12/2019</span>, vous avez emprunté le livre suivant :<br>
+                    <dd>Titre : <span class="font-weight-bold" th:text="${loan.getBookCopy().getBook().getTitle()}">Notre Dame de paris</span>
+                    <dd>Numéro : <span class="font-weight-bold" th:text="${loan.getBookCopy().getBarcode()}">123456789</span><br><br>
+                  L'emprunt est malheureusement terminé depuis le : <span class="font-weight-bold" th:text="${loan.getEndDate()}">21/12/2019</span> et le livre ne nous a pas encore été retourné.<br>
+                    Merci de nous retourner ce livre dès que possible, afin que d'autres personnes puissent en profiter !</p>
+          <a href="http://localhost:9090/login">Vous connecter à votre compte pour vérifier vos emprunts</a>
+        </div>
+    </div>
 </body>
-</html>

@@ -50,35 +50,12 @@ public class Controller {
         }
     }
 
-//    private void sendEmail(LoanDto loanDto){
-//        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-//        mailSender.setHost(this.emailConfiguration.getHost());
-//        mailSender.setPort(this.emailConfiguration.getPort());
-//        mailSender.setUsername(this.emailConfiguration.getUsername());
-//        mailSender.setPassword(this.emailConfiguration.getPassword());
-//            SimpleMailMessage mailMessage = new SimpleMailMessage();
-//            UserDto user = userApi.getUser(loan.getUserId()).execute().body();
-//            mailMessage.setFrom(BATCH_USERNAME);
-////            mailMessage.setTo(user.getEmail().toLowerCase());
-//            mailMessage.setTo("1fb592b2dc-564e4f@inbox.mailtrap.io");
-//            mailMessage.setSubject("Open Library.fr : Votre emprunt est en retard !");
-//            mailMessage.setText(
-//                    "Bonjour !\n" +
-//                    "Le " + loan.getStartDate() + ", vous avez emprunté le livre suivant :\n" +
-//                    "\tTitre : " + loan.getBookCopy().getBook().getTitle() + "\n" +
-//                    "\tNuméro : " + loan.getBookCopy().getBarcode() + "\n" +
-//                    "\nL'emprunt est terminé depuis le : " + loan.getEndDate() + " et le livre ne nous a pas été retourné" +
-//                    "\nMerci de nous retourner ce livre dès que possible, afin que d'autres personnes puissent en profiter également.");
-//            mailSender.send(mailMessage);
-//        }
-//    }
-
     private void prepareAndSend(LoanDto loanDto){
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setFrom(BATCH_USERNAME);
 //            messageHelper.setTo(loanDto.getUserEmail());
-            messageHelper.setTo(" 1fb592b2dc-564e4f@inbox.mailtrap.io");
+            messageHelper.setTo("alain_duguine@hotmail.fr");
             messageHelper.setSubject("OpenLibrary.fr : Votre emprunt est en retard !");
             String content = emailBuilder.build(loanDto);
             messageHelper.setText(content, true);
