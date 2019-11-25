@@ -62,11 +62,16 @@ public class UsersApiController implements UsersApi {
     public ResponseEntity<UserDto> getUserByEmail(@NotNull @ApiParam(value = "Email of user to return", required = true)
                                                   @Valid @RequestParam(value = "email", required = true) String email,
                                                   @ApiParam(value = "User identification" ,required=true) @RequestHeader(value="Authorization", required=true) String authorization) {
-        Optional<User> user = userManagement.getUserByEmail(email, authorization);
-        if (user.isPresent()){
-            return new ResponseEntity<UserDto>(convertUserModelToUserDto(user.get()), HttpStatus.OK);
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(userPrincipal.getUsername().equals(email)) {
+            Optional<User> user = userManagement.getUserByEmail(email, authorization);
+            if (user.isPresent()) {
+                return new ResponseEntity<UserDto>(convertUserModelToUserDto(user.get()), HttpStatus.OK);
+            }
+            return new ResponseEntity<UserDto>(HttpStatus.NOT_FOUND);
+        }else{
+            return new ResponseEntity<UserDto>(HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<UserDto>(HttpStatus.NOT_FOUND);
     }
 
     public ResponseEntity<Void> deleteUser(@ApiParam(value = "User id to delete", required = true) @PathVariable("id") Long id) {
@@ -89,8 +94,8 @@ public class UsersApiController implements UsersApi {
     public ResponseEntity<UserDto> updateUser(@ApiParam(value = "User id to update", required = true) @PathVariable("id") Long id,
                                               @ApiParam(value = "User object to update", required = true) @Valid @RequestBody UserFormUpdate userFormUpdate,
                                               @ApiParam(value = "User identification", required = true) @RequestHeader(value = "Authorization", required = true) String authorization) {
-        UserPrincipal user = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(user.hasRole("ADMIN") || user.getId() == id) {
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(userPrincipal.hasRole("ADMIN") || userPrincipal.getId() == id) {
             Optional<User> userModel = userManagement.updateUser(id, convertUserFormUpdateToUserModel(userFormUpdate));
             if (userModel.isPresent()) {
                 return new ResponseEntity<UserDto>(convertUserModelToUserDto(userModel.get()), HttpStatus.OK);

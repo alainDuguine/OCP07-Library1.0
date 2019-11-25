@@ -46,11 +46,7 @@ public class UserManagementImpl extends CrudManagementImpl<User> implements User
     public Optional<User> getUserByEmail(String email, String authorization) {
         User user = userRepository.findByEmail(email);
         if (user != null){
-            if (checkUserCredentialsFromB64Encoded(user.getEmail(), user.getPassword(), authorization)) {
-                return Optional.of(user);
-            }else{
-                throw new UnauthorizedException("You are not allowed to access these user's loans");
-            }
+            return Optional.of(user);
         }
         return Optional.empty();
     }
