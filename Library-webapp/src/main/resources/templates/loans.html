@@ -44,7 +44,7 @@
                             </p>
                             <p class="lead" th:case="RETURNED" th:classappend="alert-success" th:text="|Livre rendu le ${loan.getCurrentStatusDate()}|">
                             </p>
-                            <p th:case="PROLONGED"
+                            <p class="lead" th:case="PROLONGED"
                                th:text="|Emprunt prolongé le ${loan.getCurrentStatusDate()}|">
                             </p>
                             <p class="lead" th:case="LATE"

@@ -99,14 +99,18 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
     }
 
     @Override
-    public Optional<LoanStatus> extendLoan(Long id) {
+    public Optional<LoanStatus> extendLoan(Long id, UserPrincipal userPrincipal) {
         Optional<Loan> loan = loanRepository.findById(id);
         if (loan.isPresent()){
-            if(!loan.get().getCurrentStatus().equals("PROLONGED") && !loan.get().getCurrentStatus().equals("RETURNED")){
-                loan.get().setEndDate(loan.get().getEndDate().plusWeeks(4));
-                return Optional.of(this.addLoanStatusToLoan(loan.get(), StatusDesignation.PROLONGED));
+            if(userPrincipal.hasRole("ADMIN") || userPrincipal.getId().equals(loan.get().getUser().getId())) {
+                if (!loan.get().getCurrentStatus().equals("PROLONGED") && !loan.get().getCurrentStatus().equals("RETURNED")) {
+                    loan.get().setEndDate(loan.get().getEndDate().plusWeeks(4));
+                    return Optional.of(this.addLoanStatusToLoan(loan.get(), StatusDesignation.PROLONGED));
+                } else {
+                    return Optional.empty();
+                }
             }else{
-                return Optional.empty();
+                throw new UnauthorizedException("Impossible to extend loan");
             }
         }else{
             throw new UnknownLoanException("Unknown loan "+id);

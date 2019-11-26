@@ -1,5 +1,6 @@
 package org.alain.library.api.business.contract;
 
+import org.alain.library.api.business.impl.UserPrincipal;
 import org.alain.library.api.model.loan.Loan;
 import org.alain.library.api.model.loan.LoanStatus;
 
@@ -11,6 +12,6 @@ public interface LoanManagement extends CrudManagement<Loan> {
     List<LoanStatus> getLoanStatusList(Long id);
     Loan createNewLoan(Long bookCopyId, Long userId);
     Optional<LoanStatus> updateLoan(Long id, String status);
-    Optional<LoanStatus> extendLoan(Long id);
+    Optional<LoanStatus> extendLoan(Long id, UserPrincipal userPrincipal);
     List<Loan> updateAndFindLateLoans();
 }
