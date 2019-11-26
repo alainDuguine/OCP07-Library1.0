@@ -1,5 +1,6 @@
 package org.alain.library.api.business.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.alain.library.api.business.contract.BookManagement;
 import org.alain.library.api.business.exceptions.UnknownAuthorException;
 import org.alain.library.api.business.exceptions.UnknownBookException;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
+@Slf4j
 public class BookManagementImpl extends CrudManagementImpl<Book> implements BookManagement {
 
     private final BookRepository bookRepository;
@@ -29,7 +31,7 @@ public class BookManagementImpl extends CrudManagementImpl<Book> implements Book
 
     @Override
     public List<Book> findByTitleAndAuthor(String title, String author) {
-        return bookRepository.findByTitleAndAuthor(title, author);
+        return bookRepository.findByTitleAndAuthor(title.toLowerCase(), author.toLowerCase());
     }
 
     @Override
@@ -56,6 +58,7 @@ public class BookManagementImpl extends CrudManagementImpl<Book> implements Book
         try {
             this.manageAuthors(book);
         } catch (UnknownAuthorException e) {
+            log.warn("Unknown author exception" + e.getMessage());
             throw new UnknownAuthorException("The author doesn't exist in the database");
         }
         if (bookAlreadyExists(book)) {
@@ -73,6 +76,7 @@ public class BookManagementImpl extends CrudManagementImpl<Book> implements Book
                 this.manageAuthors(bookForm);
                 bookForm.setId(book.get().getId());
             } catch (UnknownAuthorException e) {
+                log.warn("Unknown author exception" + e.getMessage());
                 throw new UnknownAuthorException("The author doesn't exist in the database");
             }
             if (bookAlreadyExists(bookForm)) {
@@ -116,9 +120,11 @@ public class BookManagementImpl extends CrudManagementImpl<Book> implements Book
      * @param book to check the authors from
      */
     private void manageAuthors(Book book) {
+        log.info("Extracting author from bookForm");
         Set<Author> listAuthor = new HashSet<>();
         for (Iterator<Author> it = book.getAuthors().iterator(); it.hasNext();) {
             Author author = it.next();
+            log.info("Author : " + author.getFirstName() + " - " +author.getLastName());
             Optional<Author> authorInDb = authorRepository.findByFirstNameAndLastName(author.getFirstName(), author.getLastName());
             if(authorInDb.isPresent()){
                 it.remove();

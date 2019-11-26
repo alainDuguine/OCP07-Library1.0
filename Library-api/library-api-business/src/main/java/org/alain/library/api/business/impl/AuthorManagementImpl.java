@@ -1,5 +1,6 @@
 package org.alain.library.api.business.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.alain.library.api.business.contract.AuthorManagement;
 import org.alain.library.api.consumer.repository.AuthorRepository;
 import org.alain.library.api.consumer.repository.BookRepository;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class AuthorManagementImpl extends CrudManagementImpl<Author> implements AuthorManagement {
 
     private final AuthorRepository authorRepository;
@@ -48,6 +50,7 @@ public class AuthorManagementImpl extends CrudManagementImpl<Author> implements 
             try {
                 return Optional.of(authorRepository.save(author.get()));
             }catch (ConstraintViolationException e){
+                log.warn("Constraint violation on author update " + e.getMessage());
                 throw new ValidationException(e.getMessage());
             }
         }

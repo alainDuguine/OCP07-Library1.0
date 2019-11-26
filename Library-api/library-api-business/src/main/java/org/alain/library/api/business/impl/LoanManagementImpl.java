@@ -1,5 +1,6 @@
 package org.alain.library.api.business.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.alain.library.api.business.contract.LoanManagement;
 import org.alain.library.api.business.exceptions.*;
 import org.alain.library.api.consumer.repository.*;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class LoanManagementImpl extends CrudManagementImpl<Loan> implements LoanManagement {
 
     private final LoanRepository loanRepository;
@@ -64,6 +66,7 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
             try {
                 this.addLoanStatusToLoan(loan, StatusDesignation.LOANED);
             }catch (Exception e) {
+                log.warn("Wrong parameter on createNewLoan : " + userId + e.getMessage());
                 throw new UnknownParameterException(String.format("Cannot create loan for bookCopy %d and user %d", bookCopyId, userId), e);
             }
             return loan;
@@ -83,6 +86,7 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
                 return Optional.empty();
             }
         }catch(IllegalArgumentException ex){
+            log.warn("Wrong status on updateLoan : " + status + " - " + ex.getMessage());
             throw new UnknowStatusException("Unknown status "+status);
         }
 
@@ -99,10 +103,10 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
     }
 
     @Override
-    public Optional<LoanStatus> extendLoan(Long id, UserPrincipal userPrincipal) {
+    public Optional<LoanStatus> extendLoan(Long id, Long userId, boolean isAdmin) {
         Optional<Loan> loan = loanRepository.findById(id);
         if (loan.isPresent()){
-            if(userPrincipal.hasRole("ADMIN") || userPrincipal.getId().equals(loan.get().getUser().getId())) {
+            if( isAdmin || userId.equals(loan.get().getUser().getId())) {
                 if (!loan.get().getCurrentStatus().equals("PROLONGED") && !loan.get().getCurrentStatus().equals("RETURNED")) {
                     loan.get().setEndDate(loan.get().getEndDate().plusWeeks(4));
                     return Optional.of(this.addLoanStatusToLoan(loan.get(), StatusDesignation.PROLONGED));

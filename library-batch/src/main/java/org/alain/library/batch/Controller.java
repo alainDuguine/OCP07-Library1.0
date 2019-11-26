@@ -38,11 +38,13 @@ public class Controller {
 
     @Scheduled(cron = "${mailScheduling.delay}" )
     public void getLateLoan() throws IOException, InterruptedException {
+        log.info("Launching of batch email");
         String authorisation = "Basic " + Base64.getEncoder().encodeToString((BATCH_USERNAME+":"+BATCH_PASSWORD).getBytes());
         List<LoanDto> loanDtoList = loanApi.checkAndGetLateLoans(authorisation).execute().body();
         if (loanDtoList == null || loanDtoList.isEmpty()){
             log.info("No late loans to send email to");
         }else {
+            log.info("Number of email to be sent :" + loanDtoList.size());
             for (LoanDto loan : loanDtoList){
                 this.prepareAndSend(loan);
                 TimeUnit.SECONDS.sleep(5);
@@ -60,6 +62,7 @@ public class Controller {
             messageHelper.setText(content, true);
         };
         try{
+            log.info("Sending email to :" + loanDto.getUserEmail() + ", loan : " + loanDto.toString());
             mailSender.send(messagePreparator);
         }catch (MailException e){
             log.error("Error while sending email about loan " + loanDto.getId() + "\n"+ e.getMessage());

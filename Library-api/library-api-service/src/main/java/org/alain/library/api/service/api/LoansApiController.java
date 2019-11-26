@@ -103,7 +103,7 @@ public class LoansApiController implements LoansApi {
         try {
             log.info("Extending loan : " + id);
             UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-                Optional<LoanStatus> loanStatus = loanManagement.extendLoan(id, userPrincipal);
+                Optional<LoanStatus> loanStatus = loanManagement.extendLoan(id, userPrincipal.getId(), userPrincipal.hasRole("ADMIN"));
                 if (loanStatus.isPresent()) {
                     return new ResponseEntity<Void>(HttpStatus.OK);
                 } else {

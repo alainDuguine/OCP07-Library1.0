@@ -1,5 +1,6 @@
 package org.alain.library.api.business.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.alain.library.api.business.contract.UserManagement;
 import org.alain.library.api.business.exceptions.UnauthorizedException;
 import org.alain.library.api.consumer.repository.UserRepository;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 
 @Service
+@Slf4j
 public class UserManagementImpl extends CrudManagementImpl<User> implements UserManagement, UserDetailsService{
 
     private final UserRepository userRepository;

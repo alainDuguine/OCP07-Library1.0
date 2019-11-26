@@ -1,5 +1,6 @@
 package org.alain.library.api.service.api;
 
+import lombok.extern.slf4j.Slf4j;
 import org.alain.library.api.business.exceptions.UnknownAuthorException;
 import org.alain.library.api.model.book.Author;
 import org.alain.library.api.model.book.Book;
@@ -13,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 class Converters {
 
     private static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/YYYY");
@@ -93,6 +95,7 @@ class Converters {
             }
             return bookModel;
         }catch (NullPointerException ex){
+            log.warn("No author in book " + ex.getMessage());
             throw new UnknownAuthorException("A book should have at least one author");
         }
     }
@@ -105,6 +108,7 @@ class Converters {
             }
             return bookModel;
         }catch (NullPointerException ex){
+            log.warn("No author in book " + ex.getMessage());
             throw new UnknownAuthorException("A book should have at least one author");
         }
     }
