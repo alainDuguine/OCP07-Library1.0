@@ -19,6 +19,9 @@
                             <button id="buttonSearch" type="submit" class="btn btn-link"><i class="fa fa-search"></i></button>
                         </div>
                     </div>
+                    <div>
+                        <a th:href="@{/books}" style="font-size: 0.9rem;">Réinitialiser la recherche</a>
+                    </div>
                 </form>
             </div>
             <div class="searchDiv my-3 p-3 rounded">
@@ -27,7 +30,7 @@
                     <tr>
                         <th scope="col">Titre</th>
                         <th scope="col">Auteur</th>
-                        <th scope="col">isbn</th>
+                        <th scope="col">Isbn</th>
                         <th scope="col">Exemplaires disponibles</th>
                     </tr>
                     </thead>

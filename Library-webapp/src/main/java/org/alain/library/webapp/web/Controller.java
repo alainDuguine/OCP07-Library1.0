@@ -35,7 +35,6 @@ public class Controller {
         this.loanApi = loanApi;
     }
 
-
     @GetMapping("/")
     public String def(){return REDIRECT_LOGIN;}
 
