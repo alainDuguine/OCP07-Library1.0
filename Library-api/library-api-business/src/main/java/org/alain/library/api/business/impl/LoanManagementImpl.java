@@ -80,11 +80,7 @@ public class LoanManagementImpl extends CrudManagementImpl<Loan> implements Loan
         try {
             Optional<Loan> loan = loanRepository.findById(id);
             StatusDesignation statusDesignation = StatusDesignation.valueOf(status.toUpperCase());
-            if(loan.isPresent()) {
-                return Optional.of(this.addLoanStatusToLoan(loan.get(), statusDesignation));
-            }else{
-                return Optional.empty();
-            }
+            return loan.map(value -> this.addLoanStatusToLoan(value, statusDesignation));
         }catch(IllegalArgumentException ex){
             log.warn("Wrong status on updateLoan : " + status + " - " + ex.getMessage());
             throw new UnknowStatusException("Unknown status "+status);

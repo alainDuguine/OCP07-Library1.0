@@ -1,7 +1,6 @@
 package org.alain.library.api.model.loan;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 

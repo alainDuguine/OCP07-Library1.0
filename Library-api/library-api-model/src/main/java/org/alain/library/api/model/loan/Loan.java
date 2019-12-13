@@ -23,7 +23,6 @@ public class Loan {
     @NotNull
     private LocalDate startDate;
     private LocalDate endDate;
-
     private String currentStatus;
     private LocalDateTime currentStatusDate;
 

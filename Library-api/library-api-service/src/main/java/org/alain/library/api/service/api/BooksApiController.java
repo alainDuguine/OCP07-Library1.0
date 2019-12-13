@@ -56,7 +56,7 @@ public class BooksApiController implements BooksApi {
         List<Book> bookList = bookManagement.findByTitleAndAuthor(title,author);
         log.info("Getting list books : " + bookList.size());
         return new ResponseEntity<List<BookDto>>(convertListBookModelToListBookDto(bookList), HttpStatus.OK);
-        }
+    }
 
     public ResponseEntity<BookCopyDto> getCopy(@ApiParam(value = "Book id concerned by the copy",required=true) @PathVariable("bookId") Long bookId,
                                                @ApiParam(value = "BookCopy id to get",required=true) @PathVariable("copyId") Long copyId) {
