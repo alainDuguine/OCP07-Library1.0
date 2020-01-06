@@ -15,10 +15,12 @@ Projet Spring-boot maven multi module contenant :
   * Prérequis :
     * Java Jdk 8
     * Spring Boot 2.1.9
+    * Spring Security
     * Apache Maven 3.6.1
     * PostgreSql 11
     * Apache Tomcat 9.0.26
     * Swagger 2.3.1
+    * Thymeleaf
 
 ## Déploiement
 
