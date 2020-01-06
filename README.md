@@ -26,8 +26,8 @@ Projet Spring-boot maven multi module contenant :
   
   * Création de la base de données :
     * Créer un utilisateur username : "adm_library", password : "admin"
-	  * Créer une base de donnée "DB_LIBRARY" en utf-8
-	  * Exécuter le script "01_Schema.sql" (présent dans le dossier sql)
+    * Créer une base de donnée "DB_LIBRARY" en utf-8
+    * Exécuter le script "01_Schema.sql" (présent dans le dossier sql)
     * Exécuter le script "02_Data.sql" (présent dans le dossier sql)
 
   Variables d'environnement :
