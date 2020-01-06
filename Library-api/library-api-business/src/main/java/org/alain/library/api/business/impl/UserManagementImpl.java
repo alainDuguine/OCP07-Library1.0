@@ -63,7 +63,7 @@ public class UserManagementImpl extends CrudManagementImpl<User> implements User
 
     @Override
     public Optional<User> saveUser(User user) {
-        if (this.findUsersByEMail(user.getEmail()).isEmpty()){
+        if (!this.getUserByEmail(user.getEmail()).isPresent()){
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             if(user.getRoles().isEmpty()) {
